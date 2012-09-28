@@ -6,6 +6,8 @@ work both in the browser and in Node. It provides a simple solution for
 interpolation and pluralization, based off of Airbnb's
 experience adding I18n functionality to its Backbone.js and Node apps.
 
+View the [documentation on Github](http://airbnb.github.com/polyglot.js).
+
 Polylglot is agnostic to your translation backend. It doesn't perform any
 translation; it simply gives you a way to manage translated phrases from
 your client- or server-side JavaScript application.
