@@ -95,11 +95,11 @@ Polygot also provides two useful Handlebars helpers: `t` and `pluralize`.
 
 You can use the `t` helper with or without interpolation arguments.
 
-    In a Handlebars template
+    // In a Handlebars template
     <h1>{{t "welcome_to_my_site"}}</h1>
     <p>{{t "signed_in_as_username" username=username}}</p>
 
-    In your JavaScript
+    // In your JavaScript
     Polyglot.extend({
       "welcome_to_my_site": "Weclome to my site.",
       "signed_in_as_username": "Signed in as %{username}."
@@ -116,11 +116,11 @@ gives:
 The output of `t` is not HTML-escaped by default. To escape it, use Handlebars'
 triple-bracket `{{{t ...}}}` notation:
 
-    In a Handlebars template
+    // In a Handlebars template
     <p>{{t "num_unread_messages" count=numUnread}}</p>
     <p>{{{t "num_unread_messages" count=numUnread}}}</p>
 
-    In your JavaScript
+    // In your JavaScript
     Polyglot.extend({
       "num_unread_messages": "<strong>%{count}</strong> unread messages"
     });
