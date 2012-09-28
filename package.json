@@ -1,0 +1,29 @@
+{
+  "name": "polyglot.js",
+  "version": "0.0.1",
+  "description": "Give your JavaScript the ability to speak many languages.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script --require chai test/*.coffee"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/airbnb/polyglot.js.git"
+  },
+  "keywords": [
+    "i18n",
+    "translation",
+    "interpolation",
+    "translate"
+  ],
+  "author": "Spike Brehm <spike@airbnb.com>",
+  "devDependencies": {
+    "uglify-js": "1.3.3",
+    "docco": "0.3.0",
+    "mocha": "1.3.2",
+    "chai": "1.2.0",
+    "coffee-script": "1.3.3",
+    "handlebars": "1.0.7"
+  },
+  "license": "BSD"
+}
