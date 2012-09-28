@@ -19,7 +19,7 @@
   "author": "Spike Brehm <spike@airbnb.com>",
   "devDependencies": {
     "uglify-js": "1.3.3",
-    "docco": "0.3.0",
+    "docco": "0.4.0",
     "mocha": "1.3.2",
     "chai": "1.2.0",
     "coffee-script": "1.3.3",

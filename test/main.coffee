@@ -23,18 +23,39 @@ describe "t", ->
   it "should interpolate the same placeholder multiple times", ->
     polyglot.t("name_your_name_is_name", {name: "Spike"}).should.equal("Spike, your name is Spike!")
 
+  it "should allow you to supply default values", ->
+    polyglot.t("can_i_call_you_name",
+      _: "Can I call you %{name}?"
+      name: "Robert"
+    ).should.equal "Can I call you Robert?"
 
 describe "extend", ->
 
   it "should support multiple extends, overriding old keys", ->
     polyglot.extend {aKey: 'First time'}
     polyglot.extend {aKey: 'Second time'}
-    polyglot.t('aKey').should.equal('Second time')
+    polyglot.t('aKey').should.equal 'Second time'
 
   it "shouldn't forget old keys", ->
     polyglot.extend {firstKey: 'Numba one', secondKey: 'Numba two'}
     polyglot.extend {secondKey: 'Numero dos'}
-    polyglot.t('firstKey').should.equal('Numba one')
+    polyglot.t('firstKey').should.equal 'Numba one'
+
+describe "clear", ->
+
+  it "should wipe out old phrases", ->
+    polyglot.extend {hiFriend: "Hi, Friend."}
+    polyglot.clear()
+    polyglot.t("hiFriend").should.equal "hiFriend"
+
+
+describe "replace", ->
+
+  it "should wipe out old phrases and replace with new phrases", ->
+    polyglot.extend {hiFriend: "Hi, Friend.", byeFriend: "Bye, Friend."}
+    polyglot.replace {hiFriend: "Hi, Friend."}
+    polyglot.t("hiFriend").should.equal "Hi, Friend."
+    polyglot.t("byeFriend").should.equal "byeFriend"
 
 describe "pluralize", ->
 
