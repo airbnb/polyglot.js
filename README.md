@@ -56,10 +56,10 @@ interpolation arguments as the second parameter.
 ### Pluralization
 
 Polyglot provides a very basic pattern for providing
-pluralization based on a singular noun. Because varous languages
+pluralization based on a singular noun. Because various languages
 have different nominal forms for zero, one, and multiple, and because
 the noun can be before or after the count, we have to be overly explicit
-about the possibile phrases.
+about the possible phrases.
 
 For pluralizing "car", it assumes you have phrase keys of the form:
 
@@ -114,7 +114,7 @@ You can use the `t` helper with or without interpolation arguments.
 
     // In your JavaScript
     Polyglot.extend({
-      "welcome_to_my_site": "Weclome to my site.",
+      "welcome_to_my_site": "Welcome to my site.",
       "signed_in_as_username": "Signed in as %{username}."
     });
 
