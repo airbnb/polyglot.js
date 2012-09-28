@@ -14,20 +14,29 @@ experience adding I18n functionality to its Backbone.js and Node apps.</p>
 translation; it simply gives you a way to manage translated phrases from
 your client- or server-side JavaScript application.</p>
 
-<p>To tell Polyglot what to say, simply give it an object of phrases,
-where the key is the canonical name of the phrase, and the value is
+<h2>Usage</h2>
+
+<h3>Translation</h3>
+
+<p>Tell Polyglot what to say by simply giving it a phrases object,
+where the key is the canonical name of the phrase and the value is
 the already-translated string.</p>
 
 <pre><code>Polyglot.extend({
-  "hello_name": "Hello, %{name}."
+  "hello": "Hello"
 });
 
-Polyglot.t("hello_name", {name: "DeNiro"});
-=&gt; "Hello, DeNiro."
+Polyglot.t("hello");
+=&gt; "Hello"
 </code></pre>
 
 <p>Polyglot doesn't do the translation for you. It's up to you to give it
 the proper phrases for the user's locale.</p>
+
+<h3>Interpolation</h3>
+
+<p><code>Polyglot.t()</code> also provides interpolation. Pass an object with key-value pairs of
+interpolation arguments as the second parameter.</p>
 
 <pre><code>Polyglot.extend({
   "hello_name": "Hola, %{name}."
@@ -37,10 +46,120 @@ Polyglot.t("hello_name", {name: "DeNiro"});
 =&gt; "Hola, DeNiro."
 </code></pre>
 
-<p>It also gives you a few useful Handlebars helpers.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="o">!</span><span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+<h3>Pluralization</h3>
+
+<p>Polyglot provides a very basic pattern for providing
+pluralization based on a singular noun. Because varous languages
+have different nominal forms for zero, one, and multiple, and because
+the noun can be before or after the count, we have to be overly explicit
+about the possibile phrases.</p>
+
+<p>For pluralizing "car", it assumes you have phrase keys of the form:</p>
+
+<pre><code>Polyglot.extend({
+  "pluralize.car.zero": "%{count} cars",
+  "pluralize.car.one":  "%{count} car",
+  "pluralize.car.many": "%{count} cars"
+});
+</code></pre>
+
+<p><code>Polyglot.pluralize()</code> will choose the appropriate phrase based
+on the provided count.</p>
+
+<pre><code>Polyglot.pluralize("car", 0);
+=&gt; "0 cars"
+
+Polyglot.pluralize("car", 1);
+=&gt; "1 car"
+
+Polyglot.pluralize("car", 2);
+=&gt; "2 cars"
+</code></pre>
+
+<p>The second argument can be a <code>Number</code> or anything with a <code>length</code> property,
+such as an <code>Array</code> or a <code>Backbone.Collection</code>.</p>
+
+<pre><code>var Cars = Backbone.Collection.extend({});
+var cars = new Cars;
+
+Polyglot.pluralize("car", cars);
+=&gt; "0 cars"
+
+cars.add({make: "Ford", model: "Fiesta"});
+
+Polyglot.pluralize("car", cars);
+=&gt; "1 car"
+
+cars.add({make: "Subaru", model: "Impreza"});
+
+Polyglot.pluralize("car", cars);
+=&gt; "2 cars"
+</code></pre>
+
+<h3>Handlebars Helpers</h3>
+
+<p>Polygot also provides two useful Handlebars helpers: <code>t</code> and <code>pluralize</code>.</p>
+
+<h4>t</h4>
+
+<p>You can use the <code>t</code> helper with or without interpolation arguments.</p>
+
+<pre><code>// In a Handlebars template
+&lt;h1&gt;{{t "welcome_to_my_site"}}&lt;/h1&gt;
+&lt;p&gt;{{t "signed_in_as_username" username=username}}&lt;/p&gt;
+
+// In your JavaScript
+Polyglot.extend({
+  "welcome_to_my_site": "Weclome to my site.",
+  "signed_in_as_username": "Signed in as %{username}."
+});
+
+var template = Handlebars.compile(...);
+var html = template({username: "Spike"});
+</code></pre>
+
+<p>gives:</p>
+
+<pre><code>&lt;h1&gt;Welcome to my site.&lt;/h1&gt;
+&lt;p&gt;Signed in as Spike.&lt;/p&gt;
+</code></pre>
+
+<p>The output of <code>t</code> is not HTML-escaped by default. To escape it, use Handlebars'
+triple-bracket <code>{{{t ...}}}</code> notation:</p>
+
+<pre><code>// In a Handlebars template
+&lt;p&gt;{{t "num_unread_messages" count=numUnread}}&lt;/p&gt;
+&lt;p&gt;{{{t "num_unread_messages" count=numUnread}}}&lt;/p&gt;
+
+// In your JavaScript
+Polyglot.extend({
+  "num_unread_messages": "&lt;strong&gt;%{count}&lt;/strong&gt; unread messages"
+});
+</code></pre>
+
+<p>gives:</p>
+
+<pre><code>&lt;p&gt;&amp;lt;strong&amp;gt;5&amp;lt;/strong&amp;gt; unread messages&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;5&lt;/strong&gt; unread messages&lt;/p&gt;
+</code></pre>
+
+<h4>pluralize</h4>
+
+<p>The <code>pluralize</code> helper is just a wrapper around <code>Polyglot.pluralize()</code>, so
+you pass it a singular noun as the main string argument, and <code>count</code> as
+an argument using Handlebars' block hash syntax.  The <code>count</code> argument can
+be a <code>Number</code> or anything with a lengh property, such as <code>Array</code> or <code>Backbone.Collection</code>.</p>
+
+<pre><code>&lt;p&gt;{{pluralize "car" count=carCollection}}&lt;/p&gt;
+</code></pre>
+
+<p>gives:</p>
+
+<pre><code>&lt;p&gt;3 cars&lt;/p&gt;
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="o">!</span><span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
   <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
 
-  <span class="kd">var</span> <span class="nx">phrases</span> <span class="o">=</span> <span class="p">{};</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h2>Public Methods</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h3>Polyglot.extend(phrases)</h3>
+  <span class="kd">var</span> <span class="nx">phrases</span> <span class="o">=</span> <span class="p">{};</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h2>Public Methods</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h3>Polyglot.extend(phrases)</h3>
 
 <p>Use <code>extend</code> to tell Polyglot how to translate a given key.</p>
 
@@ -58,20 +177,20 @@ untouched.</p>             </td>             <td class="code">               <di
         <span class="nx">phrases</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">morePhrases</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
       <span class="p">}</span>
     <span class="p">}</span>
-  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h3>Polyglot.clear()</h3>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <h3>Polyglot.clear()</h3>
 
 <p>Clears all phrases. Useful for special cases, such as freeing
 up memory if you have lots of phrases but no longer need to
 perform any translation. Also used internally by <code>replace</code>.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">clear</span><span class="p">()</span> <span class="p">{</span>
     <span class="nx">phrases</span> <span class="o">=</span> <span class="p">{};</span>
-  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <h3>Polyglot.replace(phrases)</h3>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <h3>Polyglot.replace(phrases)</h3>
 
 <p>Completely replace the existing phrases with a new set of phrases.
 Normally, just use <code>extend</code> to add more phrases, but under certain
 circumstances, you may want to make sure no old phrases are lying around.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">replace</span><span class="p">(</span><span class="nx">newPhrases</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">clear</span><span class="p">();</span>
     <span class="nx">extend</span><span class="p">(</span><span class="nx">newPhrases</span><span class="p">);</span>
-  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <h3>Polyglot.t(key, interpolationOptions)</h3>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <h3>Polyglot.t(key, interpolationOptions)</h3>
 
 <p>The most-used method. Provide a key, and <code>t</code> will return the
 phrase.</p>
@@ -108,7 +227,7 @@ Use the special option key "_" to specify a default.</p>
       <span class="nx">result</span> <span class="o">=</span> <span class="nx">interpolate</span><span class="p">(</span><span class="nx">phrase</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
-  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <h3>Polyglot.pluralize(noun, count)</h3>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <h3>Polyglot.pluralize(noun, count)</h3>
 
 <p>Polyglot provides a very basic pattern for providing
 pluralization based on a singular noun. Because varous languages
@@ -125,7 +244,7 @@ about the possibile phrases.</p>
 });
 </code></pre>
 
-<p>`Polyglot.pluralize()' will choose the appropriate phrase based
+<p><code>Polyglot.pluralize()</code> will choose the appropriate phrase based
 on the provided count.</p>
 
 <pre><code>Polyglot.pluralize("car", 0);
@@ -169,7 +288,7 @@ Polyglot.pluralize("car", cars);
       <span class="nx">key</span> <span class="o">=</span> <span class="s2">&quot;pluralize.&quot;</span> <span class="o">+</span> <span class="nx">noun</span> <span class="o">+</span> <span class="s2">&quot;.many&quot;</span><span class="p">;</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">t</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="p">{</span><span class="nx">count</span><span class="o">:</span> <span class="nx">count</span><span class="p">});</span>
-  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <h3>Polyglot.registerHandlebars(Handlebars)</h3>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h3>Polyglot.registerHandlebars(Handlebars)</h3>
 
 <p>Registers Polyglot's Handlebars helpers on a given
 Handlebars context. This is automatically called if we find
@@ -195,7 +314,7 @@ console.log(Handlebars.helpers.t);
         <span class="nx">handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">handlebarsHelpers</span><span class="p">[</span><span class="nx">key</span><span class="p">]);</span>
       <span class="p">}</span>
     <span class="p">}</span>
-  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <h2>Private Methods</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h3>interpolate</h3>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h2>Private Methods</h2>             </td>             <td class="code">               <div class="highlight"><pre></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h3>interpolate</h3>
 
 <p>Does the dirty work. Creates a <code>RegExp</code> object for each
 interpolation placeholder.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">interpolate</span><span class="p">(</span><span class="nx">phrase</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
@@ -205,11 +324,11 @@ interpolation placeholder.</p>             </td>             <td class="code">  
       <span class="p">}</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="nx">phrase</span><span class="p">;</span>
-  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h3>warn</h3>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <h3>warn</h3>
 
 <p>Provides a warning in the console if a phrase key is missing.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">warn</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">root</span><span class="p">.</span><span class="nx">console</span> <span class="o">&amp;&amp;</span> <span class="nx">root</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">warn</span> <span class="o">&amp;&amp;</span> <span class="nx">root</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;WARNING: &#39;</span> <span class="o">+</span> <span class="nx">message</span><span class="p">);</span>
-  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <h2>Handlebars helpers</h2>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">handlebarsHelpers</span> <span class="o">=</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <h3>t</h3>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <h2>Handlebars helpers</h2>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">handlebarsHelpers</span> <span class="o">=</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h3>t</h3>
 
 <pre><code>&lt;h1&gt;{{t "hello_name" name=name}}&lt;/h1&gt;
 </code></pre>
@@ -219,7 +338,7 @@ interpolation placeholder.</p>             </td>             <td class="code">  
 <pre><code>&lt;h1&gt;Hello, DeNiro.&lt;/h1&gt;
 </code></pre>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">t</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="nx">t</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">hash</span><span class="p">);</span>
-    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h3>pluralize</h3>
+    <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <h3>pluralize</h3>
 
 <pre><code>&lt;p&gt;{{pluralize "car" count=carCollection}}&lt;/p&gt;
 </code></pre>
@@ -230,18 +349,18 @@ interpolation placeholder.</p>             </td>             <td class="code">  
 </code></pre>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">pluralize</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">block</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="nx">pluralize</span><span class="p">(</span><span class="nx">object</span><span class="p">,</span> <span class="nx">block</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">count</span><span class="p">);</span>
     <span class="p">}</span>
-  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <h2>Export public methods</h2>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">Polyglot</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <h2>Export public methods</h2>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">Polyglot</span> <span class="o">=</span> <span class="p">{</span>
     <span class="nx">extend</span><span class="o">:</span> <span class="nx">extend</span><span class="p">,</span>
     <span class="nx">replace</span><span class="o">:</span> <span class="nx">replace</span><span class="p">,</span>
     <span class="nx">clear</span><span class="o">:</span> <span class="nx">clear</span><span class="p">,</span>
     <span class="nx">t</span><span class="o">:</span> <span class="nx">t</span><span class="p">,</span>
     <span class="nx">pluralize</span><span class="o">:</span> <span class="nx">pluralize</span><span class="p">,</span>
     <span class="nx">registerHandlebars</span><span class="o">:</span> <span class="nx">registerHandlebars</span>
-  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <p>Export for Node, attach to <code>window</code> for browser.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">module</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">)</span> <span class="p">{</span>
+  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <p>Export for Node, attach to <code>window</code> for browser.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">module</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Polyglot</span><span class="p">;</span>
   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
     <span class="nx">root</span><span class="p">.</span><span class="nx">Polyglot</span> <span class="o">=</span> <span class="nx">Polyglot</span><span class="p">;</span>
-  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <p>Register Handlebars helpers if Handlebars is found.
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <p>Register Handlebars helpers if Handlebars is found.
 If not, you can manually register Handlebars helpers by
 calling <code>Polyglot.registerHandlebars(Handlebars)</code>,
 passing in your Handlebars context.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">if</span> <span class="p">(</span><span class="nx">root</span><span class="p">.</span><span class="nx">Handlebars</span> <span class="o">&amp;&amp;</span> <span class="nx">root</span><span class="p">.</span><span class="nx">Handlebars</span><span class="p">.</span><span class="nx">registerHelper</span><span class="p">)</span> <span class="p">{</span>
