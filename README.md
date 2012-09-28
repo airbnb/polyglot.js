@@ -7,7 +7,7 @@ interpolation and pluralization, based off of Airbnb's
 experience adding I18n functionality to its Backbone.js and Node apps.
 
 I18n is incredibly important for us at [Airbnb](https://www.airbnb.com/),
-as we have listings in 192 countries, and we translate our site into 30-odd differenet languages.
+as we have listings in 192 countries, and we translate our site into 30-odd different languages.
 We're also [hiring talented engineers](https://www.airbnb.com/jobs/departments/engineering)
 to help us scale up to meet the challenges of buliding a global marketplace.
 
