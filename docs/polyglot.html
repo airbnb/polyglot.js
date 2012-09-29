@@ -187,12 +187,18 @@ in the same phrase.</p>             </td>             <td class="code">         
     <span class="nx">root</span><span class="p">.</span><span class="nx">console</span> <span class="o">&amp;&amp;</span> <span class="nx">root</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">warn</span> <span class="o">&amp;&amp;</span> <span class="nx">root</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;WARNING: &#39;</span> <span class="o">+</span> <span class="nx">message</span><span class="p">);</span>
   <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <h2>Handlebars helpers</h2>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">handlebarsHelpers</span> <span class="o">=</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <h3>t</h3>
 
-<pre><code>&lt;h1&gt;{{t "hello_name" name=name}}&lt;/h1&gt;
+<pre><code>// In your JavaScript
+Polyglot.extend({
+  "hello_first_and_last_name": "Hello, %{firstName} %{lastName}."
+});
+
+// In a Handlebars template
+&lt;h1&gt;{{t "hello_first_and_last_name" firstName=firstName lastName=lastName}}&lt;/h1&gt;
 </code></pre>
 
 <p>gives:</p>
 
-<pre><code>&lt;h1&gt;Hello, DeNiro.&lt;/h1&gt;
+<pre><code>&lt;h1&gt;Hello, Robert DeNiro.&lt;/h1&gt;
 </code></pre>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="nx">t</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">block</span><span class="p">)</span> <span class="p">{</span>
       <span class="k">return</span> <span class="nx">t</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">block</span><span class="p">.</span><span class="nx">hash</span><span class="p">);</span>
     <span class="p">},</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <h3>pluralize</h3>
