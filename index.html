@@ -71,6 +71,30 @@ Polyglot.t("hello");
 <p>Polyglot doesn't do the translation for you. It's up to you to give it
 the proper phrases for the user's locale.</p>
 
+<p>A common pattern is to gather a hash of phrases in your backend, and output
+them in a <code>&lt;script&gt;</code> tag at the bottom of the document.  For example, in Rails:</p>
+
+<p><code>app/controllers/home_controller.rb</code></p>
+
+<pre><code>def index
+  @phrases = {
+    "home.login" =&gt; I18n.t("home.login"),
+    "home.signup" =&gt; I18n.t("home.signup"),
+    ...
+  }
+end
+</code></pre>
+
+<p><code>app/views/home/index.html.erb</code></p>
+
+<pre><code>&lt;script&gt;
+  Polyglot.extend(&lt;%= raw @phrases.to_json %&gt;);
+&lt;/script&gt;
+</code></pre>
+
+<p>And now you can utilize i.e. <code>Polyglot.t("home.login")</code> in your JavaScript application
+or Handlebars templates.</p>
+
 <h3>Interpolation</h3>
 
 <p><code>Polyglot.t()</code> also provides interpolation. Pass an object with key-value pairs of
@@ -160,6 +184,22 @@ var html = template({username: "Spike"});
 
 <pre><code>&lt;h1&gt;Welcome to my site.&lt;/h1&gt;
 &lt;p&gt;Signed in as Spike.&lt;/p&gt;
+</code></pre>
+
+<p>Use as many interpolation arguments as you need.</p>
+
+<pre><code>// In a Handlebars template
+&lt;h1&gt;{{t "hello_first_and_last_name" firstName=firstName lastName=lastName}}&lt;/h1&gt;
+
+// In your JavaScript
+Polyglot.extend({
+  "hello_first_and_last_name": "Hello, %{firstName} %{lastName}."
+});
+</code></pre>
+
+<p>gives:</p>
+
+<pre><code>&lt;h1&gt;Hello, Robert DeNiro.&lt;/h1&gt;
 </code></pre>
 
 <p>The output of <code>t</code> is not HTML-escaped by default. To escape it, use Handlebars'
