@@ -23,6 +23,21 @@ Polylglot is agnostic to your translation backend. It doesn't perform any
 translation; it simply gives you a way to manage translated phrases from
 your client- or server-side JavaScript application.
 
+## Installation
+
+For use with Node, install with [NPM](http://npmjs.org):
+
+    $ npm install node-polyglot
+
+### Running the tests
+
+    $ npm install
+
+    $ npm test
+
+    ․․․․․․․․․․․․․․․․․
+    ✔ 17 tests complete (17ms)
+
 ## Usage
 
 ### Translation

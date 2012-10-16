@@ -1,5 +1,5 @@
 {
-  "name": "polyglot.js",
+  "name": "node-polyglot",
   "version": "0.0.1",
   "description": "Give your JavaScript the ability to speak many languages.",
   "main": "index.js",
@@ -12,9 +12,12 @@
   },
   "keywords": [
     "i18n",
+    "internationalization",
+    "internationalisation",
     "translation",
     "interpolation",
-    "translate"
+    "translate",
+    "polyglot"
   ],
   "author": "Spike Brehm <spike@airbnb.com>",
   "devDependencies": {
