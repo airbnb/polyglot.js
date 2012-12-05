@@ -29,6 +29,18 @@ describe "t", ->
       name: "Robert"
     ).should.equal "Can I call you Robert?"
 
+describe "locale", ->
+
+  it "should default to 'en'", ->
+    polyglot.locale().should.equal "en"
+
+  it "should get and set locale", ->
+    polyglot.locale("es")
+    polyglot.locale().should.equal "es"
+
+    polyglot.locale("fr")
+    polyglot.locale().should.equal "fr"
+
 describe "extend", ->
 
   it "should support multiple extends, overriding old keys", ->
@@ -60,31 +72,30 @@ describe "replace", ->
 describe "pluralize", ->
 
   phrases =
-    "pluralize.Name.zero": "%{count} Names"
-    "pluralize.Name.one":  "%{count} Name"
-    "pluralize.Name.many": "%{count} Names"
+    num_names: "%{smart_count} Name |||| %{smart_count} Names"
 
   before ->
     polyglot.extend(phrases)
+    polyglot.locale('en')
 
   it "should support pluralization with an integer", ->
-    polyglot.pluralize("Name", 0).should.equal("0 Names")
-    polyglot.pluralize("Name", 1).should.equal("1 Name")
-    polyglot.pluralize("Name", 2).should.equal("2 Names")
-    polyglot.pluralize("Name", 3).should.equal("3 Names")
+    polyglot.t("num_names", smart_count: 0).should.equal("0 Names")
+    polyglot.t("num_names", smart_count: 1).should.equal("1 Name")
+    polyglot.t("num_names", smart_count: 2).should.equal("2 Names")
+    polyglot.t("num_names", smart_count: 3).should.equal("3 Names")
 
   it "should support pluralization with an Array", ->
     names = []
-    polyglot.pluralize("Name", names).should.equal("0 Names")
+    polyglot.t("num_names", smart_count: names).should.equal("0 Names")
     names.push "LTJ Bukem"
-    polyglot.pluralize("Name", names).should.equal("1 Name")
+    polyglot.t("num_names", smart_count: names).should.equal("1 Name")
     names.push "MC Conrad"
-    polyglot.pluralize("Name", names).should.equal("2 Names")
+    polyglot.t("num_names", smart_count: names).should.equal("2 Names")
 
   it "should support pluralization of anything with a 'length' property", ->
     obj = {length: 0}
-    polyglot.pluralize("Name", obj).should.equal("0 Names")
+    polyglot.t("num_names", smart_count: obj).should.equal("0 Names")
     obj.length++
-    polyglot.pluralize("Name", obj).should.equal("1 Name")
+    polyglot.t("num_names", smart_count: obj).should.equal("1 Name")
     obj.length++
-    polyglot.pluralize("Name", obj).should.equal("2 Names")
+    polyglot.t("num_names", smart_count: obj).should.equal("2 Names")

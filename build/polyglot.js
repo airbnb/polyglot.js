@@ -20,9 +20,18 @@
 !function(root) {
   'use strict';
 
-  var phrases = {};
+  var phrases = {}, currentLocale = 'en';
 
 // ## Public Methods
+
+// ### Polyglot.locale([locale])
+//
+// Get or set locale. Internally, Polyglot only uses locale for pluralization.
+
+  function locale(newLocale) {
+    if (newLocale) currentLocale = newLocale;
+    return currentLocale;
+  }
 
 // ### Polyglot.extend(phrases)
 //
@@ -66,7 +75,7 @@
     extend(newPhrases);
   }
 
-// ### Polyglot.t(key, interpolationOptions)
+// ### Polyglot.t(key, options)
 //
 // The most-used method. Provide a key, and `t` will return the
 // phrase.
@@ -100,72 +109,90 @@
       warn('Missing translation for key: "'+key+'"');
       result = key;
     } else {
-      result = interpolate(phrase, options);
+      options = clone(options);
+      // This allows you to pass an Array, Backbone.Collection, or anything
+      // with a `length` property as the `smart_count` parameter for pluralization.
+      if (options.smart_count != null && options.smart_count.length != null) {
+        options.smart_count = options.smart_count.length;
+      }
+      result = choosePluralForm(phrase, currentLocale, options.smart_count);
+      result = interpolate(result, options);
     }
     return result;
   }
 
-// ### Polyglot.pluralize(noun, count)
-//
-// Polyglot provides a very basic pattern for providing
-// pluralization based on a singular noun. Because varous languages
-// have different nominal forms for zero, one, and multiple, and because
-// the noun can be before or after the count, we have to be overly explicit
-// about the possibile phrases.
-//
-// For pluralizing "car", it assumes you have phrase keys of the form:
-//
-//     Polyglot.extend({
-//       "pluralize.car.zero": "%{count} cars",
-//       "pluralize.car.one":  "%{count} car",
-//       "pluralize.car.many": "%{count} cars"
-//     });
-//
-// `Polyglot.pluralize()` will choose the appropriate phrase based
-// on the provided count.
-//
-//     Polyglot.pluralize("car", 0);
-//     => "0 cars"
-//
-//     Polyglot.pluralize("car", 1);
-//     => "1 car"
-//
-//     Polyglot.pluralize("car", 2);
-//     => "2 cars"
-//
-// The second argument can be a `Number` or anything with a `length` property,
-// such as an `Array` or a `Backbone.Collection`.
-//
-//     var Cars = Backbone.Collection.extend({});
-//     var cars = new Cars;
-//
-//     Polyglot.pluralize("car", cars);
-//     => "0 cars"
-//
-//     cars.add({make: "Ford", model: "Fiesta"});
-//
-//     Polyglot.pluralize("car", cars);
-//     => "1 car"
-//
-//     cars.add({make: "Subaru", model: "Impreza"});
-//
-//     Polyglot.pluralize("car", cars);
-//     => "2 cars"
-//
 
-  function pluralize(noun, count) {
-    if (count != null && typeof count.length !== 'undefined') {
-      count = count.length;
+  // #### Pluralization methods
+
+  // The string that separates the different phrase possibilities.
+  var delimeter = '||||',
+
+  // Mapping from pluralization group plural logic.
+  pluralTypes = {
+    chinese:   function(n) { return 0; },
+    german:    function(n) { return n !== 1 ? 1 : 0; },
+    french:    function(n) { return n > 1 ? 1 : 0; },
+    russian:   function(n) { return n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2; },
+    czech:     function(n) { return (n === 1) ? 0 : (n >= 2 && n <= 4) ? 1 : 2; },
+    polish:    function(n) { return (n === 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2) },
+    icelandic: function(n) { return (n % 10 !== 1 || n % 100 === 11) ? 1 : 0; }
+  },
+
+  // Mapping from pluralization group to individual locales.
+  pluralTypeToLanguages = {
+    chinese:   ['id', 'ja', 'ko', 'ms', 'th', 'tr', 'zh'],
+    german:    ['da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'it', 'nl', 'no', 'pt', 'sv'],
+    french:    ['fr', 'tl'],
+    russian:   ['hr', 'ru'],
+    czech:     ['cs'],
+    polish:    ['pl'],
+    icelandic: ['is'],
+  },
+
+  // Mapping from individual locale to pluralization group.
+  languageToPluralType = (function(mapping){
+    var type, langs, l, ret = {};
+    for (type in mapping) {
+      if (mapping.hasOwnProperty(type)) {
+        langs = mapping[type];
+        for (l in langs) {
+          ret[langs[l]] = type;
+        }
+      }
     }
-    var key;
-    if (count === 0) {
-      key = "pluralize." + noun + ".zero";
-    } else if (count === 1) {
-      key = "pluralize." + noun + ".one";
+    return ret;
+  })(pluralTypeToLanguages),
+
+  // RegExp for trimming a string.
+  trimRe = /^\s+|\s+$/g;
+
+  // Trim a string.
+  function trim(str){
+    return str.replace(trimRe, '');
+  }
+
+  // Based on a phrase text that contains `n` plural forms separated
+  // by `delimeter`, a `locale`, and a `count`, choose the correct
+  // plural form, or none if `count` is `null`.
+  function choosePluralForm(text, locale, count){
+    var ret, texts, chosenText;
+    if (count != null && text) {
+      texts = text.split(delimeter);
+      chosenText = texts[pluralTypeIndex(locale, count)] || texts[0];
+      ret = trim(chosenText);
     } else {
-      key = "pluralize." + noun + ".many";
+      ret = text;
     }
-    return t(key, {count: count});
+    return ret;
+  }
+
+  function pluralTypeName(locale) {
+    return languageToPluralType[locale] ||
+      languageToPluralType['en'];
+  }
+
+  function pluralTypeIndex(locale, count) {
+    return pluralTypes[pluralTypeName(locale)](count);
   }
 
 // ### Polyglot.registerHandlebars(Handlebars)
@@ -207,6 +234,9 @@
   function interpolate(phrase, options) {
     for (var arg in options) {
       if (arg !== '_' && options.hasOwnProperty(arg)) {
+        // We create a new `RegExp` each time instead of using a more-efficient
+        // string replace so that the same argument can be replaced multiple times
+        // in the same phrase.
         phrase = phrase.replace(new RegExp('%\\{'+arg+'\\}', 'g'), options[arg]);
       }
     }
@@ -221,44 +251,50 @@
     root.console && root.console.warn && root.console.warn('WARNING: ' + message);
   }
 
+// ### clone
+//
+// Clone an object.
+
+  function clone(source) {
+    var ret = {};
+    for (var prop in source) {
+      ret[prop] = source[prop];
+    }
+    return ret;
+  }
+
 // ## Handlebars helpers
 
   var handlebarsHelpers = {
 
 // ### t
 //
-//     <h1>{{t "hello_name" name=name}}</h1>
+//     // In your JavaScript
+//     Polyglot.extend({
+//       "hello_first_and_last_name": "Hello, %{firstName} %{lastName}."
+//     });
+//
+//     // In a Handlebars template
+//     <h1>{{t "hello_first_and_last_name" firstName=firstName lastName=lastName}}</h1>
 //
 // gives:
 //
-//     <h1>Hello, DeNiro.</h1>
+//     <h1>Hello, Robert DeNiro.</h1>
 
-    t: function(key, options) {
-      return t(key, options.hash);
-    },
-
-// ### pluralize
-//
-//     <p>{{pluralize "car" count=carCollection}}</p>
-//
-// gives:
-//
-//     <p>3 cars</p>
-
-    pluralize: function(object, block) {
-      return pluralize(object, block.hash.count);
+    t: function(key, block) {
+      return t(key, block.hash);
     }
-  }
+  };
 
 
 // ## Export public methods
 
   var Polyglot = {
+    locale: locale,
     extend: extend,
     replace: replace,
     clear: clear,
     t: t,
-    pluralize: pluralize,
     registerHandlebars: registerHandlebars
   };
 

@@ -1,10 +1,10 @@
 {
   "name": "node-polyglot",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Give your JavaScript the ability to speak many languages.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script --require chai test/*.coffee"
+    "test": "mocha --compilers coffee:coffee-script --require chai test/*.coffee --reporter spec"
   },
   "repository": {
     "type": "git",
