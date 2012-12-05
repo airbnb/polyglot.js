@@ -12,6 +12,7 @@ describe "Handlebars support", ->
 
   it "should allow you to lazily register Handlebars helpers", ->
     Handlebars.helpers.should.have.property('t')
+    Handlebars.helpers.should.have.property('pluralize')
 
   it "should support basic 't' Handlebars helper", ->
     template = Handlebars.compile """

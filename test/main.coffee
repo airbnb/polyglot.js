@@ -72,30 +72,36 @@ describe "replace", ->
 describe "pluralize", ->
 
   phrases =
-    num_names: "%{smart_count} Name |||| %{smart_count} Names"
+    "shared.pluralize.Name": "%{smart_count} Name |||| %{smart_count} Names"
 
   before ->
     polyglot.extend(phrases)
     polyglot.locale('en')
 
   it "should support pluralization with an integer", ->
-    polyglot.t("num_names", smart_count: 0).should.equal("0 Names")
-    polyglot.t("num_names", smart_count: 1).should.equal("1 Name")
-    polyglot.t("num_names", smart_count: 2).should.equal("2 Names")
-    polyglot.t("num_names", smart_count: 3).should.equal("3 Names")
+    polyglot.t("shared.pluralize.Name", smart_count: 0).should.equal("0 Names")
+    polyglot.t("shared.pluralize.Name", smart_count: 1).should.equal("1 Name")
+    polyglot.t("shared.pluralize.Name", smart_count: 2).should.equal("2 Names")
+    polyglot.t("shared.pluralize.Name", smart_count: 3).should.equal("3 Names")
 
   it "should support pluralization with an Array", ->
     names = []
-    polyglot.t("num_names", smart_count: names).should.equal("0 Names")
+    polyglot.t("shared.pluralize.Name", smart_count: names).should.equal("0 Names")
     names.push "LTJ Bukem"
-    polyglot.t("num_names", smart_count: names).should.equal("1 Name")
+    polyglot.t("shared.pluralize.Name", smart_count: names).should.equal("1 Name")
     names.push "MC Conrad"
-    polyglot.t("num_names", smart_count: names).should.equal("2 Names")
+    polyglot.t("shared.pluralize.Name", smart_count: names).should.equal("2 Names")
 
   it "should support pluralization of anything with a 'length' property", ->
     obj = {length: 0}
-    polyglot.t("num_names", smart_count: obj).should.equal("0 Names")
+    polyglot.t("shared.pluralize.Name", smart_count: obj).should.equal("0 Names")
     obj.length++
-    polyglot.t("num_names", smart_count: obj).should.equal("1 Name")
+    polyglot.t("shared.pluralize.Name", smart_count: obj).should.equal("1 Name")
     obj.length++
-    polyglot.t("num_names", smart_count: obj).should.equal("2 Names")
+    polyglot.t("shared.pluralize.Name", smart_count: obj).should.equal("2 Names")
+
+  it "should support the 'pluralize' shortcut", ->
+    polyglot.pluralize("Name", 0).should.equal("0 Names")
+    polyglot.pluralize("Name", 1).should.equal("1 Name")
+    polyglot.pluralize("Name", 2).should.equal("2 Names")
+    polyglot.pluralize("Name", 3).should.equal("3 Names")
