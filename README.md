@@ -36,38 +36,38 @@ For use with Node, install with [NPM](http://npmjs.org):
     $ npm test
 
 	   Handlebars support
-	    ✓ should allow you to lazily register Handlebars helpers 
-	    ✓ should support basic 't' Handlebars helper 
-	    ✓ should support 't' Handlebars helper with interpolation 
-	    ✓ should escape HTML when using 't' 
-	
+	    ✓ should allow you to lazily register Handlebars helpers
+	    ✓ should support basic 't' Handlebars helper
+	    ✓ should support 't' Handlebars helper with interpolation
+	    ✓ should escape HTML when using 't'
+
 	  t
-	    ✓ should translate a simple string 
-	    ✓ should return the key if translation not found 
-	    ✓ should interpolate 
-	    ✓ should interpolate the same placeholder multiple times 
-	    ✓ should allow you to supply default values 
-	
+	    ✓ should translate a simple string
+	    ✓ should return the key if translation not found
+	    ✓ should interpolate
+	    ✓ should interpolate the same placeholder multiple times
+	    ✓ should allow you to supply default values
+
 	  locale
-	    ✓ should default to 'en' 
-	    ✓ should get and set locale 
-	
+	    ✓ should default to 'en'
+	    ✓ should get and set locale
+
 	  extend
-	    ✓ should support multiple extends, overriding old keys 
-	    ✓ shouldn't forget old keys 
-	
+	    ✓ should support multiple extends, overriding old keys
+	    ✓ shouldn't forget old keys
+
 	  clear
-	    ✓ should wipe out old phrases 
-	
+	    ✓ should wipe out old phrases
+
 	  replace
-	    ✓ should wipe out old phrases and replace with new phrases 
-	
+	    ✓ should wipe out old phrases and replace with new phrases
+
 	  pluralize
-	    ✓ should support pluralization with an integer 
-	    ✓ should support pluralization with an Array 
-	    ✓ should support pluralization of anything with a 'length' property 
-	
-	
+	    ✓ should support pluralization with an integer
+	    ✓ should support pluralization with an Array
+	    ✓ should support pluralization of anything with a 'length' property
+
+
 	  ✔ 18 tests complete (13ms)
 
 ## Usage
@@ -142,7 +142,7 @@ For pluralizing "car" in English, Polyglot assumes you have a phrase of the form
     Polyglot.extend({
       "num_cars": "%{smart_count} car |||| %{smart_count} cars",
     });
-    
+
 English (and German, Spanish, Italian, and a few others) there are only two plural forms: singular and not-singular.
 
 `Polyglot.t()` will choose the appropriate phrase based
@@ -342,43 +342,4 @@ such as an `Array` or a `Backbone.Collection`.
 
     Polyglot.pluralize("car", cars);
     => "2 cars"
-
-### Polyglot.registerHandlebars(Handlebars)
-
-Registers Polyglot's Handlebars helpers on a given
-Handlebars context. This is automatically called if we find
-a global `Handlebars` object, which makes use in the
-browser a snap if Handlebars is included before Polyglot.
-Otherwise, you can manually register the Handlebars helpers
-by passing in a Handlebars conext, which is the primary Node
-use case:
-
-    var Handlebars = require('handlebars');
-    var Polyglot = require('polyglot');
-
-    console.log(Handlebars.helpers.t);
-    => undefined
-
-    Polyglot.registerHandlebars(Handlebars);
-
-    console.log(Handlebars.helpers.t);
-    => function(){...}
-
-## Handlebars helpers
-
-### t
-
-    <h1>{{t "hello_name" name=name}}</h1>
-
-gives:
-
-    <h1>Hello, DeNiro.</h1>
-
-### pluralize
-
-    <p>{{pluralize "car" count=carCollection}}</p>
-
-gives:
-
-    <p>3 cars</p>
 
