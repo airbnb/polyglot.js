@@ -1,0 +1,196 @@
+<!DOCTYPE html>  <html> <head>   <title>polyglot.js</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               polyglot.js             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>               <pre><code>(c) 2012 Airbnb, Inc.
+
+polyglot.js may be freely distributed under the terms of the BSD
+license. For all licensing information, details, and documention:
+http://airbnb.github.com/polyglot.js
+</code></pre>
+
+<p>Polyglot.js is an I18n helper library written in JavaScript, made to
+work both in the browser and in Node. It provides a simple solution for
+interpolation and pluralization, based off of Airbnb's
+experience adding I18n functionality to its Backbone.js and Node apps.</p>
+
+<p>Polylglot is agnostic to your translation backend. It doesn't perform any
+translation; it simply gives you a way to manage translated phrases from
+your client- or server-side JavaScript application.</p>             </td>             <td class="code">               <div class="highlight"><pre><span class="o">!</span><span class="kd">function</span><span class="p">(</span><span class="nx">root</span><span class="p">)</span> <span class="p">{</span>
+  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <h3>Polyglot class constructor</h3>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">Polyglot</span><span class="p">(</span><span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">phrases</span> <span class="o">=</span> <span class="p">(</span><span class="nx">options</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">phrases</span><span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">phrases</span> <span class="o">:</span> <span class="p">{};</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">currentLocale</span> <span class="o">=</span> <span class="p">(</span><span class="nx">options</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">locale</span><span class="p">)</span> <span class="o">?</span> <span class="nx">options</span><span class="p">.</span><span class="nx">locale</span> <span class="o">:</span> <span class="s1">&#39;en&#39;</span><span class="p">;</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h3>Version</h3>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Polyglot</span><span class="p">.</span><span class="nx">VERSION</span> <span class="o">=</span> <span class="s1">&#39;0.2.0&#39;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <h3>polyglot.locale([locale])</h3>
+
+<p>Get or set locale. Internally, Polyglot only uses locale for pluralization.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Polyglot</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">locale</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">newLocale</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">newLocale</span><span class="p">)</span> <span class="k">this</span><span class="p">.</span><span class="nx">currentLocale</span> <span class="o">=</span> <span class="nx">newLocale</span><span class="p">;</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">currentLocale</span><span class="p">;</span>
+  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <h3>polyglot.extend(phrases)</h3>
+
+<p>Use <code>extend</code> to tell Polyglot how to translate a given key.</p>
+
+<pre><code>polyglot.extend({
+  "hello": "Hello",
+  "hello_name": "Hello, %{name}"
+});
+</code></pre>
+
+<p>The key can be any string.  Feel free to call <code>extend</code> multiple times;
+it will override any phrases with the same key, but leave existing phrases
+untouched.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Polyglot</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">extend</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">morePhrases</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">morePhrases</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">morePhrases</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">phrases</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">morePhrases</span><span class="p">[</span><span class="nx">key</span><span class="p">];</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <h3>polyglot.clear()</h3>
+
+<p>Clears all phrases. Useful for special cases, such as freeing
+up memory if you have lots of phrases but no longer need to
+perform any translation. Also used internally by <code>replace</code>.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Polyglot</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">clear</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">phrases</span> <span class="o">=</span> <span class="p">{};</span>
+  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <h3>polyglot.replace(phrases)</h3>
+
+<p>Completely replace the existing phrases with a new set of phrases.
+Normally, just use <code>extend</code> to add more phrases, but under certain
+circumstances, you may want to make sure no old phrases are lying around.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Polyglot</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">replace</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">newPhrases</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">clear</span><span class="p">();</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">extend</span><span class="p">(</span><span class="nx">newPhrases</span><span class="p">);</span>
+  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-8">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-8">&#182;</a>               </div>               <h3>polyglot.t(key, options)</h3>
+
+<p>The most-used method. Provide a key, and <code>t</code> will return the
+phrase.</p>
+
+<pre><code>polyglot.t("hello");
+=&gt; "Hello"
+</code></pre>
+
+<p>The phrase value is provided first by a call to <code>polyglot.extend()</code> or
+<code>polyglot.replace()</code>.</p>
+
+<p>Pass in an object as the second argument to perform interpolation.</p>
+
+<pre><code>polyglot.t("hello_name", {name: "Spike"});
+=&gt; "Hello, Spike"
+</code></pre>
+
+<p>If you like, you can provide a default value in case the phrase is missing.
+Use the special option key "_" to specify a default.</p>
+
+<pre><code>polyglot.t("i_like_to_write_in_language", {
+  _: "I like to write in %{language}.",
+  language: "JavaScript"
+});
+=&gt; "I like to write in JavaScript."
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Polyglot</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">t</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">result</span><span class="p">;</span>
+    <span class="nx">options</span> <span class="o">=</span> <span class="nx">options</span> <span class="o">||</span> <span class="p">{};</span>
+    <span class="kd">var</span> <span class="nx">phrase</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">phrases</span><span class="p">[</span><span class="nx">key</span><span class="p">]</span> <span class="o">||</span> <span class="nx">options</span><span class="p">.</span><span class="nx">_</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">phrase</span> <span class="o">===</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;Missing translation for key: &quot;&#39;</span><span class="o">+</span><span class="nx">key</span><span class="o">+</span><span class="s1">&#39;&quot;&#39;</span><span class="p">);</span>
+      <span class="nx">result</span> <span class="o">=</span> <span class="nx">key</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">options</span> <span class="o">=</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">options</span><span class="p">);</span></pre></div>             </td>           </tr>                               <tr id="section-9">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-9">&#182;</a>               </div>               <p>This allows you to pass an Array, Backbone.Collection, or anything
+with a <code>length</code> property as the <code>smart_count</code> parameter for pluralization.</p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="k">if</span> <span class="p">(</span><span class="nx">options</span><span class="p">.</span><span class="nx">smart_count</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">smart_count</span><span class="p">.</span><span class="nx">length</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">options</span><span class="p">.</span><span class="nx">smart_count</span> <span class="o">=</span> <span class="nx">options</span><span class="p">.</span><span class="nx">smart_count</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="nx">result</span> <span class="o">=</span> <span class="nx">choosePluralForm</span><span class="p">(</span><span class="nx">phrase</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">currentLocale</span><span class="p">,</span> <span class="nx">options</span><span class="p">.</span><span class="nx">smart_count</span><span class="p">);</span>
+      <span class="nx">result</span> <span class="o">=</span> <span class="nx">interpolate</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-10">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-10">&#182;</a>               </div>               <h3>polylglot.pluralize(noun, count)</h3>
+
+<p>A shortcut for calling <code>polyglot.t()</code> with a special <code>||||</code>-delimeted phrase.
+Works well for the simple case, like "1 car".</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="nx">Polyglot</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">pluralize</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">noun</span><span class="p">,</span> <span class="nx">count</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">count</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">count</span><span class="p">.</span><span class="nx">length</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">count</span> <span class="o">=</span> <span class="nx">count</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="kd">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="nx">pluralizeKey</span><span class="p">(</span><span class="nx">noun</span><span class="p">);</span>
+    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="p">{</span><span class="nx">smart_count</span><span class="o">:</span> <span class="nx">count</span><span class="p">});</span>
+  <span class="p">};</span>
+
+  <span class="kd">function</span> <span class="nx">pluralizeKey</span><span class="p">(</span><span class="nx">noun</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s1">&#39;shared.pluralize.&#39;</span> <span class="o">+</span> <span class="nx">noun</span><span class="p">;</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-11">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-11">&#182;</a>               </div>               <h4>Pluralization methods</h4>
+
+<p>The string that separates the different phrase possibilities.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">delimeter</span> <span class="o">=</span> <span class="s1">&#39;||||&#39;</span><span class="p">;</span></pre></div>             </td>           </tr>                               <tr id="section-12">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-12">&#182;</a>               </div>               <p>Mapping from pluralization group plural logic.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">pluralTypes</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">chinese</span><span class="o">:</span>   <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> <span class="p">},</span>
+    <span class="nx">german</span><span class="o">:</span>    <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">n</span> <span class="o">!==</span> <span class="mi">1</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="p">},</span>
+    <span class="nx">french</span><span class="o">:</span>    <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">n</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="p">},</span>
+    <span class="nx">russian</span><span class="o">:</span>   <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">!==</span> <span class="mi">11</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">&lt;=</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">||</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&gt;=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">2</span><span class="p">;</span> <span class="p">},</span>
+    <span class="nx">czech</span><span class="o">:</span>     <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="p">(</span><span class="nx">n</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">&lt;=</span> <span class="mi">4</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">2</span><span class="p">;</span> <span class="p">},</span>
+    <span class="nx">polish</span><span class="o">:</span>    <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="nx">n</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">&lt;=</span> <span class="mi">4</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&lt;</span> <span class="mi">10</span> <span class="o">||</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">&gt;=</span> <span class="mi">20</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">2</span><span class="p">)</span> <span class="p">},</span>
+    <span class="nx">icelandic</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="p">(</span><span class="nx">n</span> <span class="o">%</span> <span class="mi">10</span> <span class="o">!==</span> <span class="mi">1</span> <span class="o">||</span> <span class="nx">n</span> <span class="o">%</span> <span class="mi">100</span> <span class="o">===</span> <span class="mi">11</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+  <span class="p">};</span></pre></div>             </td>           </tr>                               <tr id="section-13">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-13">&#182;</a>               </div>               <p>Mapping from pluralization group to individual locales.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">var</span> <span class="nx">pluralTypeToLanguages</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">chinese</span><span class="o">:</span>   <span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;ja&#39;</span><span class="p">,</span> <span class="s1">&#39;ko&#39;</span><span class="p">,</span> <span class="s1">&#39;ms&#39;</span><span class="p">,</span> <span class="s1">&#39;th&#39;</span><span class="p">,</span> <span class="s1">&#39;tr&#39;</span><span class="p">,</span> <span class="s1">&#39;zh&#39;</span><span class="p">],</span>
+    <span class="nx">german</span><span class="o">:</span>    <span class="p">[</span><span class="s1">&#39;da&#39;</span><span class="p">,</span> <span class="s1">&#39;de&#39;</span><span class="p">,</span> <span class="s1">&#39;en&#39;</span><span class="p">,</span> <span class="s1">&#39;es&#39;</span><span class="p">,</span> <span class="s1">&#39;fi&#39;</span><span class="p">,</span> <span class="s1">&#39;el&#39;</span><span class="p">,</span> <span class="s1">&#39;he&#39;</span><span class="p">,</span> <span class="s1">&#39;hu&#39;</span><span class="p">,</span> <span class="s1">&#39;it&#39;</span><span class="p">,</span> <span class="s1">&#39;nl&#39;</span><span class="p">,</span> <span class="s1">&#39;no&#39;</span><span class="p">,</span> <span class="s1">&#39;pt&#39;</span><span class="p">,</span> <span class="s1">&#39;sv&#39;</span><span class="p">],</span>
+    <span class="nx">french</span><span class="o">:</span>    <span class="p">[</span><span class="s1">&#39;fr&#39;</span><span class="p">,</span> <span class="s1">&#39;tl&#39;</span><span class="p">],</span>
+    <span class="nx">russian</span><span class="o">:</span>   <span class="p">[</span><span class="s1">&#39;hr&#39;</span><span class="p">,</span> <span class="s1">&#39;ru&#39;</span><span class="p">],</span>
+    <span class="nx">czech</span><span class="o">:</span>     <span class="p">[</span><span class="s1">&#39;cs&#39;</span><span class="p">],</span>
+    <span class="nx">polish</span><span class="o">:</span>    <span class="p">[</span><span class="s1">&#39;pl&#39;</span><span class="p">],</span>
+    <span class="nx">icelandic</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;is&#39;</span><span class="p">]</span>
+  <span class="p">};</span>
+
+  <span class="kd">function</span> <span class="nx">langToTypeMap</span><span class="p">(</span><span class="nx">mapping</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">type</span><span class="p">,</span> <span class="nx">langs</span><span class="p">,</span> <span class="nx">l</span><span class="p">,</span> <span class="nx">ret</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="nx">type</span> <span class="k">in</span> <span class="nx">mapping</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">mapping</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">type</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">langs</span> <span class="o">=</span> <span class="nx">mapping</span><span class="p">[</span><span class="nx">type</span><span class="p">];</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">l</span> <span class="k">in</span> <span class="nx">langs</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">ret</span><span class="p">[</span><span class="nx">langs</span><span class="p">[</span><span class="nx">l</span><span class="p">]]</span> <span class="o">=</span> <span class="nx">type</span><span class="p">;</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ret</span><span class="p">;</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-14">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-14">&#182;</a>               </div>               <p>Trim a string.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">trim</span><span class="p">(</span><span class="nx">str</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">trimRe</span> <span class="o">=</span> <span class="sr">/^\s+|\s+$/g</span><span class="p">;</span>
+    <span class="k">return</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="nx">trimRe</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-15">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-15">&#182;</a>               </div>               <p>Based on a phrase text that contains <code>n</code> plural forms separated
+by <code>delimeter</code>, a <code>locale</code>, and a <code>count</code>, choose the correct
+plural form, or none if <code>count</code> is <code>null</code>.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">choosePluralForm</span><span class="p">(</span><span class="nx">text</span><span class="p">,</span> <span class="nx">locale</span><span class="p">,</span> <span class="nx">count</span><span class="p">){</span>
+    <span class="kd">var</span> <span class="nx">ret</span><span class="p">,</span> <span class="nx">texts</span><span class="p">,</span> <span class="nx">chosenText</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">count</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">text</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">texts</span> <span class="o">=</span> <span class="nx">text</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="nx">delimeter</span><span class="p">);</span>
+      <span class="nx">chosenText</span> <span class="o">=</span> <span class="nx">texts</span><span class="p">[</span><span class="nx">pluralTypeIndex</span><span class="p">(</span><span class="nx">locale</span><span class="p">,</span> <span class="nx">count</span><span class="p">)]</span> <span class="o">||</span> <span class="nx">texts</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+      <span class="nx">ret</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nx">chosenText</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">ret</span> <span class="o">=</span> <span class="nx">text</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ret</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">pluralTypeName</span><span class="p">(</span><span class="nx">locale</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">langToPluralType</span> <span class="o">=</span> <span class="nx">langToTypeMap</span><span class="p">(</span><span class="nx">pluralTypeToLanguages</span><span class="p">);</span>
+    <span class="k">return</span> <span class="nx">langToPluralType</span><span class="p">[</span><span class="nx">locale</span><span class="p">]</span> <span class="o">||</span> <span class="nx">langToPluralType</span><span class="p">[</span><span class="s1">&#39;en&#39;</span><span class="p">];</span>
+  <span class="p">}</span>
+
+  <span class="kd">function</span> <span class="nx">pluralTypeIndex</span><span class="p">(</span><span class="nx">locale</span><span class="p">,</span> <span class="nx">count</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">pluralTypes</span><span class="p">[</span><span class="nx">pluralTypeName</span><span class="p">(</span><span class="nx">locale</span><span class="p">)](</span><span class="nx">count</span><span class="p">);</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-16">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-16">&#182;</a>               </div>               <h3>interpolate</h3>
+
+<p>Does the dirty work. Creates a <code>RegExp</code> object for each
+interpolation placeholder.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">interpolate</span><span class="p">(</span><span class="nx">phrase</span><span class="p">,</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">arg</span> <span class="k">in</span> <span class="nx">options</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">arg</span> <span class="o">!==</span> <span class="s1">&#39;_&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">options</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">arg</span><span class="p">))</span> <span class="p">{</span></pre></div>             </td>           </tr>                               <tr id="section-17">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-17">&#182;</a>               </div>               <p>We create a new <code>RegExp</code> each time instead of using a more-efficient
+string replace so that the same argument can be replaced multiple times
+in the same phrase.</p>             </td>             <td class="code">               <div class="highlight"><pre>        <span class="nx">phrase</span> <span class="o">=</span> <span class="nx">phrase</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s1">&#39;%\\{&#39;</span><span class="o">+</span><span class="nx">arg</span><span class="o">+</span><span class="s1">&#39;\\}&#39;</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">),</span> <span class="nx">options</span><span class="p">[</span><span class="nx">arg</span><span class="p">]);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">phrase</span><span class="p">;</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-18">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-18">&#182;</a>               </div>               <h3>warn</h3>
+
+<p>Provides a warning in the console if a phrase key is missing.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">warn</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">root</span><span class="p">.</span><span class="nx">console</span> <span class="o">&amp;&amp;</span> <span class="nx">root</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">warn</span> <span class="o">&amp;&amp;</span> <span class="nx">root</span><span class="p">.</span><span class="nx">console</span><span class="p">.</span><span class="nx">warn</span><span class="p">(</span><span class="s1">&#39;WARNING: &#39;</span> <span class="o">+</span> <span class="nx">message</span><span class="p">);</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-19">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-19">&#182;</a>               </div>               <h3>clone</h3>
+
+<p>Clone an object.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="kd">function</span> <span class="nx">clone</span><span class="p">(</span><span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="p">{};</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="nx">source</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">ret</span><span class="p">[</span><span class="nx">prop</span><span class="p">]</span> <span class="o">=</span> <span class="nx">source</span><span class="p">[</span><span class="nx">prop</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">ret</span><span class="p">;</span>
+  <span class="p">}</span></pre></div>             </td>           </tr>                               <tr id="section-20">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-20">&#182;</a>               </div>               <p>Export for Node, attach to <code>window</code> for browser.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">module</span> <span class="o">!==</span> <span class="s1">&#39;undefined&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Polyglot</span><span class="p">;</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="nx">root</span><span class="p">.</span><span class="nx">Polyglot</span> <span class="o">=</span> <span class="nx">Polyglot</span><span class="p">;</span>
+  <span class="p">}</span>
+
+<span class="p">}(</span><span class="k">this</span><span class="p">);</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
