@@ -1,5 +1,5 @@
 Polyglot = require("../lib/polyglot")
-should = require('chai').should()
+should = require('should')
 
 describe "t", ->
 
