@@ -1,4 +1,4 @@
-Polyglot = require("../lib/pg")
+Polyglot = require("../lib/polyglot")
 should = require('chai').should()
 
 describe "t", ->
