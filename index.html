@@ -31,8 +31,7 @@
         <h1>Polyglot.js</h1>
 
 <p>Polyglot.js is a tiny I18n helper library written in JavaScript, made to
-work both in the browser and in Node. It provides a simple solution for
-interpolation and pluralization, based off of Airbnb's
+work both in the browser and in CommonJS environments (Node). It provides a simple solution for interpolation and pluralization, based off of Airbnb's
 experience adding I18n functionality to its Backbone.js and Node apps.</p>
 
 <p>I18n is incredibly important for us at <a href="https://www.airbnb.com/">Airbnb</a>,
@@ -44,15 +43,68 @@ to help us scale up to meet the challenges of buliding a global marketplace.</p>
 
 <p>View the <a href="http://airbnb.github.com/polyglot.js/polyglot.html">annotated source</a>.</p>
 
-<p>Download the <a href="https://raw.github.com/airbnb/polyglot.js/master/build/polyglot.js">development version</a>: 2.6kb, unminified with comments.</p>
+<p>Download the <a href="https://raw.github.com/airbnb/polyglot.js/master/build/polyglot.js">development version</a>: 7.9kb, unminified with comments.</p>
 
-<p>Download the <a href="https://raw.github.com/airbnb/polyglot.js/master/build/polyglot.min.js">production version</a>: 665b, minified and gzipped.</p>
+<p>Download the <a href="https://raw.github.com/airbnb/polyglot.js/master/build/polyglot.min.js">production version</a>: 2.8kb, minified (1.3kb gzipped).</p>
 
 <p>Polylglot is agnostic to your translation backend. It doesn't perform any
 translation; it simply gives you a way to manage translated phrases from
 your client- or server-side JavaScript application.</p>
 
+<h2>Installation</h2>
+
+<p>For use with Node, install with <a href="http://npmjs.org">NPM</a>:</p>
+
+<pre><code>$ npm install node-polyglot
+</code></pre>
+
+<h3>Running the tests</h3>
+
+<pre><code>$ npm install
+
+$ npm test
+
+  t
+    ✓ should translate a simple string
+    ✓ should return the key if translation not found
+    ✓ should interpolate
+    ✓ should interpolate the same placeholder multiple times
+    ✓ should allow you to supply default values
+
+  locale
+    ✓ should default to 'en'
+    ✓ should get and set locale
+
+  extend
+    ✓ should support multiple extends, overriding old keys
+    ✓ shouldn't forget old keys
+
+  clear
+    ✓ should wipe out old phrases
+
+  replace
+    ✓ should wipe out old phrases and replace with new phrases
+
+  pluralize
+    ✓ should support pluralization with an integer
+    ✓ should support pluralization with an Array
+    ✓ should support pluralization of anything with a 'length' property
+    ✓ should support the 'pluralize' shortcut
+
+
+  ✔ 15 tests complete (13ms)
+</code></pre>
+
 <h2>Usage</h2>
+
+<h3>Instantiation</h3>
+
+<p>First, create an instance of the <code>Polyglot</code> class, which you will use for translation.</p>
+
+<pre><code>var polyglot = new Polyglot();
+</code></pre>
+
+<p>Polyglot is class-based so you can maintain different sets of phrases at the same time, possibly in different locales. This is very useful for example when serving requests with <a href="http://expressjs.com">Express</a>, because each request may have a different locale, and you don't want concurrent requests to clobber each other's phrases.</p>
 
 <h3>Translation</h3>
 
@@ -60,12 +112,17 @@ your client- or server-side JavaScript application.</p>
 where the key is the canonical name of the phrase and the value is
 the already-translated string.</p>
 
-<pre><code>Polyglot.extend({
+<pre><code>polyglot.extend({
   "hello": "Hello"
 });
 
-Polyglot.t("hello");
+polyglot.t("hello");
 =&gt; "Hello"
+</code></pre>
+
+<p>You can also instantiate with phrases:</p>
+
+<pre><code>var polyglot = new Polyglot({phrases: {"hello": "Hello"}});
 </code></pre>
 
 <p>Polyglot doesn't do the translation for you. It's up to you to give it
@@ -88,11 +145,11 @@ end
 <p><code>app/views/home/index.html.erb</code></p>
 
 <pre><code>&lt;script&gt;
-  Polyglot.extend(&lt;%= raw @phrases.to_json %&gt;);
+  var polyglot = new Polyglot({phrases: &lt;%= raw @phrases.to_json %&gt;});
 &lt;/script&gt;
 </code></pre>
 
-<p>And now you can utilize i.e. <code>Polyglot.t("home.login")</code> in your JavaScript application
+<p>And now you can utilize i.e. <code>polyglot.t("home.login")</code> in your JavaScript application
 or Handlebars templates.</p>
 
 <h3>Interpolation</h3>
@@ -100,149 +157,86 @@ or Handlebars templates.</p>
 <p><code>Polyglot.t()</code> also provides interpolation. Pass an object with key-value pairs of
 interpolation arguments as the second parameter.</p>
 
-<pre><code>Polyglot.extend({
+<pre><code>polyglot.extend({
   "hello_name": "Hola, %{name}."
 });
 
-Polyglot.t("hello_name", {name: "DeNiro"});
+polyglot.t("hello_name", {name: "DeNiro"});
 =&gt; "Hola, DeNiro."
 </code></pre>
 
 <h3>Pluralization</h3>
 
+<p>For pluralization to work properly, you need to tell Polyglot what the current locale is.  You can use <code>polyglot.locale("fr")</code> to set the locale to, for example, French. This method is also a getter:</p>
+
+<pre><code>polyglot.locale()
+=&gt; "fr"
+</code></pre>
+
+<p>You can also pass this in during instantiation.</p>
+
+<pre><code>var polyglot = new Polyglot({locale: "fr"});
+</code></pre>
+
+<p>Currently, the <em>only</em> thing that Polyglot uses this locale setting for is pluralization.</p>
+
 <p>Polyglot provides a very basic pattern for providing
-pluralization based on a singular noun. Because various languages
-have different nominal forms for zero, one, and multiple, and because
-the noun can be before or after the count, we have to be overly explicit
+pluralization based on a single string that contains all plural forms for a given phrase. Because various languages have different nominal forms for zero, one, and multiple, and because the noun can be before or after the count, we have to be overly explicit
 about the possible phrases.</p>
 
-<p>For pluralizing "car", it assumes you have phrase keys of the form:</p>
+<p>To get a pluralized phrase, still use <code>polyglot.t()</code> but use a specially-formatted phrase string that separates the plural forms by the delimeter <code>||||</code>, or four vertical pipe characters.</p>
 
-<pre><code>Polyglot.extend({
-  "pluralize.car.zero": "%{count} cars",
-  "pluralize.car.one":  "%{count} car",
-  "pluralize.car.many": "%{count} cars"
+<p>For pluralizing "car" in English, Polyglot assumes you have a phrase of the form:</p>
+
+<pre><code>polyglot.extend({
+  "num_cars": "%{smart_count} car |||| %{smart_count} cars",
 });
 </code></pre>
 
-<p><code>Polyglot.pluralize()</code> will choose the appropriate phrase based
-on the provided count.</p>
+<p>English (and German, Spanish, Italian, and a few others) there are only two plural forms: singular and not-singular.</p>
 
-<pre><code>Polyglot.pluralize("car", 0);
+<p><code>polyglot.t()</code> will choose the appropriate phrase based
+on the provided <code>smart_count</code> option.</p>
+
+<pre><code>polyglot.t("num_cars", {smart_count: 0});
 =&gt; "0 cars"
 
-Polyglot.pluralize("car", 1);
+polyglot.t("num_cars", {smart_count: 1});
 =&gt; "1 car"
 
-Polyglot.pluralize("car", 2);
+polyglot.t("num_cars", {smart_count: 2});
 =&gt; "2 cars"
 </code></pre>
 
-<p>The second argument can be a <code>Number</code> or anything with a <code>length</code> property,
+<p>However, some languages get a bit more complicated. In Czech, there are three separate forms: 1, 2 through 4, and 5 and up. Russian is even crazier.</p>
+
+<p>The <code>smart_count</code> option can be a <code>Number</code> or anything with a <code>length</code> property,
 such as an <code>Array</code> or a <code>Backbone.Collection</code>.</p>
 
 <pre><code>var Cars = Backbone.Collection.extend({});
 var cars = new Cars;
 
-Polyglot.pluralize("car", cars);
+polyglot.t("num_cars", {smart_count: cars});
 =&gt; "0 cars"
 
 cars.add({make: "Ford", model: "Fiesta"});
 
-Polyglot.pluralize("car", cars);
+polyglot.t("num_cars", {smart_count: cars});
 =&gt; "1 car"
 
 cars.add({make: "Subaru", model: "Impreza"});
 
-Polyglot.pluralize("car", cars);
+polyglot.t("num_cars", {smart_count: cars});
 =&gt; "2 cars"
-</code></pre>
-
-<h3>Handlebars Helpers</h3>
-
-<p>Polygot also provides two useful Handlebars helpers: <code>t</code> and <code>pluralize</code>.</p>
-
-<h4>t</h4>
-
-<p>You can use the <code>t</code> helper with or without interpolation arguments.</p>
-
-<pre><code>// In a Handlebars template
-&lt;h1&gt;{{t "welcome_to_my_site"}}&lt;/h1&gt;
-&lt;p&gt;{{t "signed_in_as_username" username=username}}&lt;/p&gt;
-
-// In your JavaScript
-Polyglot.extend({
-  "welcome_to_my_site": "Welcome to my site.",
-  "signed_in_as_username": "Signed in as %{username}."
-});
-
-var template = Handlebars.compile(...);
-var html = template({username: "Spike"});
-</code></pre>
-
-<p>gives:</p>
-
-<pre><code>&lt;h1&gt;Welcome to my site.&lt;/h1&gt;
-&lt;p&gt;Signed in as Spike.&lt;/p&gt;
-</code></pre>
-
-<p>Use as many interpolation arguments as you need.</p>
-
-<pre><code>// In a Handlebars template
-&lt;h1&gt;{{t "hello_first_and_last_name" firstName=firstName lastName=lastName}}&lt;/h1&gt;
-
-// In your JavaScript
-Polyglot.extend({
-  "hello_first_and_last_name": "Hello, %{firstName} %{lastName}."
-});
-</code></pre>
-
-<p>gives:</p>
-
-<pre><code>&lt;h1&gt;Hello, Robert DeNiro.&lt;/h1&gt;
-</code></pre>
-
-<p>The output of <code>t</code> is not HTML-escaped by default. To escape it, use Handlebars'
-triple-bracket <code>{{{t ...}}}</code> notation:</p>
-
-<pre><code>// In a Handlebars template
-&lt;p&gt;{{t "num_unread_messages" count=numUnread}}&lt;/p&gt;
-&lt;p&gt;{{{t "num_unread_messages" count=numUnread}}}&lt;/p&gt;
-
-// In your JavaScript
-Polyglot.extend({
-  "num_unread_messages": "&lt;strong&gt;%{count}&lt;/strong&gt; unread messages"
-});
-</code></pre>
-
-<p>gives:</p>
-
-<pre><code>&lt;p&gt;&amp;lt;strong&amp;gt;5&amp;lt;/strong&amp;gt; unread messages&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;5&lt;/strong&gt; unread messages&lt;/p&gt;
-</code></pre>
-
-<h4>pluralize</h4>
-
-<p>The <code>pluralize</code> helper is just a wrapper around <code>Polyglot.pluralize()</code>, so
-you pass it a singular noun as the main string argument, and <code>count</code> as
-an argument using Handlebars' block hash syntax.  The <code>count</code> argument can
-be a <code>Number</code> or anything with a lengh property, such as <code>Array</code> or <code>Backbone.Collection</code>.</p>
-
-<pre><code>&lt;p&gt;{{pluralize "car" count=carCollection}}&lt;/p&gt;
-</code></pre>
-
-<p>gives:</p>
-
-<pre><code>&lt;p&gt;3 cars&lt;/p&gt;
 </code></pre>
 
 <h2>Public Methods</h2>
 
-<h3>Polyglot.extend(phrases)</h3>
+<h3>Polyglot.prototype.extend(phrases)</h3>
 
 <p>Use <code>extend</code> to tell Polyglot how to translate a given key.</p>
 
-<pre><code>Polyglot.extend({
+<pre><code>polyglot.extend({
   "hello": "Hello",
   "hello_name": "Hello, %{name}"
 });
@@ -252,133 +246,99 @@ be a <code>Number</code> or anything with a lengh property, such as <code>Array<
 it will override any phrases with the same key, but leave existing phrases
 untouched.</p>
 
-<h3>Polyglot.clear()</h3>
+<h3>Polyglot.prototype.clear()</h3>
 
 <p>Clears all phrases. Useful for special cases, such as freeing
 up memory if you have lots of phrases but no longer need to
 perform any translation. Also used internally by <code>replace</code>.</p>
 
-<h3>Polyglot.replace(phrases)</h3>
+<h3>Polyglot.prototype.replace(phrases)</h3>
 
 <p>Completely replace the existing phrases with a new set of phrases.
 Normally, just use <code>extend</code> to add more phrases, but under certain
 circumstances, you may want to make sure no old phrases are lying around.</p>
 
-<h3>Polyglot.t(key, interpolationOptions)</h3>
+<h3>Polyglot.prototype.t(key, interpolationOptions)</h3>
 
 <p>The most-used method. Provide a key, and <code>t</code> will return the
 phrase.</p>
 
-<pre><code>Polyglot.t("hello");
+<pre><code>polyglot.t("hello");
 =&gt; "Hello"
 </code></pre>
 
-<p>The phrase value is provided first by a call to <code>Polyglot.extend()</code> or
-<code>Polyglot.replace()</code>.</p>
+<p>The phrase value is provided first by a call to <code>polyglot.extend()</code> or
+<code>polyglot.replace()</code>.</p>
 
 <p>Pass in an object as the second argument to perform interpolation.</p>
 
-<pre><code>Polyglot.t("hello_name", {name: "Spike"});
+<pre><code>polyglot.t("hello_name", {name: "Spike"});
 =&gt; "Hello, Spike"
 </code></pre>
 
 <p>If you like, you can provide a default value in case the phrase is missing.
 Use the special option key "_" to specify a default.</p>
 
-<pre><code>Polyglot.t("i_like_to_write_in_language", {
+<pre><code>polyglot.t("i_like_to_write_in_language", {
   _: "I like to write in %{language}.",
   language: "JavaScript"
 });
 =&gt; "I like to write in JavaScript."
 </code></pre>
 
-<h3>Polyglot.pluralize(noun, count)</h3>
+<h3>Polyglot.prototype.pluralize(noun, count)</h3>
 
 <p>For pluralizing "car", it assumes you have phrase keys of the form:</p>
 
-<pre><code>Polyglot.extend({
+<pre><code>polyglot.extend({
   "pluralize.car.zero": "%{count} cars",
   "pluralize.car.one":  "%{count} car",
   "pluralize.car.many": "%{count} cars"
 });
 </code></pre>
 
-<p>`Polyglot.pluralize()' will choose the appropriate phrase based
+<p><code>pluralize</code> will choose the appropriate phrase based
 on the provided count.</p>
 
-<pre><code>Polyglot.pluralize("car", 0);
+<pre><code>polyglot.pluralize("car", 0);
 =&gt; "0 cars"
 
-Polyglot.pluralize("car", 1);
+polyglot.pluralize("car", 1);
 =&gt; "1 car"
 
-Polyglot.pluralize("car", 2);
+polyglot.pluralize("car", 2);
 =&gt; "2 cars"
 </code></pre>
 
 <p>The second argument can be a <code>Number</code> or anything with a <code>length</code> property,
 such as an <code>Array</code> or a <code>Backbone.Collection</code>.</p>
 
-<pre><code>var Cars = Backbone.Collection.extend({});
-var cars = new Cars;
+<pre><code>var cars = new Backbone.Collection();
 
-Polyglot.pluralize("car", cars);
+polyglot.pluralize("car", cars);
 =&gt; "0 cars"
 
 cars.add({make: "Ford", model: "Fiesta"});
 
-Polyglot.pluralize("car", cars);
+polyglot.pluralize("car", cars);
 =&gt; "1 car"
 
 cars.add({make: "Subaru", model: "Impreza"});
 
-Polyglot.pluralize("car", cars);
+polyglot.pluralize("car", cars);
 =&gt; "2 cars"
 </code></pre>
 
-<h3>Polyglot.registerHandlebars(Handlebars)</h3>
+<h2>History</h2>
 
-<p>Registers Polyglot's Handlebars helpers on a given
-Handlebars context. This is automatically called if we find
-a global <code>Handlebars</code> object, which makes use in the
-browser a snap if Handlebars is included before Polyglot.
-Otherwise, you can manually register the Handlebars helpers
-by passing in a Handlebars conext, which is the primary Node
-use case:</p>
+<h3>v0.2.0: Dec 20, 2012</h3>
 
-<pre><code>var Handlebars = require('handlebars');
-var Polyglot = require('polyglot');
-
-console.log(Handlebars.helpers.t);
-=&gt; undefined
-
-Polyglot.registerHandlebars(Handlebars);
-
-console.log(Handlebars.helpers.t);
-=&gt; function(){...}
-</code></pre>
-
-<h2>Handlebars helpers</h2>
-
-<h3>t</h3>
-
-<pre><code>&lt;h1&gt;{{t "hello_name" name=name}}&lt;/h1&gt;
-</code></pre>
-
-<p>gives:</p>
-
-<pre><code>&lt;h1&gt;Hello, DeNiro.&lt;/h1&gt;
-</code></pre>
-
-<h3>pluralize</h3>
-
-<pre><code>&lt;p&gt;{{pluralize "car" count=carCollection}}&lt;/p&gt;
-</code></pre>
-
-<p>gives:</p>
-
-<pre><code>&lt;p&gt;3 cars&lt;/p&gt;
-</code></pre>
+<ul>
+<li>
+<em>Breaking change</em>: Moved from Singleton pattern to class-based. Now you create an instance of the <code>Polyglot</code> class rather than using class methods directly on it. The reason is to allow maintaining multiple sets of phrases, which is something we ran into at Airbnb with a highly-concurrent Express app.</li>
+<li>
+<em>Breaking change</em>: Removed the built-in Handlebars helpers, because Handlebars is a singleton, and it's messy to create a single helper function that can be bound to different Polyglot instances.  Instead, it's super easy to create your own, based on your requirements.</li>
+</ul>
       </section>
       <footer>
         <p>This project is maintained by <a href="https://github.com/airbnb">airbnb</a></p>
