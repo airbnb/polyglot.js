@@ -15,96 +15,95 @@
 // your client- or server-side JavaScript application.
 //
 
-//
-
 !function(root) {
   'use strict';
 
-  var phrases = {}, currentLocale = 'en';
-
-// ## Public Methods
-
-// ### Polyglot.locale([locale])
-//
-// Get or set locale. Internally, Polyglot only uses locale for pluralization.
-
-  function locale(newLocale) {
-    if (newLocale) currentLocale = newLocale;
-    return currentLocale;
+  // ### Polyglot class constructor
+  function Polyglot(options) {
+    this.phrases = (options && options.phrases) ? options.phrases : {};
+    this.currentLocale = (options && options.locale) ? options.locale : 'en';
   }
 
-// ### Polyglot.extend(phrases)
-//
-// Use `extend` to tell Polyglot how to translate a given key.
-//
-//     Polyglot.extend({
-//       "hello": "Hello",
-//       "hello_name": "Hello, %{name}"
-//     });
-//
-// The key can be any string.  Feel free to call `extend` multiple times;
-// it will override any phrases with the same key, but leave existing phrases
-// untouched.
+  // ### Version
+  Polyglot.VERSION = '0.2.0';
 
-  function extend(morePhrases) {
+  // ### polyglot.locale([locale])
+  //
+  // Get or set locale. Internally, Polyglot only uses locale for pluralization.
+  Polyglot.prototype.locale = function(newLocale) {
+    if (newLocale) this.currentLocale = newLocale;
+    return this.currentLocale;
+  };
+
+  // ### polyglot.extend(phrases)
+  //
+  // Use `extend` to tell Polyglot how to translate a given key.
+  //
+  //     polyglot.extend({
+  //       "hello": "Hello",
+  //       "hello_name": "Hello, %{name}"
+  //     });
+  //
+  // The key can be any string.  Feel free to call `extend` multiple times;
+  // it will override any phrases with the same key, but leave existing phrases
+  // untouched.
+  Polyglot.prototype.extend = function(morePhrases) {
     for (var key in morePhrases) {
       if (morePhrases.hasOwnProperty(key)) {
-        phrases[key] = morePhrases[key];
+        this.phrases[key] = morePhrases[key];
       }
     }
-  }
+  };
 
-// ### Polyglot.clear()
-//
-// Clears all phrases. Useful for special cases, such as freeing
-// up memory if you have lots of phrases but no longer need to
-// perform any translation. Also used internally by `replace`.
+  // ### polyglot.clear()
+  //
+  // Clears all phrases. Useful for special cases, such as freeing
+  // up memory if you have lots of phrases but no longer need to
+  // perform any translation. Also used internally by `replace`.
+  Polyglot.prototype.clear = function() {
+    this.phrases = {};
+  };
 
-  function clear() {
-    phrases = {};
-  }
+  // ### polyglot.replace(phrases)
+  //
+  // Completely replace the existing phrases with a new set of phrases.
+  // Normally, just use `extend` to add more phrases, but under certain
+  // circumstances, you may want to make sure no old phrases are lying around.
+  Polyglot.prototype.replace = function(newPhrases) {
+    this.clear();
+    this.extend(newPhrases);
+  };
 
-// ### Polyglot.replace(phrases)
-//
-// Completely replace the existing phrases with a new set of phrases.
-// Normally, just use `extend` to add more phrases, but under certain
-// circumstances, you may want to make sure no old phrases are lying around.
 
-  function replace(newPhrases) {
-    clear();
-    extend(newPhrases);
-  }
-
-// ### Polyglot.t(key, options)
-//
-// The most-used method. Provide a key, and `t` will return the
-// phrase.
-//
-//     Polyglot.t("hello");
-//     => "Hello"
-//
-// The phrase value is provided first by a call to `Polyglot.extend()` or
-// `Polyglot.replace()`.
-//
-// Pass in an object as the second argument to perform interpolation.
-//
-//     Polyglot.t("hello_name", {name: "Spike"});
-//     => "Hello, Spike"
-//
-// If you like, you can provide a default value in case the phrase is missing.
-// Use the special option key "_" to specify a default.
-//
-//     Polyglot.t("i_like_to_write_in_language", {
-//       _: "I like to write in %{language}.",
-//       language: "JavaScript"
-//     });
-//     => "I like to write in JavaScript."
-//
-
-  function t(key, options) {
+  // ### polyglot.t(key, options)
+  //
+  // The most-used method. Provide a key, and `t` will return the
+  // phrase.
+  //
+  //     polyglot.t("hello");
+  //     => "Hello"
+  //
+  // The phrase value is provided first by a call to `polyglot.extend()` or
+  // `polyglot.replace()`.
+  //
+  // Pass in an object as the second argument to perform interpolation.
+  //
+  //     polyglot.t("hello_name", {name: "Spike"});
+  //     => "Hello, Spike"
+  //
+  // If you like, you can provide a default value in case the phrase is missing.
+  // Use the special option key "_" to specify a default.
+  //
+  //     polyglot.t("i_like_to_write_in_language", {
+  //       _: "I like to write in %{language}.",
+  //       language: "JavaScript"
+  //     });
+  //     => "I like to write in JavaScript."
+  //
+  Polyglot.prototype.t = function(key, options) {
     var result;
     options = options || {};
-    var phrase = phrases[key] || options._ || '';
+    var phrase = this.phrases[key] || options._ || '';
     if (phrase === '') {
       warn('Missing translation for key: "'+key+'"');
       result = key;
@@ -115,20 +114,35 @@
       if (options.smart_count != null && options.smart_count.length != null) {
         options.smart_count = options.smart_count.length;
       }
-      result = choosePluralForm(phrase, currentLocale, options.smart_count);
+      result = choosePluralForm(phrase, this.currentLocale, options.smart_count);
       result = interpolate(result, options);
     }
     return result;
+  };
+
+
+  // ### polylglot.pluralize(noun, count)
+  //
+  // A shortcut for calling `polyglot.t()` with a special `||||`-delimeted phrase.
+  // Works well for the simple case, like "1 car".
+  Polyglot.prototype.pluralize = function(noun, count) {
+    if (count != null && count.length != null) {
+      count = count.length;
+    }
+    var key = pluralizeKey(noun);
+    return this.t(key, {smart_count: count});
+  };
+
+  function pluralizeKey(noun) {
+    return 'shared.pluralize.' + noun;
   }
 
-
   // #### Pluralization methods
-
   // The string that separates the different phrase possibilities.
-  var delimeter = '||||',
+  var delimeter = '||||';
 
   // Mapping from pluralization group plural logic.
-  pluralTypes = {
+  var pluralTypes = {
     chinese:   function(n) { return 0; },
     german:    function(n) { return n !== 1 ? 1 : 0; },
     french:    function(n) { return n > 1 ? 1 : 0; },
@@ -136,21 +150,20 @@
     czech:     function(n) { return (n === 1) ? 0 : (n >= 2 && n <= 4) ? 1 : 2; },
     polish:    function(n) { return (n === 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2) },
     icelandic: function(n) { return (n % 10 !== 1 || n % 100 === 11) ? 1 : 0; }
-  },
+  };
 
   // Mapping from pluralization group to individual locales.
-  pluralTypeToLanguages = {
+  var pluralTypeToLanguages = {
     chinese:   ['id', 'ja', 'ko', 'ms', 'th', 'tr', 'zh'],
     german:    ['da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'it', 'nl', 'no', 'pt', 'sv'],
     french:    ['fr', 'tl'],
     russian:   ['hr', 'ru'],
     czech:     ['cs'],
     polish:    ['pl'],
-    icelandic: ['is'],
-  },
+    icelandic: ['is']
+  };
 
-  // Mapping from individual locale to pluralization group.
-  languageToPluralType = (function(mapping){
+  function langToTypeMap(mapping) {
     var type, langs, l, ret = {};
     for (type in mapping) {
       if (mapping.hasOwnProperty(type)) {
@@ -161,13 +174,11 @@
       }
     }
     return ret;
-  })(pluralTypeToLanguages),
+  }
 
-  // RegExp for trimming a string.
-  trimRe = /^\s+|\s+$/g;
-
-  // Trim a string.
+    // Trim a string.
   function trim(str){
+    var trimRe = /^\s+|\s+$/g;
     return str.replace(trimRe, '');
   }
 
@@ -187,50 +198,18 @@
   }
 
   function pluralTypeName(locale) {
-    return languageToPluralType[locale] ||
-      languageToPluralType['en'];
+    var langToPluralType = langToTypeMap(pluralTypeToLanguages);
+    return langToPluralType[locale] || langToPluralType['en'];
   }
 
   function pluralTypeIndex(locale, count) {
     return pluralTypes[pluralTypeName(locale)](count);
   }
 
-// ### Polyglot.registerHandlebars(Handlebars)
-//
-// Registers Polyglot's Handlebars helpers on a given
-// Handlebars context. This is automatically called if we find
-// a global `Handlebars` object, which makes use in the
-// browser a snap if Handlebars is included before Polyglot.
-// Otherwise, you can manually register the Handlebars helpers
-// by passing in a Handlebars conext, which is the primary Node
-// use case:
-//
-//     var Handlebars = require('handlebars');
-//     var Polyglot = require('polyglot');
-//
-//     console.log(Handlebars.helpers.t);
-//     // => undefined
-//
-//     Polyglot.registerHandlebars(Handlebars);
-//
-//     console.log(Handlebars.helpers.t);
-//     // => function(){...}
-
-  function registerHandlebars(handlebars) {
-    for (var key in handlebarsHelpers) {
-      if (handlebarsHelpers.hasOwnProperty(key)) {
-        handlebars.registerHelper(key, handlebarsHelpers[key]);
-      }
-    }
-  }
-
-// ## Private Methods
-
-// ### interpolate
-//
-// Does the dirty work. Creates a `RegExp` object for each
-// interpolation placeholder.
-
+  // ### interpolate
+  //
+  // Does the dirty work. Creates a `RegExp` object for each
+  // interpolation placeholder.
   function interpolate(phrase, options) {
     for (var arg in options) {
       if (arg !== '_' && options.hasOwnProperty(arg)) {
@@ -243,18 +222,16 @@
     return phrase;
   }
 
-// ### warn
-//
-// Provides a warning in the console if a phrase key is missing.
-
+  // ### warn
+  //
+  // Provides a warning in the console if a phrase key is missing.
   function warn(message) {
     root.console && root.console.warn && root.console.warn('WARNING: ' + message);
   }
 
-// ### clone
-//
-// Clone an object.
-
+  // ### clone
+  //
+  // Clone an object.
   function clone(source) {
     var ret = {};
     for (var prop in source) {
@@ -263,55 +240,13 @@
     return ret;
   }
 
-// ## Handlebars helpers
 
-  var handlebarsHelpers = {
-
-// ### t
-//
-//     // In your JavaScript
-//     Polyglot.extend({
-//       "hello_first_and_last_name": "Hello, %{firstName} %{lastName}."
-//     });
-//
-//     // In a Handlebars template
-//     <h1>{{t "hello_first_and_last_name" firstName=firstName lastName=lastName}}</h1>
-//
-// gives:
-//
-//     <h1>Hello, Robert DeNiro.</h1>
-
-    t: function(key, block) {
-      return t(key, block.hash);
-    }
-  };
-
-
-// ## Export public methods
-
-  var Polyglot = {
-    locale: locale,
-    extend: extend,
-    replace: replace,
-    clear: clear,
-    t: t,
-    registerHandlebars: registerHandlebars
-  };
-
-// Export for Node, attach to `window` for browser.
+  // Export for Node, attach to `window` for browser.
   if (typeof module !== 'undefined' && module.exports) {
     module.exports = Polyglot;
   } else {
     root.Polyglot = Polyglot;
   }
 
-
-// Register Handlebars helpers if Handlebars is found.
-// If not, you can manually register Handlebars helpers by
-// calling `Polyglot.registerHandlebars(Handlebars)`,
-// passing in your Handlebars context.
-  if (root.Handlebars && root.Handlebars.registerHelper) {
-    registerHandlebars(root.Handlebars);
-  }
-
 }(this);
+
