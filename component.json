@@ -15,6 +15,7 @@
   "dependencies": { },
   "development": {},
   "license": "BSD",
+  "main": "lib/polyglot.js",
   "scripts": [
     "lib/polyglot.js"
   ]
