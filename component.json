@@ -1,0 +1,22 @@
+{
+  "name": "polyglot",
+  "repo": "airbnb/polyglot.js",
+  "description": "Give your JavaScript the ability to speak many languages.",
+  "version": "0.2.0",
+  "keywords": [
+    "i18n",
+    "internationalization",
+    "internationalisation",
+    "translation",
+    "interpolation",
+    "translate",
+    "polyglot"
+  ],
+  "dependencies": { },
+  "development": {},
+  "license": "BSD",
+  "main": "lib/polyglot.js",
+  "scripts": [
+    "lib/polyglot.js"
+  ]
+}
