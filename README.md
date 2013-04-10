@@ -3,7 +3,7 @@ Polyglot.js
 
 Polyglot.js is a tiny I18n helper library written in JavaScript, made to
 work both in the browser and in CommonJS environments (Node). It provides a simple solution for interpolation and pluralization, based off of Airbnb's
-experience adding I18n functionality to its Backbone.js and Node apps.
+experience adding I18n functionality to its Backbone.js and Node apps. Polyglot has zero dependencies.
 
 I18n is incredibly important for us at [Airbnb](https://www.airbnb.com/),
 as we have listings in 192 countries, and we translate our site into 30-odd different languages.
