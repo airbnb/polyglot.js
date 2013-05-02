@@ -285,6 +285,9 @@ such as an `Array` or a `Backbone.Collection`.
 
 ## History
 
+### v0.2.1: May 2, 2013
+* Added `allowMissing` option to let the phrase key be the default translation (thanks @ziad-saab).
+
 ### v0.2.0: Dec 20, 2012
 * _Breaking change_: Moved from Singleton pattern to class-based. Now you create an instance of the `Polyglot` class rather than using class methods directly on it. The reason is to allow maintaining multiple sets of phrases, which is something we ran into at Airbnb with a highly-concurrent Express app.
 * _Breaking change_: Removed the built-in Handlebars helpers, because Handlebars is a singleton, and it's messy to create a single helper function that can be bound to different Polyglot instances.  Instead, it's super easy to create your own, based on your requirements.
