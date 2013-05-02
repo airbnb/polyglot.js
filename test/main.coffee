@@ -29,6 +29,17 @@ describe "t", ->
       name: "Robert"
     ).should.equal "Can I call you Robert?"
 
+  it "should return the non-interpolated key if not initialized with allowMissing and translation not found", ->
+    @polyglot.t("Welcome %{name}",
+      name: "Robert"
+    ).should.equal "Welcome %{name}"
+
+  it "should return an interpolated key if initialized with allowMissing and translation not found", ->
+    @polyglot = new Polyglot({phrases:phrases,allowMissing:true})
+    @polyglot.t("Welcome %{name}",
+      name: "Robert"
+    ).should.equal "Welcome Robert"
+
 describe "locale", ->
 
   beforeEach ->
