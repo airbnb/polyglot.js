@@ -1,0 +1,23 @@
+{
+  "name": "polyglot",
+  "description": "Give your JavaScript the ability to speak many languages.",
+  "version": "0.2.1",
+  "keywords": [
+    "i18n",
+    "internationalization",
+    "internationalisation",
+    "translation",
+    "interpolation",
+    "translate",
+    "polyglot"
+  ],
+  "dependencies": {},
+  "devDependencies": {},
+  "license": "BSD",
+  "main": "lib/polyglot.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}
