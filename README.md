@@ -218,7 +218,7 @@ circumstances, you may want to make sure no old phrases are lying around.
 
 ### Polyglot.prototype.t(key, interpolationOptions)
 
-The most-used method. Provide a key, and `t` will return the
+The most-used method. Provide a key, and `t()` will return the
 phrase.
 
     polyglot.t("hello");
@@ -244,15 +244,25 @@ Use the special option key "_" to specify a default.
 
 ### Polyglot.prototype.pluralize(noun, count)
 
-For pluralizing "car", it assumes you have phrase keys of the form:
+The `pluralize()` method is a simple wrapper around `t()`'s pluralization behavior.
+We pluralize based on the the value of the `smart_count` interpolated variable.
+
+For pluralizing "car", it assumes you have a phrase defined like:
 
     polyglot.extend({
-      "pluralize.car.zero": "%{count} cars",
-      "pluralize.car.one":  "%{count} car",
-      "pluralize.car.many": "%{count} cars"
+      "shared.pluralize.car": "%{smart_count} car |||| %{smart_count} cars"
     });
 
-`pluralize` will choose the appropriate phrase based
+A call to `pluralize()` simply calls `t()` with an expected phrase key format,
+passing in the second argument as `smart_count`:
+
+    polyglot.pluralize('car', 2);
+
+is equivalent to
+
+    polyglot.t('shared.pluralize.car', {smart_count: 2});
+
+`pluralize()` will choose the appropriate phrase based
 on the provided count.
 
     polyglot.pluralize("car", 0);
