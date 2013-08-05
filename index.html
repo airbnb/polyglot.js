@@ -28,11 +28,12 @@
         </ul>
       </header>
       <section>
-        <h1>Polyglot.js</h1>
+        <h1>
+<a name="polyglotjs" class="anchor" href="#polyglotjs"><span class="octicon octicon-link"></span></a>Polyglot.js</h1>
 
 <p>Polyglot.js is a tiny I18n helper library written in JavaScript, made to
 work both in the browser and in CommonJS environments (Node). It provides a simple solution for interpolation and pluralization, based off of Airbnb's
-experience adding I18n functionality to its Backbone.js and Node apps.</p>
+experience adding I18n functionality to its Backbone.js and Node apps. Polyglot has zero dependencies.</p>
 
 <p>I18n is incredibly important for us at <a href="https://www.airbnb.com/">Airbnb</a>,
 as we have listings in 192 countries, and we translate our site into 30-odd different languages.
@@ -51,14 +52,16 @@ to help us scale up to meet the challenges of buliding a global marketplace.</p>
 translation; it simply gives you a way to manage translated phrases from
 your client- or server-side JavaScript application.</p>
 
-<h2>Installation</h2>
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
 <p>For use with Node, install with <a href="http://npmjs.org">NPM</a>:</p>
 
 <pre><code>$ npm install node-polyglot
 </code></pre>
 
-<h3>Running the tests</h3>
+<h3>
+<a name="running-the-tests" class="anchor" href="#running-the-tests"><span class="octicon octicon-link"></span></a>Running the tests</h3>
 
 <pre><code>$ npm install
 
@@ -95,9 +98,11 @@ $ npm test
   ✔ 15 tests complete (13ms)
 </code></pre>
 
-<h2>Usage</h2>
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
 
-<h3>Instantiation</h3>
+<h3>
+<a name="instantiation" class="anchor" href="#instantiation"><span class="octicon octicon-link"></span></a>Instantiation</h3>
 
 <p>First, create an instance of the <code>Polyglot</code> class, which you will use for translation.</p>
 
@@ -106,7 +111,8 @@ $ npm test
 
 <p>Polyglot is class-based so you can maintain different sets of phrases at the same time, possibly in different locales. This is very useful for example when serving requests with <a href="http://expressjs.com">Express</a>, because each request may have a different locale, and you don't want concurrent requests to clobber each other's phrases.</p>
 
-<h3>Translation</h3>
+<h3>
+<a name="translation" class="anchor" href="#translation"><span class="octicon octicon-link"></span></a>Translation</h3>
 
 <p>Tell Polyglot what to say by simply giving it a phrases object,
 where the key is the canonical name of the phrase and the value is
@@ -152,7 +158,8 @@ end
 <p>And now you can utilize i.e. <code>polyglot.t("home.login")</code> in your JavaScript application
 or Handlebars templates.</p>
 
-<h3>Interpolation</h3>
+<h3>
+<a name="interpolation" class="anchor" href="#interpolation"><span class="octicon octicon-link"></span></a>Interpolation</h3>
 
 <p><code>Polyglot.t()</code> also provides interpolation. Pass an object with key-value pairs of
 interpolation arguments as the second parameter.</p>
@@ -165,7 +172,8 @@ polyglot.t("hello_name", {name: "DeNiro"});
 =&gt; "Hola, DeNiro."
 </code></pre>
 
-<h3>Pluralization</h3>
+<h3>
+<a name="pluralization" class="anchor" href="#pluralization"><span class="octicon octicon-link"></span></a>Pluralization</h3>
 
 <p>For pluralization to work properly, you need to tell Polyglot what the current locale is.  You can use <code>polyglot.locale("fr")</code> to set the locale to, for example, French. This method is also a getter:</p>
 
@@ -230,9 +238,11 @@ polyglot.t("num_cars", {smart_count: cars});
 =&gt; "2 cars"
 </code></pre>
 
-<h2>Public Methods</h2>
+<h2>
+<a name="public-methods" class="anchor" href="#public-methods"><span class="octicon octicon-link"></span></a>Public Methods</h2>
 
-<h3>Polyglot.prototype.extend(phrases)</h3>
+<h3>
+<a name="polyglotprototypeextendphrases" class="anchor" href="#polyglotprototypeextendphrases"><span class="octicon octicon-link"></span></a>Polyglot.prototype.extend(phrases)</h3>
 
 <p>Use <code>extend</code> to tell Polyglot how to translate a given key.</p>
 
@@ -246,21 +256,24 @@ polyglot.t("num_cars", {smart_count: cars});
 it will override any phrases with the same key, but leave existing phrases
 untouched.</p>
 
-<h3>Polyglot.prototype.clear()</h3>
+<h3>
+<a name="polyglotprototypeclear" class="anchor" href="#polyglotprototypeclear"><span class="octicon octicon-link"></span></a>Polyglot.prototype.clear()</h3>
 
 <p>Clears all phrases. Useful for special cases, such as freeing
 up memory if you have lots of phrases but no longer need to
 perform any translation. Also used internally by <code>replace</code>.</p>
 
-<h3>Polyglot.prototype.replace(phrases)</h3>
+<h3>
+<a name="polyglotprototypereplacephrases" class="anchor" href="#polyglotprototypereplacephrases"><span class="octicon octicon-link"></span></a>Polyglot.prototype.replace(phrases)</h3>
 
 <p>Completely replace the existing phrases with a new set of phrases.
 Normally, just use <code>extend</code> to add more phrases, but under certain
 circumstances, you may want to make sure no old phrases are lying around.</p>
 
-<h3>Polyglot.prototype.t(key, interpolationOptions)</h3>
+<h3>
+<a name="polyglotprototypetkey-interpolationoptions" class="anchor" href="#polyglotprototypetkey-interpolationoptions"><span class="octicon octicon-link"></span></a>Polyglot.prototype.t(key, interpolationOptions)</h3>
 
-<p>The most-used method. Provide a key, and <code>t</code> will return the
+<p>The most-used method. Provide a key, and <code>t()</code> will return the
 phrase.</p>
 
 <pre><code>polyglot.t("hello");
@@ -286,18 +299,31 @@ Use the special option key "_" to specify a default.</p>
 =&gt; "I like to write in JavaScript."
 </code></pre>
 
-<h3>Polyglot.prototype.pluralize(noun, count)</h3>
+<h3>
+<a name="polyglotprototypepluralizenoun-count" class="anchor" href="#polyglotprototypepluralizenoun-count"><span class="octicon octicon-link"></span></a>Polyglot.prototype.pluralize(noun, count)</h3>
 
-<p>For pluralizing "car", it assumes you have phrase keys of the form:</p>
+<p>The <code>pluralize()</code> method is a simple wrapper around <code>t()</code>'s pluralization behavior.
+We pluralize based on the the value of the <code>smart_count</code> interpolated variable.</p>
+
+<p>For pluralizing "car", it assumes you have a phrase defined like:</p>
 
 <pre><code>polyglot.extend({
-  "pluralize.car.zero": "%{count} cars",
-  "pluralize.car.one":  "%{count} car",
-  "pluralize.car.many": "%{count} cars"
+  "shared.pluralize.car": "%{smart_count} car |||| %{smart_count} cars"
 });
 </code></pre>
 
-<p><code>pluralize</code> will choose the appropriate phrase based
+<p>A call to <code>pluralize()</code> simply calls <code>t()</code> with an expected phrase key format,
+passing in the second argument as <code>smart_count</code>:</p>
+
+<pre><code>polyglot.pluralize('car', 2);
+</code></pre>
+
+<p>is equivalent to</p>
+
+<pre><code>polyglot.t('shared.pluralize.car', {smart_count: 2});
+</code></pre>
+
+<p><code>pluralize()</code> will choose the appropriate phrase based
 on the provided count.</p>
 
 <pre><code>polyglot.pluralize("car", 0);
@@ -329,9 +355,16 @@ polyglot.pluralize("car", cars);
 =&gt; "2 cars"
 </code></pre>
 
-<h2>History</h2>
+<h2>
+<a name="history" class="anchor" href="#history"><span class="octicon octicon-link"></span></a>History</h2>
 
-<h3>v0.2.0: Dec 20, 2012</h3>
+<h3>
+<a name="v021-may-2-2013" class="anchor" href="#v021-may-2-2013"><span class="octicon octicon-link"></span></a>v0.2.1: May 2, 2013</h3>
+
+<ul>
+<li>Added <code>allowMissing</code> option to let the phrase key be the default translation (thanks <a href="https://github.com/ziad-saab" class="user-mention">@ziad-saab</a>).</li>
+</ul><h3>
+<a name="v020-dec-20-2012" class="anchor" href="#v020-dec-20-2012"><span class="octicon octicon-link"></span></a>v0.2.0: Dec 20, 2012</h3>
 
 <ul>
 <li>
