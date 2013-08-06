@@ -32,37 +32,37 @@ For use with Node, install with [NPM](http://npmjs.org):
 
     $ npm install
 
-	$ npm test
+    $ npm test
 
-	  t
-	    ✓ should translate a simple string
-	    ✓ should return the key if translation not found
-	    ✓ should interpolate
-	    ✓ should interpolate the same placeholder multiple times
-	    ✓ should allow you to supply default values
+      t
+        ✓ should translate a simple string
+        ✓ should return the key if translation not found
+        ✓ should interpolate
+        ✓ should interpolate the same placeholder multiple times
+        ✓ should allow you to supply default values 
+        ✓ should return the non-interpolated key if not initialized with allowMissing and translation not found 
+        ✓ should return an interpolated key if initialized with allowMissing and translation not found 
 
-	  locale
-	    ✓ should default to 'en'
-	    ✓ should get and set locale
+      pluralize
+        ✓ should support pluralization with an integer 
+        ✓ should accept a number as a shortcut to pluralize a word 
 
-	  extend
-	    ✓ should support multiple extends, overriding old keys
-	    ✓ shouldn't forget old keys
+      locale
+        ✓ should default to 'en'
+        ✓ should get and set locale
 
-	  clear
-	    ✓ should wipe out old phrases
+      extend
+        ✓ should support multiple extends, overriding old keys
+        ✓ shouldn't forget old keys
 
-	  replace
-	    ✓ should wipe out old phrases and replace with new phrases
+      clear
+        ✓ should wipe out old phrases
 
-	  pluralize
-	    ✓ should support pluralization with an integer
-	    ✓ should support pluralization with an Array
-	    ✓ should support pluralization of anything with a 'length' property
-	    ✓ should support the 'pluralize' shortcut
+      replace
+        ✓ should wipe out old phrases and replace with new phrases
 
 
-	  ✔ 15 tests complete (13ms)
+      ✔ 15 tests complete (19ms)
 
 ## Usage
 
@@ -87,9 +87,9 @@ the already-translated string.
     polyglot.t("hello");
     => "Hello"
 
-You can also instantiate with phrases:
+You can also pass a mapping at instantiation, using the key `phrases`:
 
-	var polyglot = new Polyglot({phrases: {"hello": "Hello"}});
+    var polyglot = new Polyglot({phrases: {"hello": "Hello"}});
 
 Polyglot doesn't do the translation for you. It's up to you to give it
 the proper phrases for the user's locale.
@@ -137,7 +137,7 @@ For pluralization to work properly, you need to tell Polyglot what the current l
 
 You can also pass this in during instantiation.
 
-	var polyglot = new Polyglot({locale: "fr"});
+    var polyglot = new Polyglot({locale: "fr"});
 
 Currently, the _only_ thing that Polyglot uses this locale setting for is pluralization.
 
@@ -155,8 +155,10 @@ For pluralizing "car" in English, Polyglot assumes you have a phrase of the form
 
 English (and German, Spanish, Italian, and a few others) there are only two plural forms: singular and not-singular.
 
+Some languages get a bit more complicated. In Czech, there are three separate forms: 1, 2 through 4, and 5 and up. Russian is even crazier.
+
 `polyglot.t()` will choose the appropriate phrase based
-on the provided `smart_count` option.
+on the provided `smart_count` option, whose value is a number.
 
     polyglot.t("num_cars", {smart_count: 0});
     => "0 cars"
@@ -167,25 +169,9 @@ on the provided `smart_count` option.
     polyglot.t("num_cars", {smart_count: 2});
     => "2 cars"
 
-However, some languages get a bit more complicated. In Czech, there are three separate forms: 1, 2 through 4, and 5 and up. Russian is even crazier.
+As a shortcut, you can also pass a number to the second parameter:
 
-The `smart_count` option can be a `Number` or anything with a `length` property,
-such as an `Array` or a `Backbone.Collection`.
-
-    var Cars = Backbone.Collection.extend({});
-    var cars = new Cars;
-
-    polyglot.t("num_cars", {smart_count: cars});
-    => "0 cars"
-
-    cars.add({make: "Ford", model: "Fiesta"});
-
-    polyglot.t("num_cars", {smart_count: cars});
-    => "1 car"
-
-    cars.add({make: "Subaru", model: "Impreza"});
-
-    polyglot.t("num_cars", {smart_count: cars});
+    polyglot.t("num_cars", 2);
     => "2 cars"
 
 ## Public Methods
@@ -232,6 +218,12 @@ Pass in an object as the second argument to perform interpolation.
     polyglot.t("hello_name", {name: "Spike"});
     => "Hello, Spike"
 
+Pass a number as the second argument as a shortcut to `smart_count`:
+
+    // same as: polyglot.t("car", {smart_count: 2});
+    polyglot.t("car", 2);
+    => "2 cars"
+
 If you like, you can provide a default value in case the phrase is missing.
 Use the special option key "_" to specify a default.
 
@@ -240,58 +232,6 @@ Use the special option key "_" to specify a default.
       language: "JavaScript"
     });
     => "I like to write in JavaScript."
-
-
-### Polyglot.prototype.pluralize(noun, count)
-
-The `pluralize()` method is a simple wrapper around `t()`'s pluralization behavior.
-We pluralize based on the the value of the `smart_count` interpolated variable.
-
-For pluralizing "car", it assumes you have a phrase defined like:
-
-    polyglot.extend({
-      "shared.pluralize.car": "%{smart_count} car |||| %{smart_count} cars"
-    });
-
-A call to `pluralize()` simply calls `t()` with an expected phrase key format,
-passing in the second argument as `smart_count`:
-
-    polyglot.pluralize('car', 2);
-
-is equivalent to
-
-    polyglot.t('shared.pluralize.car', {smart_count: 2});
-
-`pluralize()` will choose the appropriate phrase based
-on the provided count.
-
-    polyglot.pluralize("car", 0);
-    => "0 cars"
-
-    polyglot.pluralize("car", 1);
-    => "1 car"
-
-    polyglot.pluralize("car", 2);
-    => "2 cars"
-
-The second argument can be a `Number` or anything with a `length` property,
-such as an `Array` or a `Backbone.Collection`.
-
-    var cars = new Backbone.Collection();
-
-    polyglot.pluralize("car", cars);
-    => "0 cars"
-
-    cars.add({make: "Ford", model: "Fiesta"});
-
-    polyglot.pluralize("car", cars);
-    => "1 car"
-
-    cars.add({make: "Subaru", model: "Impreza"});
-
-    polyglot.pluralize("car", cars);
-    => "2 cars"
-
 
 ## History
 
