@@ -40,6 +40,16 @@ describe "t", ->
       name: "Robert"
     ).should.equal "Welcome Robert"
 
+  it "should accept a number as a shortcut to pluralize a word", ->
+    @polyglot = new Polyglot({
+      phrases: {
+        "car": "car |||| cars"
+      }
+    })
+    @polyglot.t("car", 0).should.equal "cars"
+    @polyglot.t("car", 1).should.equal "car"
+    @polyglot.t("car", 2).should.equal "cars"
+
 describe "locale", ->
 
   beforeEach ->
@@ -80,7 +90,6 @@ describe "clear", ->
     @polyglot.clear()
     @polyglot.t("hiFriend").should.equal "hiFriend"
 
-
 describe "replace", ->
 
   beforeEach ->
@@ -91,39 +100,3 @@ describe "replace", ->
     @polyglot.replace {hiFriend: "Hi, Friend."}
     @polyglot.t("hiFriend").should.equal "Hi, Friend."
     @polyglot.t("byeFriend").should.equal "byeFriend"
-
-describe "pluralize", ->
-
-  phrases =
-    "shared.pluralize.Name": "%{smart_count} Name |||| %{smart_count} Names"
-
-  beforeEach ->
-    @polyglot = new Polyglot({phrases:phrases, locale:'en'})
-
-  it "should support pluralization with an integer", ->
-    @polyglot.t("shared.pluralize.Name", smart_count: 0).should.equal("0 Names")
-    @polyglot.t("shared.pluralize.Name", smart_count: 1).should.equal("1 Name")
-    @polyglot.t("shared.pluralize.Name", smart_count: 2).should.equal("2 Names")
-    @polyglot.t("shared.pluralize.Name", smart_count: 3).should.equal("3 Names")
-
-  it "should support pluralization with an Array", ->
-    names = []
-    @polyglot.t("shared.pluralize.Name", smart_count: names).should.equal("0 Names")
-    names.push "LTJ Bukem"
-    @polyglot.t("shared.pluralize.Name", smart_count: names).should.equal("1 Name")
-    names.push "MC Conrad"
-    @polyglot.t("shared.pluralize.Name", smart_count: names).should.equal("2 Names")
-
-  it "should support pluralization of anything with a 'length' property", ->
-    obj = {length: 0}
-    @polyglot.t("shared.pluralize.Name", smart_count: obj).should.equal("0 Names")
-    obj.length++
-    @polyglot.t("shared.pluralize.Name", smart_count: obj).should.equal("1 Name")
-    obj.length++
-    @polyglot.t("shared.pluralize.Name", smart_count: obj).should.equal("2 Names")
-
-  it "should support the 'pluralize' shortcut", ->
-    @polyglot.pluralize("Name", 0).should.equal("0 Names")
-    @polyglot.pluralize("Name", 1).should.equal("1 Name")
-    @polyglot.pluralize("Name", 2).should.equal("2 Names")
-    @polyglot.pluralize("Name", 3).should.equal("3 Names")
