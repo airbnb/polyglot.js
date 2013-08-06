@@ -42,6 +42,9 @@ For use with Node, install with [NPM](http://npmjs.org):
         ✓ should allow you to supply default values 
         ✓ should return the non-interpolated key if not initialized with allowMissing and translation not found 
         ✓ should return an interpolated key if initialized with allowMissing and translation not found 
+
+      pluralize
+        ✓ should support pluralization with an integer 
         ✓ should accept a number as a shortcut to pluralize a word 
 
       locale
@@ -59,7 +62,7 @@ For use with Node, install with [NPM](http://npmjs.org):
         ✓ should wipe out old phrases and replace with new phrases
 
 
-      ✔ 14 tests complete (18ms)
+      ✔ 15 tests complete (19ms)
 
 ## Usage
 
