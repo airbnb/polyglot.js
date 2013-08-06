@@ -72,7 +72,13 @@ $ npm test
     ✓ should return the key if translation not found
     ✓ should interpolate
     ✓ should interpolate the same placeholder multiple times
-    ✓ should allow you to supply default values
+    ✓ should allow you to supply default values 
+    ✓ should return the non-interpolated key if not initialized with allowMissing and translation not found 
+    ✓ should return an interpolated key if initialized with allowMissing and translation not found 
+
+  pluralize
+    ✓ should support pluralization with an integer 
+    ✓ should accept a number as a shortcut to pluralize a word 
 
   locale
     ✓ should default to 'en'
@@ -88,14 +94,8 @@ $ npm test
   replace
     ✓ should wipe out old phrases and replace with new phrases
 
-  pluralize
-    ✓ should support pluralization with an integer
-    ✓ should support pluralization with an Array
-    ✓ should support pluralization of anything with a 'length' property
-    ✓ should support the 'pluralize' shortcut
 
-
-  ✔ 15 tests complete (13ms)
+  ✔ 15 tests complete (19ms)
 </code></pre>
 
 <h2>
@@ -106,8 +106,8 @@ $ npm test
 
 <p>First, create an instance of the <code>Polyglot</code> class, which you will use for translation.</p>
 
-<pre><code>var polyglot = new Polyglot();
-</code></pre>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">polyglot</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Polyglot</span><span class="p">();</span>
+</pre></div>
 
 <p>Polyglot is class-based so you can maintain different sets of phrases at the same time, possibly in different locales. This is very useful for example when serving requests with <a href="http://expressjs.com">Express</a>, because each request may have a different locale, and you don't want concurrent requests to clobber each other's phrases.</p>
 
@@ -118,18 +118,18 @@ $ npm test
 where the key is the canonical name of the phrase and the value is
 the already-translated string.</p>
 
-<pre><code>polyglot.extend({
-  "hello": "Hello"
-});
+<div class="highlight"><pre><span class="nx">polyglot</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+  <span class="s2">"hello"</span><span class="o">:</span> <span class="s2">"Hello"</span>
+<span class="p">});</span>
 
-polyglot.t("hello");
-=&gt; "Hello"
-</code></pre>
+<span class="nx">polyglot</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">"hello"</span><span class="p">);</span>
+<span class="o">=&gt;</span> <span class="s2">"Hello"</span>
+</pre></div>
 
-<p>You can also instantiate with phrases:</p>
+<p>You can also pass a mapping at instantiation, using the key <code>phrases</code>:</p>
 
-<pre><code>var polyglot = new Polyglot({phrases: {"hello": "Hello"}});
-</code></pre>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">polyglot</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Polyglot</span><span class="p">({</span><span class="nx">phrases</span><span class="o">:</span> <span class="p">{</span><span class="s2">"hello"</span><span class="o">:</span> <span class="s2">"Hello"</span><span class="p">}});</span>
+</pre></div>
 
 <p>Polyglot doesn't do the translation for you. It's up to you to give it
 the proper phrases for the user's locale.</p>
@@ -139,21 +139,21 @@ them in a <code>&lt;script&gt;</code> tag at the bottom of the document.  For ex
 
 <p><code>app/controllers/home_controller.rb</code></p>
 
-<pre><code>def index
-  @phrases = {
-    "home.login" =&gt; I18n.t("home.login"),
-    "home.signup" =&gt; I18n.t("home.signup"),
-    ...
-  }
-end
-</code></pre>
+<div class="highlight"><pre><span class="k">def</span> <span class="nf">index</span>
+  <span class="vi">@phrases</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"home.login"</span> <span class="o">=&gt;</span> <span class="no">I18n</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="s2">"home.login"</span><span class="p">),</span>
+    <span class="s2">"home.signup"</span> <span class="o">=&gt;</span> <span class="no">I18n</span><span class="o">.</span><span class="n">t</span><span class="p">(</span><span class="s2">"home.signup"</span><span class="p">),</span>
+    <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+  <span class="p">}</span>
+<span class="k">end</span>
+</pre></div>
 
 <p><code>app/views/home/index.html.erb</code></p>
 
-<pre><code>&lt;script&gt;
-  var polyglot = new Polyglot({phrases: &lt;%= raw @phrases.to_json %&gt;});
-&lt;/script&gt;
-</code></pre>
+<div class="highlight"><pre><span class="nt">&lt;script&gt;</span>
+  <span class="kd">var</span> <span class="nx">polyglot</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Polyglot</span><span class="p">({</span><span class="nx">phrases</span><span class="o">:</span> <span class="o">&lt;%=</span> <span class="nx">raw</span> <span class="err">@</span><span class="nx">phrases</span><span class="p">.</span><span class="nx">to_json</span> <span class="o">%&gt;</span><span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</pre></div>
 
 <p>And now you can utilize i.e. <code>polyglot.t("home.login")</code> in your JavaScript application
 or Handlebars templates.</p>
@@ -164,27 +164,27 @@ or Handlebars templates.</p>
 <p><code>Polyglot.t()</code> also provides interpolation. Pass an object with key-value pairs of
 interpolation arguments as the second parameter.</p>
 
-<pre><code>polyglot.extend({
-  "hello_name": "Hola, %{name}."
-});
+<div class="highlight"><pre><span class="nx">polyglot</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+  <span class="s2">"hello_name"</span><span class="o">:</span> <span class="s2">"Hola, %{name}."</span>
+<span class="p">});</span>
 
-polyglot.t("hello_name", {name: "DeNiro"});
-=&gt; "Hola, DeNiro."
-</code></pre>
+<span class="nx">polyglot</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">"hello_name"</span><span class="p">,</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s2">"DeNiro"</span><span class="p">});</span>
+<span class="o">=&gt;</span> <span class="s2">"Hola, DeNiro."</span>
+</pre></div>
 
 <h3>
 <a name="pluralization" class="anchor" href="#pluralization"><span class="octicon octicon-link"></span></a>Pluralization</h3>
 
 <p>For pluralization to work properly, you need to tell Polyglot what the current locale is.  You can use <code>polyglot.locale("fr")</code> to set the locale to, for example, French. This method is also a getter:</p>
 
-<pre><code>polyglot.locale()
-=&gt; "fr"
-</code></pre>
+<div class="highlight"><pre><span class="nx">polyglot</span><span class="p">.</span><span class="nx">locale</span><span class="p">()</span>
+<span class="o">=&gt;</span> <span class="s2">"fr"</span>
+</pre></div>
 
 <p>You can also pass this in during instantiation.</p>
 
-<pre><code>var polyglot = new Polyglot({locale: "fr"});
-</code></pre>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">polyglot</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Polyglot</span><span class="p">({</span><span class="nx">locale</span><span class="o">:</span> <span class="s2">"fr"</span><span class="p">});</span>
+</pre></div>
 
 <p>Currently, the <em>only</em> thing that Polyglot uses this locale setting for is pluralization.</p>
 
@@ -196,47 +196,33 @@ about the possible phrases.</p>
 
 <p>For pluralizing "car" in English, Polyglot assumes you have a phrase of the form:</p>
 
-<pre><code>polyglot.extend({
-  "num_cars": "%{smart_count} car |||| %{smart_count} cars",
-});
-</code></pre>
+<div class="highlight"><pre><span class="nx">polyglot</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+  <span class="s2">"num_cars"</span><span class="o">:</span> <span class="s2">"%{smart_count} car |||| %{smart_count} cars"</span><span class="p">,</span>
+<span class="p">});</span>
+</pre></div>
 
 <p>English (and German, Spanish, Italian, and a few others) there are only two plural forms: singular and not-singular.</p>
 
+<p>Some languages get a bit more complicated. In Czech, there are three separate forms: 1, 2 through 4, and 5 and up. Russian is even crazier.</p>
+
 <p><code>polyglot.t()</code> will choose the appropriate phrase based
-on the provided <code>smart_count</code> option.</p>
+on the provided <code>smart_count</code> option, whose value is a number.</p>
 
-<pre><code>polyglot.t("num_cars", {smart_count: 0});
-=&gt; "0 cars"
+<div class="highlight"><pre><span class="nx">polyglot</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">"num_cars"</span><span class="p">,</span> <span class="p">{</span><span class="nx">smart_count</span><span class="o">:</span> <span class="mi">0</span><span class="p">});</span>
+<span class="o">=&gt;</span> <span class="s2">"0 cars"</span>
 
-polyglot.t("num_cars", {smart_count: 1});
-=&gt; "1 car"
+<span class="nx">polyglot</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">"num_cars"</span><span class="p">,</span> <span class="p">{</span><span class="nx">smart_count</span><span class="o">:</span> <span class="mi">1</span><span class="p">});</span>
+<span class="o">=&gt;</span> <span class="s2">"1 car"</span>
 
-polyglot.t("num_cars", {smart_count: 2});
-=&gt; "2 cars"
-</code></pre>
+<span class="nx">polyglot</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">"num_cars"</span><span class="p">,</span> <span class="p">{</span><span class="nx">smart_count</span><span class="o">:</span> <span class="mi">2</span><span class="p">});</span>
+<span class="o">=&gt;</span> <span class="s2">"2 cars"</span>
+</pre></div>
 
-<p>However, some languages get a bit more complicated. In Czech, there are three separate forms: 1, 2 through 4, and 5 and up. Russian is even crazier.</p>
+<p>As a shortcut, you can also pass a number to the second parameter:</p>
 
-<p>The <code>smart_count</code> option can be a <code>Number</code> or anything with a <code>length</code> property,
-such as an <code>Array</code> or a <code>Backbone.Collection</code>.</p>
-
-<pre><code>var Cars = Backbone.Collection.extend({});
-var cars = new Cars;
-
-polyglot.t("num_cars", {smart_count: cars});
-=&gt; "0 cars"
-
-cars.add({make: "Ford", model: "Fiesta"});
-
-polyglot.t("num_cars", {smart_count: cars});
-=&gt; "1 car"
-
-cars.add({make: "Subaru", model: "Impreza"});
-
-polyglot.t("num_cars", {smart_count: cars});
-=&gt; "2 cars"
-</code></pre>
+<div class="highlight"><pre><span class="nx">polyglot</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">"num_cars"</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+<span class="o">=&gt;</span> <span class="s2">"2 cars"</span>
+</pre></div>
 
 <h2>
 <a name="public-methods" class="anchor" href="#public-methods"><span class="octicon octicon-link"></span></a>Public Methods</h2>
@@ -246,11 +232,11 @@ polyglot.t("num_cars", {smart_count: cars});
 
 <p>Use <code>extend</code> to tell Polyglot how to translate a given key.</p>
 
-<pre><code>polyglot.extend({
-  "hello": "Hello",
-  "hello_name": "Hello, %{name}"
-});
-</code></pre>
+<div class="highlight"><pre><span class="nx">polyglot</span><span class="p">.</span><span class="nx">extend</span><span class="p">({</span>
+  <span class="s2">"hello"</span><span class="o">:</span> <span class="s2">"Hello"</span><span class="p">,</span>
+  <span class="s2">"hello_name"</span><span class="o">:</span> <span class="s2">"Hello, %{name}"</span>
+<span class="p">});</span>
+</pre></div>
 
 <p>The key can be any string.  Feel free to call <code>extend</code> multiple times;
 it will override any phrases with the same key, but leave existing phrases
@@ -289,76 +275,36 @@ phrase.</p>
 =&gt; "Hello, Spike"
 </code></pre>
 
+<p>Pass a number as the second argument as a shortcut to <code>smart_count</code>:</p>
+
+<div class="highlight"><pre><span class="c1">// same as: polyglot.t("car", {smart_count: 2});</span>
+<span class="nx">polyglot</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">"car"</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+<span class="o">=&gt;</span> <span class="s2">"2 cars"</span>
+</pre></div>
+
 <p>If you like, you can provide a default value in case the phrase is missing.
 Use the special option key "_" to specify a default.</p>
 
-<pre><code>polyglot.t("i_like_to_write_in_language", {
-  _: "I like to write in %{language}.",
-  language: "JavaScript"
-});
-=&gt; "I like to write in JavaScript."
-</code></pre>
-
-<h3>
-<a name="polyglotprototypepluralizenoun-count" class="anchor" href="#polyglotprototypepluralizenoun-count"><span class="octicon octicon-link"></span></a>Polyglot.prototype.pluralize(noun, count)</h3>
-
-<p>The <code>pluralize()</code> method is a simple wrapper around <code>t()</code>'s pluralization behavior.
-We pluralize based on the the value of the <code>smart_count</code> interpolated variable.</p>
-
-<p>For pluralizing "car", it assumes you have a phrase defined like:</p>
-
-<pre><code>polyglot.extend({
-  "shared.pluralize.car": "%{smart_count} car |||| %{smart_count} cars"
-});
-</code></pre>
-
-<p>A call to <code>pluralize()</code> simply calls <code>t()</code> with an expected phrase key format,
-passing in the second argument as <code>smart_count</code>:</p>
-
-<pre><code>polyglot.pluralize('car', 2);
-</code></pre>
-
-<p>is equivalent to</p>
-
-<pre><code>polyglot.t('shared.pluralize.car', {smart_count: 2});
-</code></pre>
-
-<p><code>pluralize()</code> will choose the appropriate phrase based
-on the provided count.</p>
-
-<pre><code>polyglot.pluralize("car", 0);
-=&gt; "0 cars"
-
-polyglot.pluralize("car", 1);
-=&gt; "1 car"
-
-polyglot.pluralize("car", 2);
-=&gt; "2 cars"
-</code></pre>
-
-<p>The second argument can be a <code>Number</code> or anything with a <code>length</code> property,
-such as an <code>Array</code> or a <code>Backbone.Collection</code>.</p>
-
-<pre><code>var cars = new Backbone.Collection();
-
-polyglot.pluralize("car", cars);
-=&gt; "0 cars"
-
-cars.add({make: "Ford", model: "Fiesta"});
-
-polyglot.pluralize("car", cars);
-=&gt; "1 car"
-
-cars.add({make: "Subaru", model: "Impreza"});
-
-polyglot.pluralize("car", cars);
-=&gt; "2 cars"
-</code></pre>
+<div class="highlight"><pre><span class="nx">polyglot</span><span class="p">.</span><span class="nx">t</span><span class="p">(</span><span class="s2">"i_like_to_write_in_language"</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">_</span><span class="o">:</span> <span class="s2">"I like to write in %{language}."</span><span class="p">,</span>
+  <span class="nx">language</span><span class="o">:</span> <span class="s2">"JavaScript"</span>
+<span class="p">});</span>
+<span class="o">=&gt;</span> <span class="s2">"I like to write in JavaScript."</span>
+</pre></div>
 
 <h2>
 <a name="history" class="anchor" href="#history"><span class="octicon octicon-link"></span></a>History</h2>
 
 <h3>
+<a name="v030-august-6-2013" class="anchor" href="#v030-august-6-2013"><span class="octicon octicon-link"></span></a>v0.3.0: August 6, 2013</h3>
+
+<ul>
+<li>
+<em>Breaking change</em>: Removed <code>pluralize()</code> method; instead, just use the <code>t()</code> method, passing in a <code>smart_count</code> option.</li>
+<li>
+<em>Breaking change</em>: Removed the ability to use <code>Array</code>, <code>Backbone.Collection</code>, etc. instances for the <code>smart_count</code> option; instead, must pass a <code>Number</code>.</li>
+<li>Allow passing <code>Number</code> as second argument to <code>t()</code>, which gets converted to the options object <code>{smart_count: &lt;my number&gt;}</code>.</li>
+</ul><h3>
 <a name="v021-may-2-2013" class="anchor" href="#v021-may-2-2013"><span class="octicon octicon-link"></span></a>v0.2.1: May 2, 2013</h3>
 
 <ul>
