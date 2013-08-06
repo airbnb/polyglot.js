@@ -70,7 +70,9 @@ For use with Node, install with [NPM](http://npmjs.org):
 
 First, create an instance of the `Polyglot` class, which you will use for translation.
 
-    var polyglot = new Polyglot();
+```js
+var polyglot = new Polyglot();
+```
 
 Polyglot is class-based so you can maintain different sets of phrases at the same time, possibly in different locales. This is very useful for example when serving requests with [Express](http://expressjs.com), because each request may have a different locale, and you don't want concurrent requests to clobber each other's phrases.
 
@@ -80,16 +82,20 @@ Tell Polyglot what to say by simply giving it a phrases object,
 where the key is the canonical name of the phrase and the value is
 the already-translated string.
 
-    polyglot.extend({
-      "hello": "Hello"
-    });
+```js
+polyglot.extend({
+  "hello": "Hello"
+});
 
-    polyglot.t("hello");
-    => "Hello"
+polyglot.t("hello");
+=> "Hello"
+```
 
 You can also pass a mapping at instantiation, using the key `phrases`:
 
-    var polyglot = new Polyglot({phrases: {"hello": "Hello"}});
+```js
+var polyglot = new Polyglot({phrases: {"hello": "Hello"}});
+```
 
 Polyglot doesn't do the translation for you. It's up to you to give it
 the proper phrases for the user's locale.
@@ -99,19 +105,23 @@ them in a `<script>` tag at the bottom of the document.  For example, in Rails:
 
 `app/controllers/home_controller.rb`
 
-    def index
-      @phrases = {
-        "home.login" => I18n.t("home.login"),
-        "home.signup" => I18n.t("home.signup"),
-        ...
-      }
-    end
+```ruby
+def index
+  @phrases = {
+    "home.login" => I18n.t("home.login"),
+    "home.signup" => I18n.t("home.signup"),
+    ...
+  }
+end
+```
 
 `app/views/home/index.html.erb`
 
-    <script>
-      var polyglot = new Polyglot({phrases: <%= raw @phrases.to_json %>});
-    </script>
+```html
+<script>
+  var polyglot = new Polyglot({phrases: <%= raw @phrases.to_json %>});
+</script>
+```
 
 And now you can utilize i.e. `polyglot.t("home.login")` in your JavaScript application
 or Handlebars templates.
@@ -121,23 +131,29 @@ or Handlebars templates.
 `Polyglot.t()` also provides interpolation. Pass an object with key-value pairs of
 interpolation arguments as the second parameter.
 
-    polyglot.extend({
-      "hello_name": "Hola, %{name}."
-    });
+```js
+polyglot.extend({
+  "hello_name": "Hola, %{name}."
+});
 
-    polyglot.t("hello_name", {name: "DeNiro"});
-    => "Hola, DeNiro."
+polyglot.t("hello_name", {name: "DeNiro"});
+=> "Hola, DeNiro."
+```
 
 ### Pluralization
 
 For pluralization to work properly, you need to tell Polyglot what the current locale is.  You can use `polyglot.locale("fr")` to set the locale to, for example, French. This method is also a getter:
 
-    polyglot.locale()
-    => "fr"
+```js
+polyglot.locale()
+=> "fr"
+```
 
 You can also pass this in during instantiation.
 
-    var polyglot = new Polyglot({locale: "fr"});
+```js
+var polyglot = new Polyglot({locale: "fr"});
+```
 
 Currently, the _only_ thing that Polyglot uses this locale setting for is pluralization.
 
@@ -149,9 +165,11 @@ To get a pluralized phrase, still use `polyglot.t()` but use a specially-formatt
 
 For pluralizing "car" in English, Polyglot assumes you have a phrase of the form:
 
-    polyglot.extend({
-      "num_cars": "%{smart_count} car |||| %{smart_count} cars",
-    });
+```js
+polyglot.extend({
+  "num_cars": "%{smart_count} car |||| %{smart_count} cars",
+});
+```
 
 English (and German, Spanish, Italian, and a few others) there are only two plural forms: singular and not-singular.
 
@@ -160,19 +178,23 @@ Some languages get a bit more complicated. In Czech, there are three separate fo
 `polyglot.t()` will choose the appropriate phrase based
 on the provided `smart_count` option, whose value is a number.
 
-    polyglot.t("num_cars", {smart_count: 0});
-    => "0 cars"
+```js
+polyglot.t("num_cars", {smart_count: 0});
+=> "0 cars"
 
-    polyglot.t("num_cars", {smart_count: 1});
-    => "1 car"
+polyglot.t("num_cars", {smart_count: 1});
+=> "1 car"
 
-    polyglot.t("num_cars", {smart_count: 2});
-    => "2 cars"
+polyglot.t("num_cars", {smart_count: 2});
+=> "2 cars"
+```
 
 As a shortcut, you can also pass a number to the second parameter:
 
-    polyglot.t("num_cars", 2);
-    => "2 cars"
+```js
+polyglot.t("num_cars", 2);
+=> "2 cars"
+```
 
 ## Public Methods
 
@@ -180,10 +202,12 @@ As a shortcut, you can also pass a number to the second parameter:
 
 Use `extend` to tell Polyglot how to translate a given key.
 
-    polyglot.extend({
-      "hello": "Hello",
-      "hello_name": "Hello, %{name}"
-    });
+```js
+polyglot.extend({
+  "hello": "Hello",
+  "hello_name": "Hello, %{name}"
+});
+```
 
 The key can be any string.  Feel free to call `extend` multiple times;
 it will override any phrases with the same key, but leave existing phrases
@@ -207,31 +231,39 @@ circumstances, you may want to make sure no old phrases are lying around.
 The most-used method. Provide a key, and `t()` will return the
 phrase.
 
-    polyglot.t("hello");
-    => "Hello"
+```
+polyglot.t("hello");
+=> "Hello"
+```
 
 The phrase value is provided first by a call to `polyglot.extend()` or
 `polyglot.replace()`.
 
 Pass in an object as the second argument to perform interpolation.
 
-    polyglot.t("hello_name", {name: "Spike"});
-    => "Hello, Spike"
+```
+polyglot.t("hello_name", {name: "Spike"});
+=> "Hello, Spike"
+```
 
 Pass a number as the second argument as a shortcut to `smart_count`:
 
-    // same as: polyglot.t("car", {smart_count: 2});
-    polyglot.t("car", 2);
-    => "2 cars"
+```js
+// same as: polyglot.t("car", {smart_count: 2});
+polyglot.t("car", 2);
+=> "2 cars"
+```
 
 If you like, you can provide a default value in case the phrase is missing.
 Use the special option key "_" to specify a default.
 
-    polyglot.t("i_like_to_write_in_language", {
-      _: "I like to write in %{language}.",
-      language: "JavaScript"
-    });
-    => "I like to write in JavaScript."
+```js
+polyglot.t("i_like_to_write_in_language", {
+  _: "I like to write in %{language}.",
+  language: "JavaScript"
+});
+=> "I like to write in JavaScript."
+```
 
 ## History
 
