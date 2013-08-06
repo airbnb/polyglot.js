@@ -267,6 +267,11 @@ polyglot.t("i_like_to_write_in_language", {
 
 ## History
 
+### v0.3.0: August 6, 2013
+* _Breaking change_: Removed `pluralize()` method; instead, just use the `t()` method, passing in a `smart_count` option.
+* _Breaking change_: Removed the ability to use `Array`, `Backbone.Collection`, etc. instances for the `smart_count` option; instead, must pass a `Number`.
+* Allow passing `Number` as second argument to `t()`, which gets converted to the options object `{smart_count: <my number>}`.
+
 ### v0.2.1: May 2, 2013
 * Added `allowMissing` option to let the phrase key be the default translation (thanks @ziad-saab).
 

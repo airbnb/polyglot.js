@@ -1,7 +1,7 @@
 {
   "name": "polyglot",
   "description": "Give your JavaScript the ability to speak many languages.",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "keywords": [
     "i18n",
     "internationalization",
