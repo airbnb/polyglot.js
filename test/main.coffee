@@ -40,15 +40,25 @@ describe "t", ->
       name: "Robert"
     ).should.equal "Welcome Robert"
 
+describe "pluralize", ->
+
+  phrases =
+     "count_name": "%{smart_count} Name |||| %{smart_count} Names"
+
+  beforeEach ->
+    @polyglot = new Polyglot({phrases:phrases, locale:'en'})
+
+  it "should support pluralization with an integer", ->
+    @polyglot.t("count_name", smart_count: 0).should.equal("0 Names")
+    @polyglot.t("count_name", smart_count: 1).should.equal("1 Name")
+    @polyglot.t("count_name", smart_count: 2).should.equal("2 Names")
+    @polyglot.t("count_name", smart_count: 3).should.equal("3 Names")
+
   it "should accept a number as a shortcut to pluralize a word", ->
-    @polyglot = new Polyglot({
-      phrases: {
-        "car": "car |||| cars"
-      }
-    })
-    @polyglot.t("car", 0).should.equal "cars"
-    @polyglot.t("car", 1).should.equal "car"
-    @polyglot.t("car", 2).should.equal "cars"
+    @polyglot.t("count_name", 0).should.equal "0 Names"
+    @polyglot.t("count_name", 1).should.equal "1 Name"
+    @polyglot.t("count_name", 2).should.equal "2 Names"
+    @polyglot.t("count_name", 3).should.equal "3 Names"
 
 describe "locale", ->
 
