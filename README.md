@@ -314,7 +314,7 @@ The same functionality as t, but indexing into a bundle
 
 ```js
 polyglot.extend({"hello_bundle":{"hello_name": "Hello, %{name}"}});
-polyglot.tbs("hello_bundle", "hell_name", {"name": "Spike"})
+polyglot.tbs("hello_bundle", "hello_name", {"name": "Spike"})
 => Hello, Spike
 ```
 
