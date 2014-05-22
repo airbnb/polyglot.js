@@ -6,7 +6,11 @@ describe "t", ->
   phrases =
     "hello": "Hello"
     "hi_name_welcome_to_place": "Hi, %{name}, welcome to %{place}!"
-    "name_your_name_is_name": "%{name}, your name is %{name}!"
+    "name_your_name_is_name": "%{name}, your name is %{name}!",
+    "a.string.with.dots": "This string has dots",
+    "some_namespace": {
+      "namespaced_string": "This string is namespaced"
+    }
 
   beforeEach ->
     @polyglot = new Polyglot({phrases:phrases})
@@ -39,6 +43,15 @@ describe "t", ->
     @polyglot.t("Welcome %{name}",
       name: "Robert"
     ).should.equal "Welcome Robert"
+
+  it "should not attempt to look through nested JSONs if allowNestedJSON is false", ->
+    @polyglot = new Polyglot({phrases:phrases,allowNestedJSON:false})
+    @polyglot.t("a.string.with.dots").should.equal "This string has dots"
+
+  it "should look through nested JSONs if allowNestedJSON is true", ->
+    @polyglot = new Polyglot({phrases:phrases,allowNestedJSON:true})
+    @polyglot.t("some_namespace.namespaced_string").should.equal "This string is namespaced"
+    @polyglot.t("a.string.with.dots").should.not.equal "This string has dots"
 
 describe "pluralize", ->
 
