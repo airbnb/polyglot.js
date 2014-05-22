@@ -39,13 +39,14 @@ For use with Node, install with [NPM](http://npmjs.org):
         ✓ should return the key if translation not found
         ✓ should interpolate
         ✓ should interpolate the same placeholder multiple times
-        ✓ should allow you to supply default values 
-        ✓ should return the non-interpolated key if not initialized with allowMissing and translation not found 
-        ✓ should return an interpolated key if initialized with allowMissing and translation not found 
+        ✓ should allow you to supply default values
+        ◦ should return the non-interpolated key if not initialized with allowMissing     ✓ should return the non-interpolated key if not initialized with allowMissing and translation not found
+        ◦ should return an interpolated key if initialized with allowMissing and trans    ✓ should return an interpolated key if initialized with allowMissing and translation not found
+        ✓ should support nested phrase objects
 
       pluralize
-        ✓ should support pluralization with an integer 
-        ✓ should accept a number as a shortcut to pluralize a word 
+        ✓ should support pluralization with an integer
+        ✓ should accept a number as a shortcut to pluralize a word
 
       locale
         ✓ should default to 'en'
@@ -54,6 +55,8 @@ For use with Node, install with [NPM](http://npmjs.org):
       extend
         ✓ should support multiple extends, overriding old keys
         ✓ shouldn't forget old keys
+        ✓ should support optional `prefix` argument
+        ✓ should support nested object
 
       clear
         ✓ should wipe out old phrases
@@ -62,7 +65,8 @@ For use with Node, install with [NPM](http://npmjs.org):
         ✓ should wipe out old phrases and replace with new phrases
 
 
-      ✔ 15 tests complete (19ms)
+      ✔ 18 tests complete (12ms)
+
 
 ## Usage
 
@@ -138,6 +142,23 @@ polyglot.extend({
 
 polyglot.t("hello_name", {name: "DeNiro"});
 => "Hola, DeNiro."
+```
+
+Polyglot also supports nested phrase objects.
+
+```js
+polyglot.extend({
+  "nav": {
+    "hello": "Hello",
+    "hello_name": "Hello, %{name}",
+    "sidebar": {
+      "welcome": "Welcome"
+    }
+  }
+});
+
+polyglot.t("nav.sidebar.welcome");
+=> "Welcome"
 ```
 
 ### Pluralization
@@ -266,6 +287,9 @@ polyglot.t("i_like_to_write_in_language", {
 ```
 
 ## History
+
+### v0.4.0: May 22, 2014
+* Added support for nested phrase objects to `extend()` and in the `phrases` option in the constructor.
 
 ### v0.3.0: August 6, 2013
 * _Breaking change_: Removed `pluralize()` method; instead, just use the `t()` method, passing in a `smart_count` option.

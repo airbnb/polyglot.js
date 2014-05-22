@@ -21,13 +21,14 @@
   // ### Polyglot class constructor
   function Polyglot(options) {
     options = options || {};
-    this.phrases = options.phrases || {};
+    this.phrases = {};
+    this.extend(options.phrases || {});
     this.currentLocale = options.locale || 'en';
     this.allowMissing = !!options.allowMissing;
   }
 
   // ### Version
-  Polyglot.VERSION = '0.3.0';
+  Polyglot.VERSION = '0.4.0';
 
   // ### polyglot.locale([locale])
   //
@@ -49,10 +50,55 @@
   // The key can be any string.  Feel free to call `extend` multiple times;
   // it will override any phrases with the same key, but leave existing phrases
   // untouched.
-  Polyglot.prototype.extend = function(morePhrases) {
+  //
+  // It is also possible to pass nested phrase objects, which get flattened
+  // into an object with the nested keys concatenated using dot notation.
+  //
+  //     polyglot.extend({
+  //       "nav": {
+  //         "hello": "Hello",
+  //         "hello_name": "Hello, %{name}",
+  //         "sidebar": {
+  //           "welcome": "Welcome"
+  //         }
+  //       }
+  //     });
+  //
+  //     console.log(polyglot.phrases);
+  //     // {
+  //     //   'nav.hello': 'Hello',
+  //     //   'nav.hello_name': 'Hello, %{name}',
+  //     //   'nav.sidebar.welcome': 'Welcome'
+  //     // }
+  //
+  // `extend` accepts an optional second argument, `prefix`, which can be used
+  // to prefix every key in the phrases object with some string, using dot
+  // notation.
+  //
+  //     polyglot.extend({
+  //       "hello": "Hello",
+  //       "hello_name": "Hello, %{name}"
+  //     }, "nav");
+  //
+  //     console.log(polyglot.phrases);
+  //     // {
+  //     //   'nav.hello': 'Hello',
+  //     //   'nav.hello_name': 'Hello, %{name}'
+  //     // }
+  //
+  // This feature is used internally to support nested phrase objects.
+  Polyglot.prototype.extend = function(morePhrases, prefix) {
+    var phrase;
+
     for (var key in morePhrases) {
       if (morePhrases.hasOwnProperty(key)) {
-        this.phrases[key] = morePhrases[key];
+        phrase = morePhrases[key];
+        if (prefix) key = prefix + '.' + key;
+        if (typeof phrase === 'object') {
+          this.extend(phrase, key);
+        } else {
+          this.phrases[key] = phrase;
+        }
       }
     }
   };
