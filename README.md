@@ -265,6 +265,67 @@ polyglot.t("i_like_to_write_in_language", {
 => "I like to write in JavaScript."
 ```
 
+### Polyglot.prototype.tb(key, interpolationOptions)
+
+Used in a similar way as t, but works with bundles,  provides a key
+and b will provide a bundle
+
+Works similar to t in that if a key does not match anything it will
+return an array with the key or ""
+
+```js
+polyglot.tb("hello");
+=> {"hello": "Hello"}
+```
+The phrase bundle is provided first by a call to `polyglot.extend()` or
+`polyglot.replace()`.
+
+Pass in an object as the second argument to perform interpolation.  If
+the key is not a bundle this returns the result from t as an associative array.
+
+```js
+polyglot.tb("hello_name", {name: "Spike"});
+=> {"hello_name": "Hello, Spike"}
+```
+
+If the key does refer to a bundle, the second argument will attempt interpolation
+on every member of that bundle
+
+```js
+polyglot.extend({"hello_bundle":{"hello_name": "hello %{name}", "my_name": "my name is %{name2}"}})
+polyglot.tb("hello_bundle", {name: "Spike", name2: "Jon"});
+=> {"hello_name": "Hello spike", "my_name": "My name is Jon"}
+```
+
+If you like, you can provide a default value in case the phrase is missing.
+Use the special option key "_" to specify a default.
+
+```js
+polyglot.tb("i_like_to_write_in_language", {
+  _: "I like to write in %{language}.",
+  language: "JavaScript"
+});
+=> {"i_like_to_write_in_language": "I like to write in JavaScript."}
+```
+
+### Polyglot.prototype.tbs(bunlde, key, interpolationOptions)
+
+The same functionality as t, but indexing into a bundle
+
+```js
+polyglot.extend({"hello_bundle":{"hello_name": "Hello, %{name}"}});
+polyglot.tbs("hello_bundle", "hello_name", {"name": "Spike"})
+=> Hello, Spike
+```
+
+If there is no bundle then this will act like t using key
+
+```js
+polyglot.extend({"hello_name": "Hello, %{name}"});
+polyglot.tbs("hello_bundle", "hello_name", {"name": "Spike"})
+=> Hello, Spike
+```
+
 ## History
 
 ### v0.3.0: August 6, 2013
