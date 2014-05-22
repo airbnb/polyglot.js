@@ -40,6 +40,20 @@ describe "t", ->
       name: "Robert"
     ).should.equal "Welcome Robert"
 
+  it "should support nested phrase objects", ->
+    nestedPhrases =
+      nav:
+        presentations: "Presentations"
+        hi_user: "Hi, %{user}."
+        cta:
+          join_now: "Join now!"
+      'header.sign_in': "Sign In"
+    @polyglot = new Polyglot({phrases: nestedPhrases})
+    @polyglot.t("nav.presentations").should.equal "Presentations"
+    @polyglot.t("nav.hi_user", user: "Raph").should.equal "Hi, Raph."
+    @polyglot.t("nav.cta.join_now").should.equal "Join now!"
+    @polyglot.t("header.sign_in").should.equal "Sign In"
+
 describe "pluralize", ->
 
   phrases =
@@ -81,14 +95,36 @@ describe "extend", ->
     @polyglot = new Polyglot()
 
   it "should support multiple extends, overriding old keys", ->
-    @polyglot.extend {aKey: 'First time'}
-    @polyglot.extend {aKey: 'Second time'}
+    @polyglot.extend({aKey: 'First time'})
+    @polyglot.extend({aKey: 'Second time'})
     @polyglot.t('aKey').should.equal 'Second time'
 
   it "shouldn't forget old keys", ->
-    @polyglot.extend {firstKey: 'Numba one', secondKey: 'Numba two'}
-    @polyglot.extend {secondKey: 'Numero dos'}
+    @polyglot.extend({firstKey: 'Numba one', secondKey: 'Numba two'})
+    @polyglot.extend({secondKey: 'Numero dos'})
     @polyglot.t('firstKey').should.equal 'Numba one'
+
+  it "should support optional `prefix` argument", ->
+    @polyglot.extend({click: 'Click', hover: 'Hover'}, 'sidebar')
+    @polyglot.phrases['sidebar.click'].should.equal 'Click'
+    @polyglot.phrases['sidebar.hover'].should.equal 'Hover'
+    should.not.exist(@polyglot.phrases['click'])
+
+  it "should support nested object", ->
+    @polyglot.extend({
+      sidebar:
+        click: 'Click'
+        hover: 'Hover'
+      nav:
+        header:
+          log_in: 'Log In'
+    })
+    @polyglot.phrases['sidebar.click'].should.equal 'Click'
+    @polyglot.phrases['sidebar.hover'].should.equal 'Hover'
+    @polyglot.phrases['nav.header.log_in'].should.equal 'Log In'
+    should.not.exist(@polyglot.phrases['click'])
+    should.not.exist(@polyglot.phrases['header.log_in'])
+    should.not.exist(@polyglot.phrases['log_in'])
 
 describe "clear", ->
 
