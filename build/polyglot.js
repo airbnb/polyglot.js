@@ -27,7 +27,7 @@
   }
 
   // ### Version
-  Polyglot.VERSION = '0.2.0';
+  Polyglot.VERSION = '0.3.0';
 
   // ### polyglot.locale([locale])
   //
