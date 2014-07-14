@@ -288,6 +288,10 @@ polyglot.t("i_like_to_write_in_language", {
 
 ## History
 
+### v0.4.1: July 14, 2014
+* Added support for `warn` option for custom error handler (thanks @terinjokes).
+* Added some more plural forms (thanks @jgill333).
+
 ### v0.4.0: May 22, 2014
 * Added support for nested phrase objects to `extend()` and in the `phrases` option in the constructor.
 

@@ -25,10 +25,11 @@
     this.extend(options.phrases || {});
     this.currentLocale = options.locale || 'en';
     this.allowMissing = !!options.allowMissing;
+    this.warn = options.warn || warn;
   }
 
   // ### Version
-  Polyglot.VERSION = '0.4.0';
+  Polyglot.VERSION = '0.4.1';
 
   // ### polyglot.locale([locale])
   //
@@ -157,7 +158,7 @@
     }
     var phrase = this.phrases[key] || options._ || (this.allowMissing ? key : '');
     if (phrase === '') {
-      warn('Missing translation for key: "'+key+'"');
+      this.warn('Missing translation for key: "'+key+'"');
       result = key;
     } else {
       options = clone(options);
@@ -185,9 +186,9 @@
 
   // Mapping from pluralization group to individual locales.
   var pluralTypeToLanguages = {
-    chinese:   ['id', 'ja', 'ko', 'ms', 'th', 'tr', 'zh'],
+    chinese:   ['fa', 'id', 'ja', 'ko', 'lo', 'ms', 'th', 'tr', 'zh'],
     german:    ['da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'it', 'nl', 'no', 'pt', 'sv'],
-    french:    ['fr', 'tl'],
+    french:    ['fr', 'tl', 'pt-br'],
     russian:   ['hr', 'ru'],
     czech:     ['cs'],
     polish:    ['pl'],
@@ -280,4 +281,3 @@
   }
 
 }(this);
-
