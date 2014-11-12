@@ -240,18 +240,11 @@
 
   // ### interpolate
   //
-  // Does the dirty work. Creates a `RegExp` object for each
-  // interpolation placeholder.
+  // Does the dirty work.
   function interpolate(phrase, options) {
-    for (var arg in options) {
-      if (arg !== '_' && options.hasOwnProperty(arg)) {
-        // We create a new `RegExp` each time instead of using a more-efficient
-        // string replace so that the same argument can be replaced multiple times
-        // in the same phrase.
-        phrase = phrase.replace(new RegExp('%\\{'+arg+'\\}', 'g'), options[arg]);
-      }
-    }
-    return phrase;
+    return phrase.replace(/%\{(.*?)\}/g, function(expression, argument) {
+      return options.hasOwnProperty(argument) ? options[argument] : '';
+    });
   }
 
   // ### warn
