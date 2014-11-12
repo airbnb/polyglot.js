@@ -242,7 +242,8 @@
   //
   // Does the dirty work.
   function interpolate(phrase, options) {
-    return phrase.replace(/%\{(.*?)\}/g, function(expression, argument) {
+    var regExp = /%\{(.*?)\}/g;
+    return phrase.replace(regExp, function(expression, argument) {
       return options.hasOwnProperty(argument) ? options[argument] : '';
     });
   }
