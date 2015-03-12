@@ -7,6 +7,7 @@ describe "t", ->
     "hello": "Hello"
     "hi_name_welcome_to_place": "Hi, %{name}, welcome to %{place}!"
     "name_your_name_is_name": "%{name}, your name is %{name}!"
+    "empty_string": ""
 
   beforeEach ->
     @polyglot = new Polyglot({phrases:phrases})
@@ -39,6 +40,16 @@ describe "t", ->
     @polyglot.t("Welcome %{name}",
       name: "Robert"
     ).should.equal "Welcome Robert"
+
+  it "should return the translation even if it is an empty string", ->
+    @polyglot = new Polyglot({phrases:phrases})
+    @polyglot.t("empty_string").should.equal("")
+
+  it "should return the default value even if it is an empty string", ->
+    @polyglot = new Polyglot({phrases:phrases})
+    @polyglot.t("bogus_key", {
+      _: ""
+    }).should.equal("")
 
   it "should support nested phrase objects", ->
     nestedPhrases =
