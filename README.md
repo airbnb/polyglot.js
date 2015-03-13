@@ -288,6 +288,9 @@ polyglot.t("i_like_to_write_in_language", {
 
 ## History
 
+### v0.4.2: March 13, 2015
+* Allow blank translations.
+
 ### v0.4.1: July 14, 2014
 * Added support for `warn` option for custom error handler (thanks @terinjokes).
 * Added some more plural forms (thanks @jgill333).
