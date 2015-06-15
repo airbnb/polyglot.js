@@ -40,8 +40,10 @@ For use with Node, install with [NPM](http://npmjs.org):
         ✓ should interpolate
         ✓ should interpolate the same placeholder multiple times
         ✓ should allow you to supply default values
-        ◦ should return the non-interpolated key if not initialized with allowMissing     ✓ should return the non-interpolated key if not initialized with allowMissing and translation not found
-        ◦ should return an interpolated key if initialized with allowMissing and trans    ✓ should return an interpolated key if initialized with allowMissing and translation not found
+        ✓ should return the non-interpolated key if not initialized with allowMissing and translation not found
+        ✓ should return an interpolated key if initialized with allowMissing and translation not found
+        ✓ should return the translation even if it is an empty string
+        ✓ should return the default value even if it is an empty string
         ✓ should support nested phrase objects
 
       pluralize
