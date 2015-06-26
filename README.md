@@ -290,6 +290,10 @@ polyglot.t("i_like_to_write_in_language", {
 
 ## History
 
+### v0.4.3: June 26, 2015
+* Add `.has(key)` method (thanks @scarfacedeb).
+* Add UMD wrapper for AMD support (thanks @TomOne).
+
 ### v0.4.2: March 13, 2015
 * Allow blank translations.
 

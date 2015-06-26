@@ -15,7 +15,18 @@
 // your client- or server-side JavaScript application.
 //
 
-!function(root) {
+
+(function(root, factory) {
+  if (typeof define === 'function' && define.amd) {
+    define([], function() {
+      return factory(root);
+    });
+  } else if (typeof exports === 'object') {
+    module.exports = factory(root);
+  } else {
+    root.Polyglot = factory(root);
+  }
+}(this, function(root) {
   'use strict';
 
   // ### Polyglot class constructor
@@ -29,7 +40,7 @@
   }
 
   // ### Version
-  Polyglot.VERSION = '0.4.2';
+  Polyglot.VERSION = '0.4.3';
 
   // ### polyglot.locale([locale])
   //
@@ -175,6 +186,14 @@
   };
 
 
+  // ### polyglot.has(key)
+  //
+  // Check if polyglot has a translation for given key
+  Polyglot.prototype.has = function(key) {
+    return key in this.phrases;
+  };
+
+
   // #### Pluralization methods
   // The string that separates the different phrase possibilities.
   var delimeter = '||||';
@@ -278,12 +297,5 @@
     return ret;
   }
 
-
-  // Export for Node, attach to `window` for browser.
-  if (typeof module !== 'undefined' && module.exports) {
-    module.exports = Polyglot;
-  } else {
-    root.Polyglot = Polyglot;
-  }
-
-}(this);
+  return Polyglot;
+}));
