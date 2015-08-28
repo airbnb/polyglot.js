@@ -20,6 +20,7 @@ describe "t", ->
 
   it "should interpolate", ->
     @polyglot.t("hi_name_welcome_to_place", {name: "Spike", place: "the webz"}).should.equal("Hi, Spike, welcome to the webz!")
+    @polyglot.t("hi_name_welcome_to_place", {name: "$&Spike", place: "the webz"}).should.equal("Hi, $&Spike, welcome to the webz!")
 
   it "should interpolate the same placeholder multiple times", ->
     @polyglot.t("name_your_name_is_name", {name: "Spike"}).should.equal("Spike, your name is Spike!")
