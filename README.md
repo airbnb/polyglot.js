@@ -1,6 +1,8 @@
 Polyglot.js
 ===========
 
+[![Build Status][travis-image]][travis-url]
+
 [![Join the chat at https://gitter.im/airbnb/polyglot.js](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/airbnb/polyglot.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Polyglot.js is a tiny I18n helper library written in JavaScript, made to
@@ -315,3 +317,6 @@ polyglot.t("i_like_to_write_in_language", {
 ### v0.2.0: Dec 20, 2012
 * _Breaking change_: Moved from Singleton pattern to class-based. Now you create an instance of the `Polyglot` class rather than using class methods directly on it. The reason is to allow maintaining multiple sets of phrases, which is something we ran into at Airbnb with a highly-concurrent Express app.
 * _Breaking change_: Removed the built-in Handlebars helpers, because Handlebars is a singleton, and it's messy to create a single helper function that can be bound to different Polyglot instances.  Instead, it's super easy to create your own, based on your requirements.
+
+[travis-image]: https://travis-ci.org/airbnb/polyglot.js.svg
+[travis-url]: https://travis-ci.org/airbnb/polyglot.js
