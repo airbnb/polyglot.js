@@ -157,3 +157,25 @@ describe "replace", ->
     @polyglot.replace {hiFriend: "Hi, Friend."}
     @polyglot.t("hiFriend").should.equal "Hi, Friend."
     @polyglot.t("byeFriend").should.equal "byeFriend"
+
+describe "unset", ->
+
+  it "should unset a key based on a string", ->
+    @polyglot.extend { test_key: "test_value"}
+    @polyglot.has("test_key").should.equal true
+    @polyglot.unset("test_key")
+    @polyglot.has("test_key").should.equal false
+
+  it "should unset a key based on an object hash", ->
+    @polyglot.extend { test_key: "test_value", foo: "bar" }
+    @polyglot.has("test_key").should.equal true
+    @polyglot.has("foo").should.equal true
+    @polyglot.unset { test_key: "test_value", foo: "bar" }
+    @polyglot.has("test_key").should.equal false
+    @polyglot.has("foo").should.equal false
+
+  it "should unset nested objects using recursive prefix call", ->
+    @polyglot.extend { foo: { bar: "foobar" }}
+    @polyglot.has("foo.bar").should.equal true
+    @polyglot.unset { foo: { bar: "foobar" }}
+    @polyglot.has("foo.bar").should.equal false
