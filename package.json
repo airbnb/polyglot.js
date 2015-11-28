@@ -27,5 +27,5 @@
     "should": "1.2.1",
     "coffee-script": "1.3.3"
   },
-  "license": "BSD"
+  "license": "BSD-2-Clause"
 }
