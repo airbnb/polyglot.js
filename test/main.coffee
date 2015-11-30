@@ -51,6 +51,13 @@ describe "t", ->
       _: ""
     }).should.equal("")
 
+  it "should handle dollar signs in the substitution value", ->
+    @polyglot = new Polyglot({phrases: phrases})
+    @polyglot.t("hi_name_welcome_to_place", {
+      name: '$abc $0'
+      place: '$1 $&'
+    }).should.equal("Hi, $abc $0, welcome to $1 $&!")
+
   it "should support nested phrase objects", ->
     nestedPhrases =
       nav:
