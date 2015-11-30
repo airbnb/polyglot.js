@@ -4,7 +4,8 @@
   "description": "Give your JavaScript the ability to speak many languages.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script test/*.coffee --reporter spec"
+    "test": "npm run tests-only",
+    "tests-only": "mocha --compilers coffee:coffee-script test/*.coffee --reporter spec"
   },
   "repository": {
     "type": "git",
