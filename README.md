@@ -196,7 +196,7 @@ polyglot.extend({
 });
 ```
 
-English (and German, Spanish, Italian, and a few others) there are only two plural forms: singular and not-singular.
+In English (and German, Spanish, Italian, and a few others) there are only two plural forms: singular and not-singular.
 
 Some languages get a bit more complicated. In Czech, there are three separate forms: 1, 2 through 4, and 5 and up. Russian is even crazier.
 
