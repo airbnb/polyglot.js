@@ -167,6 +167,9 @@ describe "replace", ->
 
 describe "unset", ->
 
+  beforeEach ->
+    @polyglot = new Polyglot()
+
   it "should unset a key based on a string", ->
     @polyglot.extend { test_key: "test_value"}
     @polyglot.has("test_key").should.equal true
