@@ -1,3 +1,16 @@
+### v1.0.0: November 29, 2015
+ * [Tests] up to `node` `v5.1`
+ * [Tests] fix npm upgrades on older nodes
+ * [Dev Deps] update `uglify-js`, `docco`, `should`, `mocha`, and fix test pollution
+
+### v0.4.5: November 29, 2015
+ * [Fix] Ensure that dollar signs are properly escaped in substitutions (#43)
+ * [Docs] use SPDX-compliant license string (#44)
+
+### v0.4.4: October 26, 2015
+ * [New] Add `unset` method (#43)
+ * [Tests] test on travis-ci
+
 ### v0.4.3: June 26, 2015
  * Add `.has(key)` method (thanks @scarfacedeb).
  * Add UMD wrapper for AMD support (thanks @TomOne).
