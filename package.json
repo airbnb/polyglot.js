@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run tests-only",
-    "tests-only": "mocha --compilers coffee:coffee-script test/*.coffee --reporter spec"
+    "tests-only": "mocha --compilers coffee:coffee-script test/*.coffee --reporter spec",
+    "docs": "docco -o docs/ lib/polyglot.js"
   },
   "repository": {
     "type": "git",
