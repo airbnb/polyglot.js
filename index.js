@@ -17,6 +17,8 @@
 
 'use strict';
 
+var assign = require('object.assign');
+
 var replace = String.prototype.replace;
 
 // ### Polyglot class constructor
@@ -196,7 +198,7 @@ Polyglot.prototype.t = function (key, options) {
     result = key;
   }
   if (typeof phrase === 'string') {
-    options = clone(options);
+    options = assign({}, options);
     result = choosePluralForm(phrase, this.currentLocale, options.smart_count);
     result = interpolate(result, options);
   }
@@ -313,17 +315,6 @@ function warn(message) {
   if (typeof console !== 'undefined' && typeof console.warn === 'function') {
     console.warn('WARNING: ' + message);
   }
-}
-
-// ### clone
-//
-// Clone an object.
-function clone(source) {
-  var ret = {};
-  for (var prop in source) {
-    ret[prop] = source[prop];
-  }
-  return ret;
 }
 
 module.exports = Polyglot;
