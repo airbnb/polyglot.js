@@ -4,8 +4,8 @@
   "description": "Give your JavaScript the ability to speak many languages.",
   "main": "index.js",
   "scripts": {
-    "test": "npm run tests-only",
-    "tests-only": "mocha --compilers coffee:coffee-script/register test/*.coffee --reporter spec",
+    "test": "npm run --silent tests-only",
+    "tests-only": "mocha test/*.js --reporter spec",
     "docs": "docco -o docs/ lib/polyglot.js"
   },
   "repository": {
@@ -23,11 +23,11 @@
   ],
   "author": "Spike Brehm <spike@airbnb.com>",
   "devDependencies": {
-    "uglify-js": "^2.6.2",
+    "chai": "^3.5.0",
     "docco": "^0.7.0",
     "mocha": "^2.4.5",
     "should": "^8.3.0",
-    "coffee-script": "^1.10.0"
+    "uglify-js": "^2.6.2"
   },
   "license": "BSD-2-Clause"
 }
