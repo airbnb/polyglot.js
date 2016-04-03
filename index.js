@@ -32,7 +32,7 @@ function Polyglot(options) {
 // ### polyglot.locale([locale])
 //
 // Get or set locale. Internally, Polyglot only uses locale for pluralization.
-Polyglot.prototype.locale = function(newLocale) {
+Polyglot.prototype.locale = function (newLocale) {
   if (newLocale) this.currentLocale = newLocale;
   return this.currentLocale;
 };
@@ -86,7 +86,7 @@ Polyglot.prototype.locale = function(newLocale) {
 //     // }
 //
 // This feature is used internally to support nested phrase objects.
-Polyglot.prototype.extend = function(morePhrases, prefix) {
+Polyglot.prototype.extend = function (morePhrases, prefix) {
   var phrase;
 
   for (var key in morePhrases) {
@@ -113,7 +113,7 @@ Polyglot.prototype.extend = function(morePhrases, prefix) {
 //
 // The unset method can take either a string (for the key), or an object hash with
 // the keys that you would like to unset.
-Polyglot.prototype.unset = function(morePhrases, prefix) {
+Polyglot.prototype.unset = function (morePhrases, prefix) {
   var phrase;
 
   if (typeof morePhrases === 'string') {
@@ -138,7 +138,7 @@ Polyglot.prototype.unset = function(morePhrases, prefix) {
 // Clears all phrases. Useful for special cases, such as freeing
 // up memory if you have lots of phrases but no longer need to
 // perform any translation. Also used internally by `replace`.
-Polyglot.prototype.clear = function() {
+Polyglot.prototype.clear = function () {
   this.phrases = {};
 };
 
@@ -147,7 +147,7 @@ Polyglot.prototype.clear = function() {
 // Completely replace the existing phrases with a new set of phrases.
 // Normally, just use `extend` to add more phrases, but under certain
 // circumstances, you may want to make sure no old phrases are lying around.
-Polyglot.prototype.replace = function(newPhrases) {
+Polyglot.prototype.replace = function (newPhrases) {
   this.clear();
   this.extend(newPhrases);
 };
@@ -178,7 +178,7 @@ Polyglot.prototype.replace = function(newPhrases) {
 //     });
 //     => "I like to write in JavaScript."
 //
-Polyglot.prototype.t = function(key, options) {
+Polyglot.prototype.t = function (key, options) {
   var phrase, result;
   options = options == null ? {} : options;
   // allow number as a pluralization shortcut
@@ -207,7 +207,7 @@ Polyglot.prototype.t = function(key, options) {
 // ### polyglot.has(key)
 //
 // Check if polyglot has a translation for given key
-Polyglot.prototype.has = function(key) {
+Polyglot.prototype.has = function (key) {
   return key in this.phrases;
 };
 
@@ -218,23 +218,23 @@ var delimeter = '||||';
 
 // Mapping from pluralization group plural logic.
 var pluralTypes = {
-  chinese:   function(n) { return 0; },
-  german:    function(n) { return n !== 1 ? 1 : 0; },
-  french:    function(n) { return n > 1 ? 1 : 0; },
-  russian:   function(n) { return n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2; },
-  czech:     function(n) { return (n === 1) ? 0 : (n >= 2 && n <= 4) ? 1 : 2; },
-  polish:    function(n) { return (n === 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2); },
-  icelandic: function(n) { return (n % 10 !== 1 || n % 100 === 11) ? 1 : 0; }
+  chinese: function (n) { return 0; },
+  german: function (n) { return n !== 1 ? 1 : 0; },
+  french: function (n) { return n > 1 ? 1 : 0; },
+  russian: function (n) { return n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2; },
+  czech: function (n) { return (n === 1) ? 0 : (n >= 2 && n <= 4) ? 1 : 2; },
+  polish: function (n) { return (n === 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2); },
+  icelandic: function (n) { return (n % 10 !== 1 || n % 100 === 11) ? 1 : 0; }
 };
 
 // Mapping from pluralization group to individual locales.
 var pluralTypeToLanguages = {
-  chinese:   ['fa', 'id', 'ja', 'ko', 'lo', 'ms', 'th', 'tr', 'zh'],
-  german:    ['da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'it', 'nl', 'no', 'pt', 'sv'],
-  french:    ['fr', 'tl', 'pt-br'],
-  russian:   ['hr', 'ru'],
-  czech:     ['cs', 'sk'],
-  polish:    ['pl'],
+  chinese: ['fa', 'id', 'ja', 'ko', 'lo', 'ms', 'th', 'tr', 'zh'],
+  german: ['da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'it', 'nl', 'no', 'pt', 'sv'],
+  french: ['fr', 'tl', 'pt-br'],
+  russian: ['hr', 'ru'],
+  czech: ['cs', 'sk'],
+  polish: ['pl'],
   icelandic: ['is']
 };
 
@@ -253,14 +253,14 @@ function langToTypeMap(mapping) {
 
 // Trim a string.
 var trimRe = /^\s+|\s+$/g;
-function trim(str){
+function trim(str) {
   return replace.call(str, trimRe, '');
 }
 
 // Based on a phrase text that contains `n` plural forms separated
 // by `delimeter`, a `locale`, and a `count`, choose the correct
 // plural form, or none if `count` is `null`.
-function choosePluralForm(text, locale, count){
+function choosePluralForm(text, locale, count) {
   var ret, texts, chosenText;
   if (count != null && text) {
     texts = text.split(delimeter);
