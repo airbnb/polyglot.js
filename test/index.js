@@ -1,4 +1,4 @@
-var Polyglot = require('../lib/polyglot');
+var Polyglot = require('../');
 var expect = require('chai').expect;
 
 describe('t', function () {
