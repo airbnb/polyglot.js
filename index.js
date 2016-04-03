@@ -18,6 +18,7 @@
 'use strict';
 
 var assign = require('object.assign');
+var forEach = require('for-each');
 
 var replace = String.prototype.replace;
 
@@ -89,19 +90,14 @@ Polyglot.prototype.locale = function (newLocale) {
 //
 // This feature is used internally to support nested phrase objects.
 Polyglot.prototype.extend = function (morePhrases, prefix) {
-  var phrase;
-
-  for (var key in morePhrases) {
-    if (morePhrases.hasOwnProperty(key)) {
-      phrase = morePhrases[key];
-      if (prefix) key = prefix + '.' + key;
-      if (typeof phrase === 'object') {
-        this.extend(phrase, key);
-      } else {
-        this.phrases[key] = phrase;
-      }
+  forEach(morePhrases, function (phrase, key) {
+    var prefixedKey = prefix ? prefix + '.' + key : key;
+    if (typeof phrase === 'object') {
+      this.extend(phrase, prefixedKey);
+    } else {
+      this.phrases[prefixedKey] = phrase;
     }
-  }
+  }, this);
 };
 
 // ### polyglot.unset(phrases)
@@ -116,22 +112,17 @@ Polyglot.prototype.extend = function (morePhrases, prefix) {
 // The unset method can take either a string (for the key), or an object hash with
 // the keys that you would like to unset.
 Polyglot.prototype.unset = function (morePhrases, prefix) {
-  var phrase;
-
   if (typeof morePhrases === 'string') {
     delete this.phrases[morePhrases];
   } else {
-    for (var key in morePhrases) {
-      if (morePhrases.hasOwnProperty(key)) {
-        phrase = morePhrases[key];
-        if (prefix) key = prefix + '.' + key;
-        if (typeof phrase === 'object') {
-          this.unset(phrase, key);
-        } else {
-          delete this.phrases[key];
-        }
+    forEach(morePhrases, function (phrase, key) {
+      var prefixedKey = prefix ? prefix + '.' + key : key;
+      if (typeof phrase === 'object') {
+        this.unset(phrase, prefixedKey);
+      } else {
+        delete this.phrases[prefixedKey];
       }
-    }
+    }, this);
   }
 };
 
@@ -242,14 +233,11 @@ var pluralTypeToLanguages = {
 
 function langToTypeMap(mapping) {
   var type, langs, l, ret = {};
-  for (type in mapping) {
-    if (mapping.hasOwnProperty(type)) {
-      langs = mapping[type];
-      for (l in langs) {
-        ret[langs[l]] = type;
-      }
-    }
-  }
+  forEach(mapping, function (langs, type) {
+    forEach(langs, function (lang) {
+      ret[lang] = type;
+    });
+  });
   return ret;
 }
 
@@ -290,12 +278,11 @@ function pluralTypeIndex(locale, count) {
 var dollarRegex = /\$/g;
 var dollarBillsYall = '$$$$';
 function interpolate(phrase, options) {
-  for (var arg in options) {
-    if (arg !== '_' && options.hasOwnProperty(arg)) {
+  forEach(options, function (replacement, arg) {
+    if (arg !== '_') {
       // Ensure replacement value is escaped to prevent special $-prefixed
       // regex replace tokens. the "$$$$" is needed because each "$" needs to
       // be escaped with "$" itself, and we need two in the resulting output.
-      var replacement = options[arg];
       if (typeof replacement === 'string') {
         replacement = replace.call(options[arg], dollarRegex, dollarBillsYall);
       }
@@ -304,7 +291,7 @@ function interpolate(phrase, options) {
       // in the same phrase.
       phrase = replace.call(phrase, new RegExp('%\\{'+arg+'\\}', 'g'), replacement);
     }
-  }
+  });
   return phrase;
 }
 
