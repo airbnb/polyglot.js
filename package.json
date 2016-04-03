@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "npm run tests-only",
-    "tests-only": "mocha --compilers coffee:coffee-script test/*.coffee --reporter spec",
+    "tests-only": "mocha --compilers coffee:coffee-script/register test/*.coffee --reporter spec",
     "docs": "docco -o docs/ lib/polyglot.js"
   },
   "repository": {
@@ -23,11 +23,11 @@
   ],
   "author": "Spike Brehm <spike@airbnb.com>",
   "devDependencies": {
-    "uglify-js": "^2.6.1",
+    "uglify-js": "^2.6.2",
     "docco": "^0.7.0",
-    "mocha": "^2.3.4",
-    "should": "^7.1.1",
-    "coffee-script": "1.3.3"
+    "mocha": "^2.4.5",
+    "should": "^8.3.0",
+    "coffee-script": "^1.10.0"
   },
   "license": "BSD-2-Clause"
 }
