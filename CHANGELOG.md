@@ -1,3 +1,10 @@
+### v2.0.0: April 6, 2016
+ * [Breaking] Remove non-node support + use object.assign/for-each.
+ * [New] Add Slovak language to the Czech pluralization group
+ * [Fix] fix`warn` messages in `node`, where `this` is not the global object
+ * [Tests] up to `node` `v5.10`, `v4.4`
+ * [Tests] decaffeinate tests
+
 ### v1.0.0: November 29, 2015
  * [Tests] up to `node` `v5.1`
  * [Tests] fix npm upgrades on older nodes

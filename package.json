@@ -1,6 +1,6 @@
 {
   "name": "node-polyglot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Give your JavaScript the ability to speak many languages.",
   "main": "index.js",
   "scripts": {
