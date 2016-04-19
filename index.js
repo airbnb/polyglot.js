@@ -19,6 +19,11 @@
 
 var assign = require('object.assign');
 var forEach = require('for-each');
+var warning = require('warning');
+
+var warn = function warn(message) {
+  warning(false, message);
+};
 
 var replace = String.prototype.replace;
 
@@ -293,15 +298,6 @@ function interpolate(phrase, options) {
     }
   });
   return phrase;
-}
-
-// ### warn
-//
-// Provides a warning in the console if a phrase key is missing.
-function warn(message) {
-  if (typeof console !== 'undefined' && typeof console.warn === 'function') {
-    console.warn('WARNING: ' + message);
-  }
 }
 
 module.exports = Polyglot;
