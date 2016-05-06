@@ -1,3 +1,5 @@
+'use strict';
+
 var Polyglot = require('../');
 var expect = require('chai').expect;
 
@@ -76,8 +78,8 @@ describe('t', function () {
         presentations: 'Presentations',
         hi_user: 'Hi, %{user}.',
         cta: {
-          join_now: 'Join now!',
-        },
+          join_now: 'Join now!'
+        }
       },
       'header.sign_in': 'Sign In'
     };
@@ -96,7 +98,7 @@ describe('pluralize', function () {
 
   var polyglot;
   beforeEach(function () {
-    polyglot = new Polyglot({ phrases: phrases, locale:'en' });
+    polyglot = new Polyglot({ phrases: phrases, locale: 'en' });
   });
 
   it('supports pluralization with an integer', function () {
@@ -155,7 +157,7 @@ describe('extend', function () {
     polyglot.extend({ click: 'Click', hover: 'Hover' }, 'sidebar');
     expect(polyglot.phrases['sidebar.click']).to.equal('Click');
     expect(polyglot.phrases['sidebar.hover']).to.equal('Hover');
-    expect(polyglot.phrases['click']).not.to.exist;
+    expect(polyglot.phrases).not.to.have.property('click');
   });
 
   it('supports nested object', function () {
@@ -169,13 +171,13 @@ describe('extend', function () {
           log_in: 'Log In'
         }
       }
-    })
+    });
     expect(polyglot.phrases['sidebar.click']).to.equal('Click');
     expect(polyglot.phrases['sidebar.hover']).to.equal('Hover');
     expect(polyglot.phrases['nav.header.log_in']).to.equal('Log In');
-    expect(polyglot.phrases['click']).not.to.exist;
-    expect(polyglot.phrases['header.log_in']).not.to.exist;
-    expect(polyglot.phrases['log_in']).not.to.exist;
+    expect(polyglot.phrases).not.to.have.property('click');
+    expect(polyglot.phrases).not.to.have.property('header.log_in');
+    expect(polyglot.phrases).not.to.have.property('log_in');
   });
 });
 
@@ -231,10 +233,10 @@ describe('unset', function () {
   });
 
   it('unsets nested objects using recursive prefix call', function () {
-    polyglot.extend({ foo: { bar: 'foobar' }});
+    polyglot.extend({ foo: { bar: 'foobar' } });
     expect(polyglot.has('foo.bar')).to.equal(true);
 
-    polyglot.unset({ foo: { bar: 'foobar' }});
+    polyglot.unset({ foo: { bar: 'foobar' } });
     expect(polyglot.has('foo.bar')).to.equal(false);
   });
 });

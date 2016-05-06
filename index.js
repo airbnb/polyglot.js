@@ -29,12 +29,12 @@ var replace = String.prototype.replace;
 
 // ### Polyglot class constructor
 function Polyglot(options) {
-  options = options || {};
+  var opts = options || {};
   this.phrases = {};
-  this.extend(options.phrases || {});
-  this.currentLocale = options.locale || 'en';
-  this.allowMissing = !!options.allowMissing;
-  this.warn = options.warn || warn;
+  this.extend(opts.phrases || {});
+  this.currentLocale = opts.locale || 'en';
+  this.allowMissing = !!opts.allowMissing;
+  this.warn = opts.warn || warn;
 }
 
 // ### polyglot.locale([locale])
@@ -178,25 +178,25 @@ Polyglot.prototype.replace = function (newPhrases) {
 //
 Polyglot.prototype.t = function (key, options) {
   var phrase, result;
-  options = options == null ? {} : options;
+  var opts = options == null ? {} : options;
   // allow number as a pluralization shortcut
-  if (typeof options === 'number') {
-    options = {smart_count: options};
+  if (typeof opts === 'number') {
+    opts = { smart_count: opts };
   }
   if (typeof this.phrases[key] === 'string') {
     phrase = this.phrases[key];
-  } else if (typeof options._ === 'string') {
-    phrase = options._;
+  } else if (typeof opts._ === 'string') {
+    phrase = opts._;
   } else if (this.allowMissing) {
     phrase = key;
   } else {
-    this.warn('Missing translation for key: "'+key+'"');
+    this.warn('Missing translation for key: "' + key + '"');
     result = key;
   }
   if (typeof phrase === 'string') {
-    options = assign({}, options);
-    result = choosePluralForm(phrase, this.currentLocale, options.smart_count);
-    result = interpolate(result, options);
+    opts = assign({}, opts);
+    result = choosePluralForm(phrase, this.currentLocale, opts.smart_count);
+    result = interpolate(result, opts);
   }
   return result;
 };
@@ -216,12 +216,21 @@ var delimeter = '||||';
 
 // Mapping from pluralization group plural logic.
 var pluralTypes = {
-  chinese: function (n) { return 0; },
+  chinese: function () { return 0; },
   german: function (n) { return n !== 1 ? 1 : 0; },
   french: function (n) { return n > 1 ? 1 : 0; },
-  russian: function (n) { return n % 10 === 1 && n % 100 !== 11 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2; },
-  czech: function (n) { return (n === 1) ? 0 : (n >= 2 && n <= 4) ? 1 : 2; },
-  polish: function (n) { return (n === 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2); },
+  russian: function (n) {
+    if (n % 10 === 1 && n % 100 !== 11) { return 0; }
+    return n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
+  },
+  czech: function (n) {
+    if (n === 1) { return 0; }
+    return (n >= 2 && n <= 4) ? 1 : 2;
+  },
+  polish: function (n) {
+    if (n === 1) { return 0; }
+    return n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
+  },
   icelandic: function (n) { return (n % 10 !== 1 || n % 100 === 11) ? 1 : 0; }
 };
 
@@ -237,7 +246,7 @@ var pluralTypeToLanguages = {
 };
 
 function langToTypeMap(mapping) {
-  var type, langs, l, ret = {};
+  var ret = {};
   forEach(mapping, function (langs, type) {
     forEach(langs, function (lang) {
       ret[lang] = type;
@@ -252,21 +261,6 @@ function trim(str) {
   return replace.call(str, trimRe, '');
 }
 
-// Based on a phrase text that contains `n` plural forms separated
-// by `delimeter`, a `locale`, and a `count`, choose the correct
-// plural form, or none if `count` is `null`.
-function choosePluralForm(text, locale, count) {
-  var ret, texts, chosenText;
-  if (count != null && text) {
-    texts = text.split(delimeter);
-    chosenText = texts[pluralTypeIndex(locale, count)] || texts[0];
-    ret = trim(chosenText);
-  } else {
-    ret = text;
-  }
-  return ret;
-}
-
 function pluralTypeName(locale) {
   var langToPluralType = langToTypeMap(pluralTypeToLanguages);
   return langToPluralType[locale] || langToPluralType.en;
@@ -276,6 +270,18 @@ function pluralTypeIndex(locale, count) {
   return pluralTypes[pluralTypeName(locale)](count);
 }
 
+// Based on a phrase text that contains `n` plural forms separated
+// by `delimeter`, a `locale`, and a `count`, choose the correct
+// plural form, or none if `count` is `null`.
+function choosePluralForm(text, locale, count) {
+  if (count != null && text) {
+    var texts = text.split(delimeter);
+    var chosenText = texts[pluralTypeIndex(locale, count)] || texts[0];
+    return trim(chosenText);
+  }
+  return text;
+}
+
 // ### interpolate
 //
 // Does the dirty work. Creates a `RegExp` object for each
@@ -283,6 +289,7 @@ function pluralTypeIndex(locale, count) {
 var dollarRegex = /\$/g;
 var dollarBillsYall = '$$$$';
 function interpolate(phrase, options) {
+  /* eslint-disable no-param-reassign */
   forEach(options, function (replacement, arg) {
     if (arg !== '_') {
       // Ensure replacement value is escaped to prevent special $-prefixed
@@ -294,9 +301,10 @@ function interpolate(phrase, options) {
       // We create a new `RegExp` each time instead of using a more-efficient
       // string replace so that the same argument can be replaced multiple times
       // in the same phrase.
-      phrase = replace.call(phrase, new RegExp('%\\{'+arg+'\\}', 'g'), replacement);
+      phrase = replace.call(phrase, new RegExp('%\\{' + arg + '\\}', 'g'), replacement);
     }
   });
+  /* eslint-enable no-param-reassign */
   return phrase;
 }
 
