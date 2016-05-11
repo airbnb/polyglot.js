@@ -287,25 +287,14 @@ function choosePluralForm(text, locale, count) {
 // Does the dirty work. Creates a `RegExp` object for each
 // interpolation placeholder.
 var dollarRegex = /\$/g;
-var dollarBillsYall = '$$$$';
+var dollarBillsYall = '$$';
+var tokenRegex = /%\{(.*?)\}/g;
 function interpolate(phrase, options) {
-  /* eslint-disable no-param-reassign */
-  forEach(options, function (replacement, arg) {
-    if (arg !== '_') {
-      // Ensure replacement value is escaped to prevent special $-prefixed
-      // regex replace tokens. the "$$$$" is needed because each "$" needs to
-      // be escaped with "$" itself, and we need two in the resulting output.
-      if (typeof replacement === 'string') {
-        replacement = replace.call(options[arg], dollarRegex, dollarBillsYall);
-      }
-      // We create a new `RegExp` each time instead of using a more-efficient
-      // string replace so that the same argument can be replaced multiple times
-      // in the same phrase.
-      phrase = replace.call(phrase, new RegExp('%\\{' + arg + '\\}', 'g'), replacement);
-    }
+  return phrase.replace(tokenRegex, function (expression, argument) {
+    if (!Object.prototype.hasOwnProperty.call(options, argument)) { return ''; }
+    // Ensure replacement value is escaped to prevent special $-prefixed regex replace tokens.
+    return replace.call(options[argument], dollarRegex, dollarBillsYall);
   });
-  /* eslint-enable no-param-reassign */
-  return phrase;
 }
 
 module.exports = Polyglot;
