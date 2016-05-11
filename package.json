@@ -33,10 +33,10 @@
     "chai": "^3.5.0",
     "docco": "^0.7.0",
     "eslint": "^2.9.0",
-    "eslint-config-airbnb-base": "^2.0.0",
+    "eslint-config-airbnb-base": "^3.0.1",
     "eslint-plugin-import": "^1.7.0",
     "mocha": "^2.4.5",
-    "should": "^8.3.0",
+    "should": "^8.3.1",
     "uglify-js": "^2.6.2"
   },
   "license": "BSD-2-Clause"
