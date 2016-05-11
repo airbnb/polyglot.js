@@ -20,6 +20,7 @@
 var assign = require('object.assign');
 var forEach = require('for-each');
 var warning = require('warning');
+var has = require('has');
 
 var warn = function warn(message) {
   warning(false, message);
@@ -206,7 +207,7 @@ Polyglot.prototype.t = function (key, options) {
 //
 // Check if polyglot has a translation for given key
 Polyglot.prototype.has = function (key) {
-  return key in this.phrases;
+  return has(this.phrases, key);
 };
 
 
@@ -291,7 +292,7 @@ var dollarBillsYall = '$$';
 var tokenRegex = /%\{(.*?)\}/g;
 function interpolate(phrase, options) {
   return phrase.replace(tokenRegex, function (expression, argument) {
-    if (!Object.prototype.hasOwnProperty.call(options, argument)) { return ''; }
+    if (!has(options, argument)) { return ''; }
     // Ensure replacement value is escaped to prevent special $-prefixed regex replace tokens.
     return replace.call(options[argument], dollarRegex, dollarBillsYall);
   });
