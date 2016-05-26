@@ -178,6 +178,20 @@ polyglot.t("num_cars", {smart_count: 2});
 => "2 cars"
 ```
 
+For the cases in which you need to determine the plural form based on a value, but interpolate another string you can use the smart_count
+object form. The count property will determine the plural form while the value property will be the one used in interpolation.
+
+```js
+polyglot.t("num_cars", {smart_count: {count: 0, value: 'Zero'}});
+=> "Zero cars"
+
+polyglot.t("num_cars", {smart_count: {count: 1, value: 'One'}});
+=> "One car"
+
+polyglot.t("num_cars", {smart_count: {count: 2, value: 'Two'}});
+=> "Two cars"
+```
+
 As a shortcut, you can also pass a number to the second parameter:
 
 ```js

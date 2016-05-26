@@ -178,7 +178,7 @@ Polyglot.prototype.replace = function (newPhrases) {
 //     => "I like to write in JavaScript."
 //
 Polyglot.prototype.t = function (key, options) {
-  var phrase, result;
+  var phrase, result, pluralizeTerm;
   var opts = options == null ? {} : options;
   // allow number as a pluralization shortcut
   if (typeof opts === 'number') {
@@ -196,7 +196,13 @@ Polyglot.prototype.t = function (key, options) {
   }
   if (typeof phrase === 'string') {
     opts = assign({}, opts);
-    result = choosePluralForm(phrase, this.currentLocale, opts.smart_count);
+    if (typeof opts.smart_count === 'object' && isValidSmartObject(opts.smart_count)) {
+      pluralizeTerm = opts.smart_count.count;
+      opts.smart_count = opts.smart_count.value;
+    } else {
+      pluralizeTerm = opts.smart_count;
+    }
+    result = choosePluralForm(phrase, this.currentLocale, pluralizeTerm);
     result = interpolate(result, opts);
   }
   return result;
@@ -281,6 +287,12 @@ function choosePluralForm(text, locale, count) {
     return trim(chosenText);
   }
   return text;
+}
+
+// Determines if an object passes as a smart_count parameter for
+// pluralization is valid
+function isValidSmartObject(count) {
+  return (typeof count.count === 'number' && !!count.value);
 }
 
 // ### interpolate

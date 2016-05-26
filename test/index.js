@@ -108,6 +108,13 @@ describe('pluralize', function () {
     expect(polyglot.t('count_name', { smart_count: 3 })).to.equal('3 Names');
   });
 
+  it('supports pluralization with an object', function () {
+    expect(polyglot.t('count_name', { smart_count: { count: 0, value: 'Zero' } })).to.equal('Zero Names');
+    expect(polyglot.t('count_name', { smart_count: { count: 1, value: 'One' } })).to.equal('One Name');
+    expect(polyglot.t('count_name', { smart_count: { count: 2, value: 'Two' } })).to.equal('Two Names');
+    expect(polyglot.t('count_name', { smart_count: { count: 3, value: 'Three' } })).to.equal('Three Names');
+  });
+
   it('accepts a number as a shortcut to pluralize a word', function () {
     expect(polyglot.t('count_name', 0)).to.equal('0 Names');
     expect(polyglot.t('count_name', 1)).to.equal('1 Name');
