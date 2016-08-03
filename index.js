@@ -211,6 +211,14 @@ Polyglot.prototype.has = function (key) {
 };
 
 
+// ### polyglot.size()
+//
+// Get the current size of phrases
+Polyglot.prototype.size = function() {
+  return Object.keys(this.phrases).length;
+};
+
+
 // #### Pluralization methods
 // The string that separates the different phrase possibilities.
 var delimeter = '||||';
