@@ -27,7 +27,7 @@
   "dependencies": {
     "for-each": "^0.3.2",
     "has": "^1.0.1",
-    "object.assign": "^4.0.3",
+    "object.assign": "^4.0.4",
     "warning": "^2.1.0"
   },
   "devDependencies": {
