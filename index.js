@@ -34,6 +34,12 @@ function Polyglot(options) {
   this.phrases = {};
   this.extend(opts.phrases || {});
   this.currentLocale = opts.locale || 'en';
+  if (typeof Intl === 'object') {
+    this.numberFormat = new Intl.NumberFormat(this.currentLocale);
+  } else {
+    // Fallback for IE<11
+    this.numberFormat = { format: function (n) { return String(n); } };
+  }
   this.allowMissing = !!opts.allowMissing;
   this.warn = opts.warn || warn;
 }
@@ -42,7 +48,15 @@ function Polyglot(options) {
 //
 // Get or set locale. Internally, Polyglot only uses locale for pluralization.
 Polyglot.prototype.locale = function (newLocale) {
-  if (newLocale) this.currentLocale = newLocale;
+  if (newLocale) {
+    this.currentLocale = newLocale;
+    if (typeof Intl === 'object') {
+      this.numberFormat = new Intl.NumberFormat(this.currentLocale);
+    } else {
+      // Fallback for IE<11
+      this.numberFormat = { format: function (n) { return String(n); } };
+    }
+  }
   return this.currentLocale;
 };
 
@@ -197,7 +211,7 @@ Polyglot.prototype.t = function (key, options) {
   if (typeof phrase === 'string') {
     opts = assign({}, opts);
     result = choosePluralForm(phrase, this.currentLocale, opts.smart_count);
-    result = interpolate(result, opts);
+    result = interpolate(result, opts, this.numberFormat);
   }
   return result;
 };
@@ -290,11 +304,16 @@ function choosePluralForm(text, locale, count) {
 var dollarRegex = /\$/g;
 var dollarBillsYall = '$$';
 var tokenRegex = /%\{(.*?)\}/g;
-function interpolate(phrase, options) {
+function interpolate(phrase, options, numberFormat) {
   return phrase.replace(tokenRegex, function (expression, argument) {
     if (!has(options, argument)) { return ''; }
+
+    var replacement = options[argument];
+    if (typeof replacement === 'number') {
+      replacement = numberFormat.format(replacement);
+    }
     // Ensure replacement value is escaped to prevent special $-prefixed regex replace tokens.
-    return replace.call(options[argument], dollarRegex, dollarBillsYall);
+    return replace.call(replacement, dollarRegex, dollarBillsYall);
   });
 }
 

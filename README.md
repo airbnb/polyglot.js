@@ -243,6 +243,25 @@ polyglot.t("car", 2);
 => "2 cars"
 ```
 
+Interpolated `Number`s will be number-formatted according to the `locale`:
+
+```js
+polyglot.t("num_cars", 2000);
+=> "2,000 cars"
+```
+
+On a default Node install, this may only work in English. To format in
+non-English locales (e.g., to output "2.000" in France or use other numerals),
+compile Node with "full" ICU data or include the `full-icu` package in your
+project:
+
+1. `npm install --save full-icu`
+2. Run `node --full-data-dir=node_modules/full-icu` instead of just `node`, or
+   set the `NODE_ICU_DATA=node_modules/full-icu` environment variable.
+
+If you're running Polyglot within a browser, it can number-format in any
+locale the web browser supports.
+
 If you like, you can provide a default value in case the phrase is missing.
 Use the special option key "_" to specify a default.
 
