@@ -271,7 +271,9 @@ function trim(str) {
 
 function pluralTypeName(locale) {
   var langToPluralType = langToTypeMap(pluralTypeToLanguages);
-  return langToPluralType[locale] || langToPluralType.en;
+  return langToPluralType[locale]
+    || langToPluralType[locale.split(/-/, 1)[0]]
+    || langToPluralType.en;
 }
 
 function pluralTypeIndex(locale, count) {

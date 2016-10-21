@@ -114,6 +114,12 @@ describe('pluralize', function () {
     expect(polyglot.t('count_name', 2)).to.equal('2 Names');
     expect(polyglot.t('count_name', 3)).to.equal('3 Names');
   });
+
+  it('ignores a region subtag when choosing a pluralization rule', function () {
+    var instance = new Polyglot({ phrases: phrases, locale: 'fr-FR' });
+    // French rule: "0" is singular
+    expect(instance.t('count_name', 0)).to.equal('0 Name');
+  });
 });
 
 describe('locale-specific pluralization rules', function () {
