@@ -8,7 +8,8 @@ describe('t', function () {
     hello: 'Hello',
     hi_name_welcome_to_place: 'Hi, %{name}, welcome to %{place}!',
     name_your_name_is_name: '%{name}, your name is %{name}!',
-    empty_string: ''
+    empty_string: '',
+    number: '%{number}'
   };
 
   var polyglot;
@@ -89,6 +90,14 @@ describe('t', function () {
     expect(instance.t('nav.cta.join_now')).to.equal('Join now!');
     expect(instance.t('header.sign_in')).to.equal('Sign In');
   });
+
+  it('uses an Intl.NumberFormat', function () {
+    var en = new Polyglot({ phrases: phrases, locale: 'en' });
+    var fr = new Polyglot({ phrases: phrases, locale: 'fr' });
+
+    expect(en.t('number', { number: 1234.56 })).to.equal('1,234.56');
+    expect(fr.t('number', { number: 1234.56 })).to.equal('1 234,56');
+  });
 });
 
 describe('pluralize', function () {
@@ -164,6 +173,12 @@ describe('locale', function () {
 
     polyglot.locale('fr');
     expect(polyglot.locale()).to.equal('fr');
+  });
+
+  it('updates number format when setting locale', function () {
+    polyglot.locale('fr');
+    polyglot.extend({ x: '%{n}' });
+    expect(polyglot.t('x', { n: 1234.56 })).to.equal('1 234,56');
   });
 });
 

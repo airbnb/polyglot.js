@@ -119,7 +119,7 @@ var tokenRegex = /%\{(.*?)\}/g;
 //
 // You should pass in a third argument, the locale, to specify the correct plural type.
 // It defaults to `'en'` with 2 plural forms.
-function transformPhrase(phrase, substitutions, locale) {
+function transformPhrase(phrase, substitutions, locale, numberFormat) {
   if (typeof phrase !== 'string') {
     throw new TypeError('Polyglot.transformPhrase expects argument #1 to be string');
   }
@@ -144,8 +144,14 @@ function transformPhrase(phrase, substitutions, locale) {
   // Interpolate: Creates a `RegExp` object for each interpolation placeholder.
   result = result.replace(tokenRegex, function (expression, argument) {
     if (!has(options, argument)) { return ''; }
+
+    var replacement = options[argument];
+    if (typeof replacement === 'number') {
+      replacement = numberFormat.format(replacement);
+    }
+
     // Ensure replacement value is escaped to prevent special $-prefixed regex replace tokens.
-    return replace.call(options[argument], dollarRegex, dollarBillsYall);
+    return replace.call(replacement, dollarRegex, dollarBillsYall);
   });
 
   return result;
@@ -157,6 +163,12 @@ function Polyglot(options) {
   this.phrases = {};
   this.extend(opts.phrases || {});
   this.currentLocale = opts.locale || 'en';
+  if (typeof Intl === 'object') {
+    this.numberFormat = new Intl.NumberFormat(this.currentLocale);
+  } else {
+    // Fallback for IE<11
+    this.numberFormat = { format: function (n) { return String(n); } };
+  }
   this.allowMissing = !!opts.allowMissing;
   this.warn = opts.warn || warn;
 }
@@ -165,7 +177,15 @@ function Polyglot(options) {
 //
 // Get or set locale. Internally, Polyglot only uses locale for pluralization.
 Polyglot.prototype.locale = function (newLocale) {
-  if (newLocale) this.currentLocale = newLocale;
+  if (newLocale) {
+    this.currentLocale = newLocale;
+    if (typeof Intl === 'object') {
+      this.numberFormat = new Intl.NumberFormat(this.currentLocale);
+    } else {
+      // Fallback for IE<11
+      this.numberFormat = { format: function (n) { return String(n); } };
+    }
+  }
   return this.currentLocale;
 };
 
@@ -314,7 +334,7 @@ Polyglot.prototype.t = function (key, options) {
     result = key;
   }
   if (typeof phrase === 'string') {
-    result = transformPhrase(phrase, opts, this.currentLocale);
+    result = transformPhrase(phrase, opts, this.currentLocale, this.numberFormat);
   }
   return result;
 };

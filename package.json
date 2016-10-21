@@ -6,7 +6,7 @@
   "scripts": {
     "pretest": "npm run --silent lint",
     "test": "npm run --silent tests-only",
-    "tests-only": "mocha test/*.js --reporter spec",
+    "tests-only": "NODE_ICU_DATA=node_modules/full-icu mocha test/*.js --reporter spec",
     "lint": "eslint *.js test/*.js",
     "docs": "docco -o docs/ index.js"
   },
@@ -36,6 +36,7 @@
     "eslint": "^3.9.1",
     "eslint-config-airbnb-base": "^10.0.1",
     "eslint-plugin-import": "^2.2.0",
+    "full-icu": "^1.0.3",
     "mocha": "^3.1.2",
     "should": "^11.1.1",
     "uglify-js": "2.7.3"
