@@ -217,6 +217,12 @@ var delimeter = '||||';
 
 // Mapping from pluralization group plural logic.
 var pluralTypes = {
+  arabic: function (n) {
+    // http://www.arabeyes.org/Plural_Forms
+    if (n < 3) { return n; }
+    if (n % 100 >= 3 && n % 100 <= 10) return 3;
+    return n % 100 >= 11 ? 4 : 5;
+  },
   chinese: function () { return 0; },
   german: function (n) { return n !== 1 ? 1 : 0; },
   french: function (n) { return n > 1 ? 1 : 0; },
@@ -237,6 +243,7 @@ var pluralTypes = {
 
 // Mapping from pluralization group to individual locales.
 var pluralTypeToLanguages = {
+  arabic: ['ar'],
   chinese: ['fa', 'id', 'ja', 'ko', 'lo', 'ms', 'th', 'tr', 'zh'],
   german: ['da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'it', 'nl', 'no', 'pt', 'sv'],
   french: ['fr', 'tl', 'pt-br'],

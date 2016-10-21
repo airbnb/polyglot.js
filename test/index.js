@@ -116,6 +116,32 @@ describe('pluralize', function () {
   });
 });
 
+describe('locale-specific pluralization rules', function () {
+  it('pluralizes in Arabic', function () {
+    // English would be: "1 vote" / "%{smart_count} votes"
+    var whatSomeoneTranslated = [
+      'ولا صوت',
+      'صوت واحد',
+      'صوتان',
+      '%{smart_count} أصوات',
+      '%{smart_count} صوت',
+      '%{smart_count} صوت'
+    ];
+    var phrases = {
+      n_votes: whatSomeoneTranslated.join(' |||| ')
+    };
+
+    var polyglot = new Polyglot({ phrases: phrases, locale: 'ar' });
+
+    expect(polyglot.t('n_votes', 0)).to.equal('ولا صوت');
+    expect(polyglot.t('n_votes', 1)).to.equal('صوت واحد');
+    expect(polyglot.t('n_votes', 2)).to.equal('صوتان');
+    expect(polyglot.t('n_votes', 3)).to.equal('3 أصوات');
+    expect(polyglot.t('n_votes', 11)).to.equal('11 صوت');
+    expect(polyglot.t('n_votes', 102)).to.equal('102 صوت');
+  });
+});
+
 describe('locale', function () {
   var polyglot;
   beforeEach(function () {
