@@ -243,24 +243,25 @@ polyglot.t("car", 2);
 => "2 cars"
 ```
 
-Interpolated `Number`s will be number-formatted according to the `locale`:
+If you pass a `numberFormat` to the constructor, interpolated `Number`s will
+be formatted by its `format()` method. That's useful because different locales
+have different rules for formatting numbers: `2,000.56` in English versus
+`1 234,56` in French, for instance.
 
 ```js
-polyglot.t("num_cars", 2000);
+polyglot = new Polyglot({
+  phrases: { num_cars: '%{smart_count} car |||| %{smart_count} cars' },
+  numberFormat: new Intl.NumberFormat('en') // Chrome, Firefox, IE11+, Node 0.12+ with ICU
+})
+polyglot.t("num_cars", 2000); // internally, calls options.numberFormat.format(2000)
 => "2,000 cars"
 ```
 
-On a default Node install, this may only work in English. To format in
-non-English locales (e.g., to output "2.000" in France or use other numerals),
-compile Node with "full" ICU data or include the `full-icu` package in your
-project:
-
-1. `npm install --save full-icu`
-2. Run `node --full-data-dir=node_modules/full-icu` instead of just `node`, or
-   set the `NODE_ICU_DATA=node_modules/full-icu` environment variable.
-
-If you're running Polyglot within a browser, it can number-format in any
-locale the web browser supports.
+(A primer on [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat)
+in Node: Node 0.12+ comes with Intl as long as it's compiled with ICU (which is
+the default). By default, the only locale Node supports is en-US. You can add
+[full-icu](https://www.npmjs.com/package/full-icu) to your project to support
+other locales.
 
 If you like, you can provide a default value in case the phrase is missing.
 Use the special option key "_" to specify a default.

@@ -92,11 +92,13 @@ describe('t', function () {
   });
 
   it('uses an Intl.NumberFormat', function () {
-    var en = new Polyglot({ phrases: phrases, locale: 'en' });
-    var fr = new Polyglot({ phrases: phrases, locale: 'fr' });
+    var instance = new Polyglot({
+      phrases: phrases,
+      // prove we're passed a Number by doing math on it and formatting it
+      numberFormat: { format: function (n) { return 'x' + (n + 2); } }
+    });
 
-    expect(en.t('number', { number: 1234.56 })).to.equal('1,234.56');
-    expect(fr.t('number', { number: 1234.56 })).to.equal('1 234,56');
+    expect(instance.t('number', { number: 1234.56 })).to.equal('x1236.56');
   });
 });
 
@@ -173,12 +175,6 @@ describe('locale', function () {
 
     polyglot.locale('fr');
     expect(polyglot.locale()).to.equal('fr');
-  });
-
-  it('updates number format when setting locale', function () {
-    polyglot.locale('fr');
-    polyglot.extend({ x: '%{n}' });
-    expect(polyglot.t('x', { n: 1234.56 })).to.equal('1 234,56');
   });
 });
 

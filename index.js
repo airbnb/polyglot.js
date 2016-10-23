@@ -163,12 +163,7 @@ function Polyglot(options) {
   this.phrases = {};
   this.extend(opts.phrases || {});
   this.currentLocale = opts.locale || 'en';
-  if (typeof Intl === 'object') {
-    this.numberFormat = new Intl.NumberFormat(this.currentLocale);
-  } else {
-    // Fallback for IE<11
-    this.numberFormat = { format: function (n) { return String(n); } };
-  }
+  this.numberFormat = opts.numberFormat || { format: String };
   this.allowMissing = !!opts.allowMissing;
   this.warn = opts.warn || warn;
 }
@@ -179,12 +174,6 @@ function Polyglot(options) {
 Polyglot.prototype.locale = function (newLocale) {
   if (newLocale) {
     this.currentLocale = newLocale;
-    if (typeof Intl === 'object') {
-      this.numberFormat = new Intl.NumberFormat(this.currentLocale);
-    } else {
-      // Fallback for IE<11
-      this.numberFormat = { format: function (n) { return String(n); } };
-    }
   }
   return this.currentLocale;
 };

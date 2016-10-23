@@ -36,7 +36,6 @@
     "eslint": "^3.9.1",
     "eslint-config-airbnb-base": "^10.0.1",
     "eslint-plugin-import": "^2.2.0",
-    "full-icu": "^1.0.3",
     "mocha": "^3.1.2",
     "should": "^11.1.1",
     "uglify-js": "2.7.3"
