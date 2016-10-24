@@ -91,11 +91,11 @@ describe('t', function () {
     expect(instance.t('header.sign_in')).to.equal('Sign In');
   });
 
-  it('uses an Intl.NumberFormat', function () {
+  it('uses numberFormat', function () {
     var instance = new Polyglot({
       phrases: phrases,
       // prove we're passed a Number by doing math on it and formatting it
-      numberFormat: { format: function (n) { return 'x' + (n + 2); } }
+      numberFormat: function (n) { return 'x' + (n + 2); }
     });
 
     expect(instance.t('number', { number: 1234.56 })).to.equal('x1236.56');

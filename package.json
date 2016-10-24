@@ -6,7 +6,7 @@
   "scripts": {
     "pretest": "npm run --silent lint",
     "test": "npm run --silent tests-only",
-    "tests-only": "NODE_ICU_DATA=node_modules/full-icu mocha test/*.js --reporter spec",
+    "tests-only": "mocha test/*.js --reporter spec",
     "lint": "eslint *.js test/*.js",
     "docs": "docco -o docs/ index.js"
   },

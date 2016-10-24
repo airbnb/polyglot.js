@@ -243,15 +243,15 @@ polyglot.t("car", 2);
 => "2 cars"
 ```
 
-If you pass a `numberFormat` to the constructor, interpolated `Number`s will
-be formatted by its `format()` method. That's useful because different locales
-have different rules for formatting numbers: `2,000.56` in English versus
-`1 234,56` in French, for instance.
+If you pass a `numberFormat` _function_ to the constructor, Polyglot will use
+it to translate interpolated `Number`s to `String`s. That's useful because
+different locales have different rules for formatting numbers: `2,000.56` in
+English versus `1 234,56` in French, for instance.
 
 ```js
 polyglot = new Polyglot({
   phrases: { num_cars: '%{smart_count} car |||| %{smart_count} cars' },
-  numberFormat: new Intl.NumberFormat('en') // Chrome, Firefox, IE11+, Node 0.12+ with ICU
+  numberFormat: new Intl.NumberFormat('en').format // Chrome, Firefox, IE11+, Node 0.12+ with ICU
 })
 polyglot.t("num_cars", 2000); // internally, calls options.numberFormat.format(2000)
 => "2,000 cars"
@@ -261,7 +261,9 @@ polyglot.t("num_cars", 2000); // internally, calls options.numberFormat.format(2
 in Node: Node 0.12+ comes with Intl as long as it's compiled with ICU (which is
 the default). By default, the only locale Node supports is en-US. You can add
 [full-icu](https://www.npmjs.com/package/full-icu) to your project to support
-other locales.
+other locales. Finally, Polyglot accepts a _function_, not an Intl.NumberFormat
+instance: if you have a NumberFormat instance, pass its `.format` property to
+Polyglot.
 
 If you like, you can provide a default value in case the phrase is missing.
 Use the special option key "_" to specify a default.
