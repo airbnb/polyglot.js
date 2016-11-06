@@ -34,7 +34,7 @@ function Polyglot(options) {
   this.phrases = {};
   this.extend(opts.phrases || {});
   this.currentLocale = opts.locale || 'en';
-  this.allowMissing = !!opts.allowMissing;
+  this.allowMissing = Boolean(opts.allowMissing);
   this.warn = opts.warn || warn;
 }
 
