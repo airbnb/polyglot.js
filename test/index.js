@@ -342,5 +342,4 @@ describe('transformPhrase', function () {
     expect(function () { Polyglot.transformPhrase(32); }).to.throw(TypeError);
     expect(function () { Polyglot.transformPhrase({}); }).to.throw(TypeError);
   });
-
 });
