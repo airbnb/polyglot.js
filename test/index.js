@@ -272,3 +272,67 @@ describe('unset', function () {
     expect(polyglot.has('foo.bar')).to.equal(false);
   });
 });
+
+describe('transformPhrase', function () {
+  var simple = '%{name} is %{attribute}';
+  var english = '%{smart_count} Name |||| %{smart_count} Names';
+  var arabic = [
+    'ولا صوت',
+    'صوت واحد',
+    'صوتان',
+    '%{smart_count} أصوات',
+    '%{smart_count} صوت',
+    '%{smart_count} صوت'
+  ].join(' |||| ');
+
+  it('does simple interpolation', function () {
+    expect(Polyglot.transformPhrase(simple, { name: 'Polyglot', attribute: 'awesome' })).to.equal('Polyglot is awesome');
+  });
+
+  it('removes missing keys', function () {
+    expect(Polyglot.transformPhrase(simple, { name: 'Polyglot' })).to.equal('Polyglot is ');
+  });
+
+  it('selects the correct plural form based on smart_count', function () {
+    expect(Polyglot.transformPhrase(english, { smart_count: 0 }, 'en')).to.equal('0 Names');
+    expect(Polyglot.transformPhrase(english, { smart_count: 1 }, 'en')).to.equal('1 Name');
+    expect(Polyglot.transformPhrase(english, { smart_count: 2 }, 'en')).to.equal('2 Names');
+    expect(Polyglot.transformPhrase(english, { smart_count: 3 }, 'en')).to.equal('3 Names');
+  });
+
+  it('selects the correct locale', function () {
+    // French rule: "0" is singular
+    expect(Polyglot.transformPhrase(english, { smart_count: 0 }, 'fr')).to.equal('0 Name');
+    expect(Polyglot.transformPhrase(english, { smart_count: 1 }, 'fr')).to.equal('1 Name');
+    expect(Polyglot.transformPhrase(english, { smart_count: 2 }, 'fr')).to.equal('2 Names');
+    expect(Polyglot.transformPhrase(english, { smart_count: 3 }, 'fr')).to.equal('3 Names');
+
+    // Arabic has 6 rules
+    expect(Polyglot.transformPhrase(arabic, 0, 'ar')).to.equal('ولا صوت');
+    expect(Polyglot.transformPhrase(arabic, 1, 'ar')).to.equal('صوت واحد');
+    expect(Polyglot.transformPhrase(arabic, 2, 'ar')).to.equal('صوتان');
+    expect(Polyglot.transformPhrase(arabic, 3, 'ar')).to.equal('3 أصوات');
+    expect(Polyglot.transformPhrase(arabic, 11, 'ar')).to.equal('11 صوت');
+    expect(Polyglot.transformPhrase(arabic, 102, 'ar')).to.equal('102 صوت');
+  });
+
+  it('defaults to `en`', function () {
+    // French rule: "0" is singular
+    expect(Polyglot.transformPhrase(english, { smart_count: 0 })).to.equal('0 Names');
+  });
+
+  it('ignores a region subtag when choosing a pluralization rule', function () {
+    // French rule: "0" is singular
+    expect(Polyglot.transformPhrase(english, { smart_count: 0 }, 'fr-FR')).to.equal('0 Name');
+  });
+
+  it('works without arguments', function () {
+    expect(Polyglot.transformPhrase(english)).to.equal(english);
+  });
+
+  it('respects a number as shortcut for smart_count', function () {
+    expect(Polyglot.transformPhrase(english, 0, 'en')).to.equal('0 Names');
+    expect(Polyglot.transformPhrase(english, 1, 'en')).to.equal('1 Name');
+    expect(Polyglot.transformPhrase(english, 5, 'en')).to.equal('5 Names');
+  });
+});
