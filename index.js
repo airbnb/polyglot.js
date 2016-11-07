@@ -21,6 +21,7 @@ var assign = require('object.assign');
 var forEach = require('for-each');
 var warning = require('warning');
 var has = require('has');
+var trim = require('string.prototype.trim');
 
 var warn = function warn(message) {
   warning(false, message);
@@ -261,12 +262,6 @@ function langToTypeMap(mapping) {
     });
   });
   return ret;
-}
-
-// Trim a string.
-var trimRe = /^\s+|\s+$/g;
-function trim(str) {
-  return replace.call(str, trimRe, '');
 }
 
 function pluralTypeName(locale) {
