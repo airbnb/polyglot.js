@@ -27,6 +27,7 @@ var warn = function warn(message) {
 };
 
 var replace = String.prototype.replace;
+var split = String.prototype.split;
 
 // #### Pluralization methods
 // The string that separates the different phrase possibilities.
@@ -83,7 +84,7 @@ function langToTypeMap(mapping) {
 function pluralTypeName(locale) {
   var langToPluralType = langToTypeMap(pluralTypeToLanguages);
   return langToPluralType[locale]
-    || langToPluralType[locale.split(/-/, 1)[0]]
+    || langToPluralType[split.call(locale, /-/, 1)[0]]
     || langToPluralType.en;
 }
 
@@ -123,7 +124,7 @@ function transformPhrase(phrase, substitutions, locale) {
     throw new TypeError('Polyglot.transformPhrase expects argument #1 to be string');
   }
 
-  if (typeof substitutions === 'undefined' || substitutions == null) {
+  if (substitutions == null) {
     return phrase;
   }
 
@@ -136,7 +137,7 @@ function transformPhrase(phrase, substitutions, locale) {
   // plural forms separated by `delimeter`, a `locale`, and a `substitutions.smart_count`,
   // choose the correct plural form. This is only done if `count` is set.
   if (options.smart_count != null && result) {
-    var texts = result.split(delimeter);
+    var texts = split.call(result, delimeter);
     result = trim(texts[pluralTypeIndex(locale || 'en', options.smart_count)] || texts[0]);
   }
 
