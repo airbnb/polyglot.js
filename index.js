@@ -95,7 +95,7 @@ var dollarRegex = /\$/g;
 var dollarBillsYall = '$$';
 var tokenRegex = /%\{(.*?)\}/g;
 
-// ### transformPhrase(phrase, opts, locale)
+// ### transformPhrase(phrase, substitutions, locale)
 //
 // Takes a phrase string and transforms it by choosing the correct
 // plural form and interpolating it.
@@ -103,9 +103,9 @@ var tokenRegex = /%\{(.*?)\}/g;
 //     transformPhrase('Hello, %{name}!', {name: 'Spike'});
 //     // "Hello, Spike!"
 //
-// The correct plural form is selected if opts.smart_count
-// is set. You can pass in a number instead of an `opts` Object as a shortcut
-// for `smart_count`.
+// The correct plural form is selected if substitutions.smart_count
+// is set. You can pass in a number instead of an Object as `substitutions`
+// as a shortcut for `smart_count`.
 //
 //     transformPhrase('%{smart_count} new messages |||| 1 new message', {smart_count: 1}, 'en');
 //     // "1 new message"
@@ -118,18 +118,22 @@ var tokenRegex = /%\{(.*?)\}/g;
 //
 // You should pass in a third argument, the locale, to specify the correct plural type.
 // It defaults to `'en'` with 2 plural forms.
-function transformPhrase(phrase, opts, locale) {
-  if (typeof opts === 'undefined' || opts === null) {
+function transformPhrase(phrase, substitutions, locale) {
+  if (typeof phrase !== 'string') {
+    throw new TypeError('Polyglot.transformPhrase expects argument #1 to be string');
+  }
+
+  if (typeof substitutions === 'undefined' || substitutions == null) {
     return phrase;
   }
 
   var result = phrase;
 
   // allow number as a pluralization shortcut
-  var options = typeof opts === 'number' ? { smart_count: opts } : opts;
+  var options = typeof substitutions === 'number' ? { smart_count: substitutions } : substitutions;
 
   // Select plural form: based on a phrase text that contains `n`
-  // plural forms separated by `delimeter`, a `locale`, and a `opts.smart_count`,
+  // plural forms separated by `delimeter`, a `locale`, and a `substitutions.smart_count`,
   // choose the correct plural form. This is only done if `count` is set.
   if (options.smart_count != null && result) {
     var texts = result.split(delimeter);

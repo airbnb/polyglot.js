@@ -335,4 +335,12 @@ describe('transformPhrase', function () {
     expect(Polyglot.transformPhrase(english, 1, 'en')).to.equal('1 Name');
     expect(Polyglot.transformPhrase(english, 5, 'en')).to.equal('5 Names');
   });
+
+  it('throws without sane phrase string', function () {
+    expect(function () { Polyglot.transformPhrase(); }).to.throw(TypeError);
+    expect(function () { Polyglot.transformPhrase(null); }).to.throw(TypeError);
+    expect(function () { Polyglot.transformPhrase(32); }).to.throw(TypeError);
+    expect(function () { Polyglot.transformPhrase({}); }).to.throw(TypeError);
+  });
+
 });
