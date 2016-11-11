@@ -157,7 +157,8 @@ function Polyglot(options) {
   this.phrases = {};
   this.extend(opts.phrases || {});
   this.currentLocale = opts.locale || 'en';
-  this.allowMissing = !!opts.allowMissing;
+  var allowMissing = opts.allowMissing ? transformPhrase : null;
+  this.onMissingKey = typeof opts.onMissingKey === 'function' ? opts.onMissingKey : allowMissing;
   this.warn = opts.warn || warn;
 }
 
@@ -307,8 +308,9 @@ Polyglot.prototype.t = function (key, options) {
     phrase = this.phrases[key];
   } else if (typeof opts._ === 'string') {
     phrase = opts._;
-  } else if (this.allowMissing) {
-    phrase = key;
+  } else if (this.onMissingKey) {
+    var onMissingKey = this.onMissingKey;
+    result = onMissingKey(key, opts, this.currentLocale);
   } else {
     this.warn('Missing translation for key: "' + key + '"');
     result = key;

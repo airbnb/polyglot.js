@@ -89,6 +89,34 @@ describe('t', function () {
     expect(instance.t('nav.cta.join_now')).to.equal('Join now!');
     expect(instance.t('header.sign_in')).to.equal('Sign In');
   });
+
+  describe('onMissingKey', function () {
+    it('calls the function when a key is missing', function () {
+      var expectedKey = 'some key';
+      var expectedOptions = {};
+      var expectedLocale = 'oz';
+      var returnValue = {};
+      var onMissingKey = function (key, options, locale) {
+        expect(key).to.equal(expectedKey);
+        expect(options).to.equal(expectedOptions);
+        expect(locale).to.equal(expectedLocale);
+        return returnValue;
+      };
+      var instance = new Polyglot({ onMissingKey: onMissingKey, locale: expectedLocale });
+      var result = instance.t(expectedKey, expectedOptions);
+      expect(result).to.equal(returnValue);
+    });
+
+    it('overrides allowMissing', function (done) {
+      var missingKey = 'missing key';
+      var onMissingKey = function (key) {
+        expect(key).to.equal(missingKey);
+        done();
+      };
+      var instance = new Polyglot({ onMissingKey: onMissingKey, allowMissing: true });
+      instance.t(missingKey);
+    });
+  });
 });
 
 describe('pluralize', function () {
