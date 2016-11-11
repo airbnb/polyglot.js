@@ -258,3 +258,7 @@ polyglot.t("i_like_to_write_in_language", {
 
 [travis-image]: https://travis-ci.org/airbnb/polyglot.js.svg
 [travis-url]: https://travis-ci.org/airbnb/polyglot.js
+
+## Related projects
+
+- [i18n-extract](https://github.com/oliviertassinari/i18n-extract): Manage localization with static analysis. (E.g. key usage extraction)
