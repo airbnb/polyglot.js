@@ -1,3 +1,18 @@
+### v2.1.0: November 11, 2016
+ * [New] Merge choosePluralForm & interpolate into one exported function: `transformPhrase` (#75)
+ * [New] Allow locales to have regions (#70)
+ * [New] Support Arabic pluralization (#71)
+ * [New] Added Lithuanian locale to russian group of pluralization (#68)
+ * [Deps] update `object.assign`, `warning`
+ * [Dev Deps] pin `uglify-js` because it does not follow semver
+ * [Dev Deps] update `eslint-config-airbnb-base`, `eslint`, `eslint-plugin-import`, `mocha`, `should`, `uglify-js`
+ * [Performance] instead of creating a new regex for each token, use the function form of `replace` (#19)
+ * [Refactor] use `warning` package for warnings
+ * [Robustness] Use `has` package to properly check “has own property”
+ * [Robustness] use `string.prototype.trim` rather than a homegrown trim polyfill
+ * [Tests] only test on latest `node` `v7`, `v6`, `v5`, `v4`, and `iojs`; improve test matrix
+ * [Tests] add linting
+
 ### v2.0.0: April 6, 2016
  * [Breaking] Remove non-node support + use object.assign/for-each.
  * [New] Add Slovak language to the Czech pluralization group
