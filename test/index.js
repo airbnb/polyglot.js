@@ -31,6 +31,12 @@ describe('t', function () {
     })).to.equal('Hi, Spike, welcome to the webz!');
   });
 
+  it('interpolates with missing substitutions', function () {
+    expect(polyglot.t('hi_name_welcome_to_place', {
+      place: undefined
+    })).to.equal('Hi, , welcome to !');
+  });
+
   it('interpolates the same placeholder multiple times', function () {
     expect(polyglot.t('name_your_name_is_name', {
       name: 'Spike'

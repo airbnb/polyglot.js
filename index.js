@@ -142,8 +142,8 @@ function transformPhrase(phrase, substitutions, locale) {
   }
 
   // Interpolate: Creates a `RegExp` object for each interpolation placeholder.
-  result = result.replace(tokenRegex, function (expression, argument) {
-    if (!has(options, argument)) { return ''; }
+  result = replace.call(result, tokenRegex, function (expression, argument) {
+    if (!has(options, argument) || options[argument] == null) { return ''; }
     // Ensure replacement value is escaped to prevent special $-prefixed regex replace tokens.
     return replace.call(options[argument], dollarRegex, dollarBillsYall);
   });
