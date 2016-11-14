@@ -1,3 +1,7 @@
+### v2.2.0: November 14, 2016
+ * [New] add `onMissingKey` constructor option - this can call `.transformPhrase`, or return `false`, or `undefined`, or throw - whatever you like (#34, #77)
+ * [Dev Deps] update `eslint`
+
 ### v2.1.1: November 13, 2016
  * [Fix] ensure that missing or null substitutions don’t crash (#79)
 
