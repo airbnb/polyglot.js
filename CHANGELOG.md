@@ -1,3 +1,6 @@
+### v2.1.1: November 13, 2016
+ * [Fix] ensure that missing or null substitutions don’t crash (#79)
+
 ### v2.1.0: November 11, 2016
  * [New] Merge choosePluralForm & interpolate into one exported function: `transformPhrase` (#75)
  * [New] Allow locales to have regions (#70)
