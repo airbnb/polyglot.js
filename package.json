@@ -4,6 +4,7 @@
   "description": "Give your JavaScript the ability to speak many languages.",
   "main": "index.js",
   "scripts": {
+    "prepublish": "not-in-publish || safe-publish-latest",
     "pretest": "npm run --silent lint",
     "test": "npm run --silent tests-only",
     "tests-only": "mocha test/*.js --reporter spec",
@@ -27,6 +28,7 @@
   "dependencies": {
     "for-each": "^0.3.2",
     "has": "^1.0.1",
+    "in-publish": "^2.0.0",
     "string.prototype.trim": "^1.1.2",
     "warning": "^3.0.0"
   },
@@ -37,6 +39,7 @@
     "eslint-config-airbnb-base": "^10.0.1",
     "eslint-plugin-import": "^2.2.0",
     "mocha": "^3.1.2",
+    "safe-publish-latest": "^1.1.1",
     "should": "^11.1.1",
     "uglify-js": "2.7.3"
   },
