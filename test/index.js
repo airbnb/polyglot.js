@@ -34,7 +34,7 @@ describe('t', function () {
   it('interpolates with missing substitutions', function () {
     expect(polyglot.t('hi_name_welcome_to_place', {
       place: undefined
-    })).to.equal('Hi, , welcome to !');
+    })).to.equal('Hi, , welcome to %{place}!');
   });
 
   it('interpolates the same placeholder multiple times', function () {
