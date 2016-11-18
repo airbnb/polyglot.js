@@ -1,3 +1,6 @@
+### v2.1.2: November 18, 2016
+ * [Fix] restore behavior of explicit null/undefined not touching the substitution
+
 ### v2.1.1: November 13, 2016
  * [Fix] ensure that missing or null substitutions don’t crash (#79)
 
