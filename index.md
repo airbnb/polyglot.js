@@ -1,6 +1,10 @@
 Polyglot.js
 ===========
 
+[![Build Status][travis-image]][travis-url]
+
+[![Join the chat at https://gitter.im/airbnb/polyglot.js](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/airbnb/polyglot.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Polyglot.js is a tiny I18n helper library written in JavaScript, made to
 work both in the browser and in CommonJS environments (Node). It provides a simple solution for interpolation and pluralization, based off of Airbnb's
 experience adding I18n functionality to its Backbone.js and Node apps. Polyglot has zero dependencies.
@@ -30,43 +34,7 @@ For use with Node, install with [NPM](http://npmjs.org):
 
 ### Running the tests
 
-    $ npm install
-
-    $ npm test
-
-      t
-        ✓ should translate a simple string
-        ✓ should return the key if translation not found
-        ✓ should interpolate
-        ✓ should interpolate the same placeholder multiple times
-        ✓ should allow you to supply default values
-        ◦ should return the non-interpolated key if not initialized with allowMissing     ✓ should return the non-interpolated key if not initialized with allowMissing and translation not found
-        ◦ should return an interpolated key if initialized with allowMissing and trans    ✓ should return an interpolated key if initialized with allowMissing and translation not found
-        ✓ should support nested phrase objects
-
-      pluralize
-        ✓ should support pluralization with an integer
-        ✓ should accept a number as a shortcut to pluralize a word
-
-      locale
-        ✓ should default to 'en'
-        ✓ should get and set locale
-
-      extend
-        ✓ should support multiple extends, overriding old keys
-        ✓ shouldn't forget old keys
-        ✓ should support optional `prefix` argument
-        ✓ should support nested object
-
-      clear
-        ✓ should wipe out old phrases
-
-      replace
-        ✓ should wipe out old phrases and replace with new phrases
-
-
-      ✔ 18 tests complete (12ms)
-
+Clone the repo, run `npm install`, and `npm test`.
 
 ## Usage
 
@@ -192,7 +160,7 @@ polyglot.extend({
 });
 ```
 
-English (and German, Spanish, Italian, and a few others) there are only two plural forms: singular and not-singular.
+In English (and German, Spanish, Italian, and a few others) there are only two plural forms: singular and not-singular.
 
 Some languages get a bit more complicated. In Czech, there are three separate forms: 1, 2 through 4, and 5 and up. Russian is even crazier.
 
@@ -286,19 +254,11 @@ polyglot.t("i_like_to_write_in_language", {
 => "I like to write in JavaScript."
 ```
 
-## History
+## [History](CHANGELOG.md)
 
-### v0.4.0: May 22, 2014
-* Added support for nested phrase objects to `extend()` and in the `phrases` option in the constructor.
+[travis-image]: https://travis-ci.org/airbnb/polyglot.js.svg
+[travis-url]: https://travis-ci.org/airbnb/polyglot.js
 
-### v0.3.0: August 6, 2013
-* _Breaking change_: Removed `pluralize()` method; instead, just use the `t()` method, passing in a `smart_count` option.
-* _Breaking change_: Removed the ability to use `Array`, `Backbone.Collection`, etc. instances for the `smart_count` option; instead, must pass a `Number`.
-* Allow passing `Number` as second argument to `t()`, which gets converted to the options object `{smart_count: <my number>}`.
+## Related projects
 
-### v0.2.1: May 2, 2013
-* Added `allowMissing` option to let the phrase key be the default translation (thanks @ziad-saab).
-
-### v0.2.0: Dec 20, 2012
-* _Breaking change_: Moved from Singleton pattern to class-based. Now you create an instance of the `Polyglot` class rather than using class methods directly on it. The reason is to allow maintaining multiple sets of phrases, which is something we ran into at Airbnb with a highly-concurrent Express app.
-* _Breaking change_: Removed the built-in Handlebars helpers, because Handlebars is a singleton, and it's messy to create a single helper function that can be bound to different Polyglot instances.  Instead, it's super easy to create your own, based on your requirements.
+- [i18n-extract](https://github.com/oliviertassinari/i18n-extract): Manage localization with static analysis. (E.g. key usage extraction)
