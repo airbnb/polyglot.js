@@ -1,3 +1,7 @@
+### v2.2.2: January 5, 2017
+ * [Fix] revert unintentional breaking change of missing substitutions being untouched
+ * [Dev Deps] update `eslint`, `eslint-config-airbnb-base`, `mocha`, `should`; add `safe-publish-latest`
+
 ### v2.2.1: November 18, 2016
  * [Fix] restore behavior of explicit null/undefined not touching the substitution
 
