@@ -34,7 +34,7 @@ describe('t', function () {
   it('interpolates with missing substitutions', function () {
     expect(polyglot.t('hi_name_welcome_to_place', {
       place: undefined
-    })).to.equal('Hi, , welcome to %{place}!');
+    })).to.equal('Hi, %{name}, welcome to %{place}!');
   });
 
   it('interpolates the same placeholder multiple times', function () {
@@ -324,7 +324,7 @@ describe('transformPhrase', function () {
   });
 
   it('removes missing keys', function () {
-    expect(Polyglot.transformPhrase(simple, { name: 'Polyglot' })).to.equal('Polyglot is ');
+    expect(Polyglot.transformPhrase(simple, { name: 'Polyglot' })).to.equal('Polyglot is %{attribute}');
   });
 
   it('selects the correct plural form based on smart_count', function () {
