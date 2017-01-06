@@ -1,3 +1,6 @@
+### v2.1.3: January 5, 2017
+ * [Fix] revert unintentional breaking change of missing substitutions being untouched
+
 ### v2.1.2: November 18, 2016
  * [Fix] restore behavior of explicit null/undefined not touching the substitution
 
