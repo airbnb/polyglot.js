@@ -143,8 +143,7 @@ function transformPhrase(phrase, substitutions, locale) {
 
   // Interpolate: Creates a `RegExp` object for each interpolation placeholder.
   result = replace.call(result, tokenRegex, function (expression, argument) {
-    if (!has(options, argument)) { return ''; }
-    if (options[argument] == null) { return expression; }
+    if (!has(options, argument) || options[argument] == null) { return expression; }
     // Ensure replacement value is escaped to prevent special $-prefixed regex replace tokens.
     return replace.call(options[argument], dollarRegex, dollarBillsYall);
   });
