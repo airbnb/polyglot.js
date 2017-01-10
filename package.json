@@ -34,8 +34,8 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "docco": "^0.7.0",
-    "eslint": "^3.12.2",
-    "eslint-config-airbnb-base": "^10.0.1",
+    "eslint": "^3.13.1",
+    "eslint-config-airbnb-base": "^11.0.1",
     "eslint-plugin-import": "^2.2.0",
     "mocha": "^3.2.0",
     "safe-publish-latest": "^1.1.1",
