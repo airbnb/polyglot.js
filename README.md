@@ -48,6 +48,8 @@ var polyglot = new Polyglot();
 
 Polyglot is class-based so you can maintain different sets of phrases at the same time, possibly in different locales. This is very useful for example when serving requests with [Express](http://expressjs.com), because each request may have a different locale, and you don't want concurrent requests to clobber each other's phrases.
 
+See [Options Overview](#options-overview) for information about the options object you can choose to pass to `new Polyglot`.
+
 ### Translation
 
 Tell Polyglot what to say by simply giving it a phrases object,
@@ -253,6 +255,15 @@ polyglot.t("i_like_to_write_in_language", {
 });
 => "I like to write in JavaScript."
 ```
+
+## Options Overview
+`new Polyglot` accepts a number of options:
+
+ - `phrases`: a key/value map of translated phrases. See [Translation](https://github.com/airbnb/polyglot.js#translation).
+ - `locale`: a string describing the locale (language and region) of the translation, to apply pluralization rules. see [Pluralization](#pluralization)
+ - `allowMissing`: a boolean to control whether missing keys in a `t` call are allowed. If `false`, by default, a missing key is returned and a warning is issued.
+ - `onMissingKey`: if `allowMissing` is `true`, and this option is a function, then it will be called instead of the default functionality. Arguments passed to it are `key`, `options`, and `locale`.
+
 
 ## [History](CHANGELOG.md)
 
