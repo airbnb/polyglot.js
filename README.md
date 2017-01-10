@@ -187,35 +187,7 @@ polyglot.t("num_cars", 2);
 => "2 cars"
 ```
 
-## Public Methods
-
-### Polyglot.prototype.extend(phrases)
-
-Use `extend` to tell Polyglot how to translate a given key.
-
-```js
-polyglot.extend({
-  "hello": "Hello",
-  "hello_name": "Hello, %{name}"
-});
-```
-
-The key can be any string.  Feel free to call `extend` multiple times;
-it will override any phrases with the same key, but leave existing phrases
-untouched.
-
-### Polyglot.prototype.clear()
-
-Clears all phrases. Useful for special cases, such as freeing
-up memory if you have lots of phrases but no longer need to
-perform any translation. Also used internally by `replace`.
-
-
-### Polyglot.prototype.replace(phrases)
-
-Completely replace the existing phrases with a new set of phrases.
-Normally, just use `extend` to add more phrases, but under certain
-circumstances, you may want to make sure no old phrases are lying around.
+## Public Instance Methods
 
 ### Polyglot.prototype.t(key, interpolationOptions)
 
@@ -255,6 +227,64 @@ polyglot.t("i_like_to_write_in_language", {
 });
 => "I like to write in JavaScript."
 ```
+
+### Polyglot.prototype.extend(phrases)
+
+Use `extend` to tell Polyglot how to translate a given key.
+
+```js
+polyglot.extend({
+  "hello": "Hello",
+  "hello_name": "Hello, %{name}"
+});
+```
+
+The key can be any string.  Feel free to call `extend` multiple times;
+it will override any phrases with the same key, but leave existing phrases
+untouched.
+
+### Polyglot.prototype.unset(keyOrObject)
+Use `unset` to selectively remove keys from a polyglot instance.
+`unset` accepts one argument: either a single string key, or an object whose keys are string keys, and whose values are ignored unless they are nested objects (in the same format).
+
+Example:
+```js
+polyglot.unset('some_key');
+polyglot.unset({
+  hello: 'Hello',
+  hello_name: 'Hello, %{name}',
+  foo: {
+    bar: 'This phrase’s key is "foo.bar"'
+  }
+});
+```
+
+### Polyglot.prototype.locale([localeToSet])
+
+Get or set the locale (also can be set using the [constructor option](#options-overview), which is used only for pluralization.
+If a truthy value is provided, it will set the locale. Afterwards, it will return it.
+
+### Polyglot.prototype.clear()
+
+Clears all phrases. Useful for special cases, such as freeing
+up memory if you have lots of phrases but no longer need to
+perform any translation. Also used internally by `replace`.
+
+
+### Polyglot.prototype.replace(phrases)
+
+Completely replace the existing phrases with a new set of phrases.
+Normally, just use `extend` to add more phrases, but under certain
+circumstances, you may want to make sure no old phrases are lying around.
+
+## Public Static Methods
+
+### transformPhrase(phrase[, substitutions[, locale]])
+
+Takes a phrase string and transforms it by choosing the correct plural form and interpolating it. This method is used internally by [t](#polyglotprototypetkey-interpolationoptions).
+The correct plural form is selected if substitutions.smart_count is set.
+You can pass in a number instead of an Object as `substitutions` as a shortcut for `smart_count`.
+You should pass in a third argument, the locale, to specify the correct plural type. It defaults to `'en'` which has 2 plural forms.
 
 ## Options Overview
 `new Polyglot` accepts a number of options:
