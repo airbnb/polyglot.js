@@ -62,8 +62,8 @@ var pluralTypes = {
 // Mapping from pluralization group to individual locales.
 var pluralTypeToLanguages = {
   arabic: ['ar'],
-  chinese: ['fa', 'id', 'ja', 'ko', 'lo', 'ms', 'th', 'tr', 'zh'],
-  german: ['da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'it', 'nl', 'no', 'pt', 'sv'],
+  chinese: ['id', 'ja', 'ko', 'lo', 'ms', 'th', 'tr', 'zh'],
+  german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'it', 'nl', 'no', 'pt', 'sv'],
   french: ['fr', 'tl', 'pt-br'],
   russian: ['hr', 'ru', 'lt'],
   czech: ['cs', 'sk'],
