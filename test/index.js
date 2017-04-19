@@ -24,6 +24,14 @@ describe('t', function () {
     expect(polyglot.t('bogus_key')).to.equal('bogus_key');
   });
 
+  it('does not warn for empty string', function () {
+    var onMissingKey = function () {
+      expect(true).to.equal(false);
+    };
+    var instance = new Polyglot({ onMissingKey: onMissingKey });
+    instance.t('');
+  });
+
   it('interpolates', function () {
     expect(polyglot.t('hi_name_welcome_to_place', {
       name: 'Spike',
