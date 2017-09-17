@@ -31,7 +31,7 @@ var split = String.prototype.split;
 
 // #### Pluralization methods
 // The string that separates the different phrase possibilities.
-var delimeter = '||||';
+var delimiter = '||||';
 
 // Mapping from pluralization group plural logic.
 var pluralTypes = {
@@ -134,10 +134,10 @@ function transformPhrase(phrase, substitutions, locale) {
   var options = typeof substitutions === 'number' ? { smart_count: substitutions } : substitutions;
 
   // Select plural form: based on a phrase text that contains `n`
-  // plural forms separated by `delimeter`, a `locale`, and a `substitutions.smart_count`,
+  // plural forms separated by `delimiter`, a `locale`, and a `substitutions.smart_count`,
   // choose the correct plural form. This is only done if `count` is set.
   if (options.smart_count != null && result) {
-    var texts = split.call(result, delimeter);
+    var texts = split.call(result, delimiter);
     result = trim(texts[pluralTypeIndex(locale || 'en', options.smart_count)] || texts[0]);
   }
 

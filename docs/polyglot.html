@@ -71,7 +71,7 @@ your client- or server-side JavaScript application.</p>
 
             </div>
 
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> delimeter = <span class="hljs-string">'||||'</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> delimiter = <span class="hljs-string">'||||'</span>;</pre></div></div>
 
         </li>
 
@@ -239,13 +239,13 @@ It defaults to <code>&#39;en&#39;</code> with 2 plural forms.</p>
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Select plural form: based on a phrase text that contains <code>n</code>
-plural forms separated by <code>delimeter</code>, a <code>locale</code>, and a <code>substitutions.smart_count</code>,
+plural forms separated by <code>delimiter</code>, a <code>locale</code>, and a <code>substitutions.smart_count</code>,
 choose the correct plural form. This is only done if <code>count</code> is set.</p>
 
             </div>
 
             <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (options.smart_count != <span class="hljs-literal">null</span> &amp;&amp; result) {
-    <span class="hljs-keyword">var</span> texts = split.call(result, delimeter);
+    <span class="hljs-keyword">var</span> texts = split.call(result, delimiter);
     result = trim(texts[pluralTypeIndex(locale || <span class="hljs-string">'en'</span>, options.smart_count)] || texts[<span class="hljs-number">0</span>]);
   }</pre></div></div>
 

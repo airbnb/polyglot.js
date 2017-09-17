@@ -152,7 +152,7 @@ Polyglot provides a very basic pattern for providing
 pluralization based on a single string that contains all plural forms for a given phrase. Because various languages have different nominal forms for zero, one, and multiple, and because the noun can be before or after the count, we have to be overly explicit
 about the possible phrases.
 
-To get a pluralized phrase, still use `polyglot.t()` but use a specially-formatted phrase string that separates the plural forms by the delimeter `||||`, or four vertical pipe characters.
+To get a pluralized phrase, still use `polyglot.t()` but use a specially-formatted phrase string that separates the plural forms by the delimiter `||||`, or four vertical pipe characters.
 
 For pluralizing "car" in English, Polyglot assumes you have a phrase of the form:
 
