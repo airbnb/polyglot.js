@@ -1,4 +1,11 @@
+# gitignore
+
 .DS_Store
 node_modules
 build/*.gz
 *.sw?
+
+# Only apps should have lockfiles
+npm-shrinkwrap.json
+package-lock.json
+yarn.lock
