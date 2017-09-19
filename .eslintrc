@@ -3,8 +3,14 @@
 
   "extends": "airbnb-base",
 
+  "parser": "babel-eslint",
+
   "parserOptions": {
-    "sourceType": "script"
+    "sourceType": "module"
+  },
+
+  "env": {
+    "mocha": true
   },
 
   "rules": {

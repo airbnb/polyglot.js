@@ -1,14 +1,20 @@
 {
   "name": "node-polyglot",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "Give your JavaScript the ability to speak many languages.",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "jsnext:main": "es/index.js",
+  "src:main": "src/index.js",
   "scripts": {
-    "prepublish": "safe-publish-latest",
+    "prepublish": "npm run clean && npm run build && safe-publish-latest",
     "pretest": "npm run --silent lint",
-    "test": "npm run --silent tests-only",
-    "tests-only": "mocha test/*.js --reporter spec",
-    "lint": "eslint *.js test/*.js",
+    "test": "npm run build:lib && npm run --silent tests-only",
+    "tests-only": "mocha lib/*.spec.js --reporter spec",
+    "lint": "eslint src/*.js",
+    "clean": "rimraf lib es",
+    "build:lib": "babel --plugins transform-es2015-modules-commonjs src --out-dir lib",
+    "build:es": "babel src --out-dir es",
+    "build": "npm run build:lib && npm run build:es",
     "docs": "docco -o docs/ index.js"
   },
   "repository": {
@@ -25,13 +31,14 @@
     "polyglot"
   ],
   "author": "Spike Brehm <spike@airbnb.com>",
-  "dependencies": {
-    "for-each": "^0.3.2",
-    "has": "^1.0.1",
-    "string.prototype.trim": "^1.1.2",
-    "warning": "^3.0.0"
-  },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "babel-eslint": "^7.2.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.24.1",
     "chai": "^3.5.0",
     "docco": "^0.7.0",
     "eslint": "^3.13.1",

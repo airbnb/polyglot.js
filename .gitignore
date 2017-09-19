@@ -2,3 +2,5 @@
 node_modules
 build/*.gz
 *.sw?
+lib
+es
