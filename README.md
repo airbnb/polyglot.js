@@ -292,7 +292,7 @@ You should pass in a third argument, the locale, to specify the correct plural t
  - `phrases`: a key/value map of translated phrases. See [Translation](https://github.com/airbnb/polyglot.js#translation).
  - `locale`: a string describing the locale (language and region) of the translation, to apply pluralization rules. see [Pluralization](#pluralization)
  - `allowMissing`: a boolean to control whether missing keys in a `t` call are allowed. If `false`, by default, a missing key is returned and a warning is issued.
- - `onMissingKey`: if `allowMissing` is `true`, and this option is a function, then it will be called instead of the default functionality. Arguments passed to it are `key`, `options`, and `locale`.
+ - `onMissingKey`: if `allowMissing` is `true`, and this option is a function, then it will be called instead of the default functionality. Arguments passed to it are `key`, `options`, and `locale`. The return of this function will be used as a translation fallback when `polyglot.t('missing.key')` is called (hint: return the key).
 
 
 ## [History](CHANGELOG.md)
