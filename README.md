@@ -5,30 +5,20 @@ Polyglot.js
 
 [![Join the chat at https://gitter.im/airbnb/polyglot.js](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/airbnb/polyglot.js?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Polyglot.js is a tiny I18n helper library written in JavaScript, made to
-work both in the browser and in CommonJS environments (Node). It provides a simple solution for interpolation and pluralization, based off of Airbnb's
-experience adding I18n functionality to its Backbone.js and Node apps. Polyglot has zero dependencies.
+Polyglot.js is a tiny I18n helper library written in JavaScript, made to work both in the browser and in CommonJS environments (Node). It provides a simple solution for interpolation and pluralization, based off of Airbnb’s experience adding I18n functionality to its Backbone.js and Node apps. Polyglot has zero dependencies.
 
-I18n is incredibly important for us at [Airbnb](https://www.airbnb.com/),
-as we have listings in 192 countries, and we translate our site into 30-odd different languages.
-We're also [hiring talented engineers](https://www.airbnb.com/jobs/departments/engineering)
-to help us scale up to meet the challenges of buliding a global marketplace.
+I18n is incredibly important for us at [Airbnb](https://www.airbnb.com/), as we have listings in 192 countries, and we translate our site into 30-odd different languages.
+We’re also [hiring talented engineers](https://www.airbnb.com/jobs/departments/engineering) to help us scale up to meet the challenges of buliding a global marketplace.
 
 View the [documentation on Github](http://airbnb.github.com/polyglot.js).
 
 View the [annotated source](http://airbnb.github.com/polyglot.js/polyglot.html).
 
-Download the [development version](https://raw.github.com/airbnb/polyglot.js/master/build/polyglot.js): 7.9kb, unminified with comments.
-
-Download the [production version](https://raw.github.com/airbnb/polyglot.js/master/build/polyglot.min.js): 2.8kb, minified (1.3kb gzipped).
-
-Polylglot is agnostic to your translation backend. It doesn't perform any
-translation; it simply gives you a way to manage translated phrases from
-your client- or server-side JavaScript application.
+Polylglot is agnostic to your translation backend. It doesn’t perform any translation; it simply gives you a way to manage translated phrases from your client- or server-side JavaScript application.
 
 ## Installation
 
-For use with Node, install with [NPM](http://npmjs.org):
+install with [npm](https://npmjs.org):
 
     $ npm install node-polyglot
 
@@ -46,7 +36,7 @@ First, create an instance of the `Polyglot` class, which you will use for transl
 var polyglot = new Polyglot();
 ```
 
-Polyglot is class-based so you can maintain different sets of phrases at the same time, possibly in different locales. This is very useful for example when serving requests with [Express](http://expressjs.com), because each request may have a different locale, and you don't want concurrent requests to clobber each other's phrases.
+Polyglot is class-based so you can maintain different sets of phrases at the same time, possibly in different locales. This is very useful for example when serving requests with [Express](http://expressjs.com), because each request may have a different locale, and you don’t want concurrent requests to clobber each other’s phrases.
 
 See [Options Overview](#options-overview) for information about the options object you can choose to pass to `new Polyglot`.
 
@@ -71,11 +61,11 @@ You can also pass a mapping at instantiation, using the key `phrases`:
 var polyglot = new Polyglot({phrases: {"hello": "Hello"}});
 ```
 
-Polyglot doesn't do the translation for you. It's up to you to give it
-the proper phrases for the user's locale.
+Polyglot doesn’t do the translation for you. It’s up to you to give it
+the proper phrases for the user’s locale.
 
 A common pattern is to gather a hash of phrases in your backend, and output
-them in a `<script>` tag at the bottom of the document.  For example, in Rails:
+them in a `<script>` tag at the bottom of the document. For example, in Rails:
 
 `app/controllers/home_controller.rb`
 
@@ -133,7 +123,7 @@ polyglot.t("nav.sidebar.welcome");
 
 ### Pluralization
 
-For pluralization to work properly, you need to tell Polyglot what the current locale is.  You can use `polyglot.locale("fr")` to set the locale to, for example, French. This method is also a getter:
+For pluralization to work properly, you need to tell Polyglot what the current locale is. You can use `polyglot.locale("fr")` to set the locale to, for example, French. This method is also a getter:
 
 ```js
 polyglot.locale()
@@ -148,9 +138,7 @@ var polyglot = new Polyglot({locale: "fr"});
 
 Currently, the _only_ thing that Polyglot uses this locale setting for is pluralization.
 
-Polyglot provides a very basic pattern for providing
-pluralization based on a single string that contains all plural forms for a given phrase. Because various languages have different nominal forms for zero, one, and multiple, and because the noun can be before or after the count, we have to be overly explicit
-about the possible phrases.
+Polyglot provides a very basic pattern for providing pluralization based on a single string that contains all plural forms for a given phrase. Because various languages have different nominal forms for zero, one, and multiple, and because the noun can be before or after the count, we have to be overly explicit about the possible phrases.
 
 To get a pluralized phrase, still use `polyglot.t()` but use a specially-formatted phrase string that separates the plural forms by the delimiter `||||`, or four vertical pipe characters.
 
@@ -166,8 +154,7 @@ In English (and German, Spanish, Italian, and a few others) there are only two p
 
 Some languages get a bit more complicated. In Czech, there are three separate forms: 1, 2 through 4, and 5 and up. Russian is even crazier.
 
-`polyglot.t()` will choose the appropriate phrase based
-on the provided `smart_count` option, whose value is a number.
+`polyglot.t()` will choose the appropriate phrase based on the provided `smart_count` option, whose value is a number.
 
 ```js
 polyglot.t("num_cars", {smart_count: 0});
@@ -191,16 +178,14 @@ polyglot.t("num_cars", 2);
 
 ### Polyglot.prototype.t(key, interpolationOptions)
 
-The most-used method. Provide a key, and `t()` will return the
-phrase.
+The most-used method. Provide a key, and `t()` will return the phrase.
 
 ```
 polyglot.t("hello");
 => "Hello"
 ```
 
-The phrase value is provided first by a call to `polyglot.extend()` or
-`polyglot.replace()`.
+The phrase value is provided first by a call to `polyglot.extend()` or `polyglot.replace()`.
 
 Pass in an object as the second argument to perform interpolation.
 
@@ -239,9 +224,7 @@ polyglot.extend({
 });
 ```
 
-The key can be any string.  Feel free to call `extend` multiple times;
-it will override any phrases with the same key, but leave existing phrases
-untouched.
+The key can be any string. Feel free to call `extend` multiple times; it will override any phrases with the same key, but leave existing phrases untouched.
 
 ### Polyglot.prototype.unset(keyOrObject)
 Use `unset` to selectively remove keys from a polyglot instance.
@@ -266,16 +249,13 @@ If a truthy value is provided, it will set the locale. Afterwards, it will retur
 
 ### Polyglot.prototype.clear()
 
-Clears all phrases. Useful for special cases, such as freeing
-up memory if you have lots of phrases but no longer need to
-perform any translation. Also used internally by `replace`.
+Clears all phrases. Useful for special cases, such as freeing up memory if you have lots of phrases but no longer need to perform any translation. Also used internally by `replace`.
 
 
 ### Polyglot.prototype.replace(phrases)
 
 Completely replace the existing phrases with a new set of phrases.
-Normally, just use `extend` to add more phrases, but under certain
-circumstances, you may want to make sure no old phrases are lying around.
+Normally, just use `extend` to add more phrases, but under certain circumstances, you may want to make sure no old phrases are lying around.
 
 ## Public Static Methods
 
