@@ -549,6 +549,7 @@ describe('locale-specific pluralization rules', function () {
     var phrases = {
       n_votes: whatSomeoneTranslated.join(' |||| ')
     };
+
     var polyglot = new Polyglot({ phrases: phrases, locale: 'lt' });
 
     expect(polyglot.t('n_votes', 0)).to.equal('0 balsų');
@@ -681,6 +682,132 @@ describe('custom pluralRules', function () {
     expect(polyglot.t('test_phrase', 2)).to.equal('2 Names');
     expect(polyglot.t('test_phrase', 2)).to.equal('2 Names');
   });
+});
+
+it('pluralizes in Belarusian', function () {
+  var whatSomeoneTranslated = [
+    '%{smart_count} голас',
+    '%{smart_count} галасы',
+    '%{smart_count} галасоў'
+  ];
+  var phrases = {
+    n_votes: whatSomeoneTranslated.join(' |||| ')
+  };
+
+  var polyglot = new Polyglot({ phrases: phrases, locale: 'be' });
+
+  expect(polyglot.t('n_votes', 0)).to.equal('0 галасоў');
+  expect(polyglot.t('n_votes', 1)).to.equal('1 голас');
+  expect(polyglot.t('n_votes', 2)).to.equal('2 галасы');
+  expect(polyglot.t('n_votes', 9)).to.equal('9 галасоў');
+  expect(polyglot.t('n_votes', 10)).to.equal('10 галасоў');
+  expect(polyglot.t('n_votes', 11)).to.equal('11 галасоў');
+  expect(polyglot.t('n_votes', 102)).to.equal('102 галасы');
+});
+
+it('pluralizes in Bosnian', function () {
+  var whatSomeoneTranslated = [
+    '%{smart_count} miš',
+    '%{smart_count} miša',
+    '%{smart_count} miševa'
+  ];
+  var phrases = {
+    n_votes: whatSomeoneTranslated.join(' |||| ')
+  };
+
+  var polyglot = new Polyglot({ phrases: phrases, locale: 'bs' });
+
+  expect(polyglot.t('n_votes', 0)).to.equal('0 miševa');
+  expect(polyglot.t('n_votes', 1)).to.equal('1 miš');
+  expect(polyglot.t('n_votes', 2)).to.equal('2 miša');
+  expect(polyglot.t('n_votes', 9)).to.equal('9 miševa');
+  expect(polyglot.t('n_votes', 10)).to.equal('10 miševa');
+  expect(polyglot.t('n_votes', 11)).to.equal('11 miševa');
+  expect(polyglot.t('n_votes', 102)).to.equal('102 miša');
+});
+
+it('pluralizes in Russian', function () {
+  var whatSomeoneTranslated = [
+    '%{smart_count} голос',
+    '%{smart_count} голоса',
+    '%{smart_count} голосов'
+  ];
+  var phrases = {
+    n_votes: whatSomeoneTranslated.join(' |||| ')
+  };
+
+  var polyglot = new Polyglot({ phrases: phrases, locale: 'ru' });
+
+  expect(polyglot.t('n_votes', 0)).to.equal('0 голосов');
+  expect(polyglot.t('n_votes', 1)).to.equal('1 голос');
+  expect(polyglot.t('n_votes', 2)).to.equal('2 голоса');
+  expect(polyglot.t('n_votes', 9)).to.equal('9 голосов');
+  expect(polyglot.t('n_votes', 10)).to.equal('10 голосов');
+  expect(polyglot.t('n_votes', 11)).to.equal('11 голосов');
+  expect(polyglot.t('n_votes', 102)).to.equal('102 голоса');
+});
+
+it('pluralizes in Serbian', function () {
+  var whatSomeoneTranslated = [
+    '%{smart_count} миш',
+    '%{smart_count} миша',
+    '%{smart_count} мишева'
+  ];
+  var phrases = {
+    n_votes: whatSomeoneTranslated.join(' |||| ')
+  };
+
+  var polyglot = new Polyglot({ phrases: phrases, locale: 'sr' });
+
+  expect(polyglot.t('n_votes', 0)).to.equal('0 мишева');
+  expect(polyglot.t('n_votes', 1)).to.equal('1 миш');
+  expect(polyglot.t('n_votes', 2)).to.equal('2 миша');
+  expect(polyglot.t('n_votes', 9)).to.equal('9 мишева');
+  expect(polyglot.t('n_votes', 10)).to.equal('10 мишева');
+  expect(polyglot.t('n_votes', 11)).to.equal('11 мишева');
+  expect(polyglot.t('n_votes', 102)).to.equal('102 миша');
+});
+
+it('pluralizes in Serbo-Croatian', function () {
+  var whatSomeoneTranslated = [
+    '%{smart_count} miš',
+    '%{smart_count} miša',
+    '%{smart_count} miševa'
+  ];
+  var phrases = {
+    n_votes: whatSomeoneTranslated.join(' |||| ')
+  };
+
+  var polyglot = new Polyglot({ phrases: phrases, locale: 'sh' });
+
+  expect(polyglot.t('n_votes', 0)).to.equal('0 miševa');
+  expect(polyglot.t('n_votes', 1)).to.equal('1 miš');
+  expect(polyglot.t('n_votes', 2)).to.equal('2 miša');
+  expect(polyglot.t('n_votes', 9)).to.equal('9 miševa');
+  expect(polyglot.t('n_votes', 10)).to.equal('10 miševa');
+  expect(polyglot.t('n_votes', 11)).to.equal('11 miševa');
+  expect(polyglot.t('n_votes', 102)).to.equal('102 miša');
+});
+
+it('pluralizes in Ukranian', function () {
+  var whatSomeoneTranslated = [
+    '%{smart_count} голос',
+    '%{smart_count} голоси',
+    '%{smart_count} голосiв'
+  ];
+  var phrases = {
+    n_votes: whatSomeoneTranslated.join(' |||| ')
+  };
+
+  var polyglot = new Polyglot({ phrases: phrases, locale: 'uk' });
+
+  expect(polyglot.t('n_votes', 0)).to.equal('0 голосiв');
+  expect(polyglot.t('n_votes', 1)).to.equal('1 голос');
+  expect(polyglot.t('n_votes', 2)).to.equal('2 голоси');
+  expect(polyglot.t('n_votes', 9)).to.equal('9 голосiв');
+  expect(polyglot.t('n_votes', 10)).to.equal('10 голосiв');
+  expect(polyglot.t('n_votes', 11)).to.equal('11 голосiв');
+  expect(polyglot.t('n_votes', 102)).to.equal('102 голоси');
 });
 
 describe('locale', function () {
