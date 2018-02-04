@@ -72,6 +72,10 @@ var pluralTypes = {
     }
     return 2;
   },
+  lithuanian: function (n) {
+    if (n % 10 === 1 && n % 100 !== 11) { return 0; }
+    return n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19) ? 1 : 2;
+  },
   czech: function (n) {
     if (n === 1) { return 0; }
     return (n >= 2 && n <= 4) ? 1 : 2;
@@ -104,7 +108,8 @@ var pluralTypeToLanguages = {
   croatian: ['hr', 'hr-HR'],
   german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hi-IN', 'hu', 'hu-HU', 'it', 'nl', 'no', 'pt', 'sv', 'tr'],
   french: ['fr', 'tl', 'pt-br'],
-  russian: ['ru', 'ru-RU', 'lt'],
+  russian: ['ru', 'ru-RU'],
+  lithuanian: ['lt'],
   czech: ['cs', 'cs-CZ', 'sk'],
   polish: ['pl'],
   icelandic: ['is'],

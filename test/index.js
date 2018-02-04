@@ -452,6 +452,30 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglot.t('n_x_cart', 1)).to.equal('Sepetinizde 1 X var. Bunu almak istiyor musunuz?');
     expect(polyglot.t('n_x_cart', 2)).to.equal('Sepetinizde 2 X var. Bunları almak istiyor musunuz?');
   });
+
+  it('pluralizes in Lithuanian', function () {
+    var whatSomeoneTranslated = [
+      '%{smart_count} balsas',
+      '%{smart_count} balsai',
+      '%{smart_count} balsų'
+    ];
+    var phrases = {
+      n_votes: whatSomeoneTranslated.join(' |||| ')
+    };
+    var polyglot = new Polyglot({ phrases: phrases, locale: 'lt' });
+
+    expect(polyglot.t('n_votes', 0)).to.equal('0 balsų');
+    expect(polyglot.t('n_votes', 1)).to.equal('1 balsas');
+    expect(polyglot.t('n_votes', 2)).to.equal('2 balsai');
+    expect(polyglot.t('n_votes', 9)).to.equal('9 balsai');
+    expect(polyglot.t('n_votes', 10)).to.equal('10 balsų');
+    expect(polyglot.t('n_votes', 11)).to.equal('11 balsų');
+    expect(polyglot.t('n_votes', 12)).to.equal('12 balsų');
+    expect(polyglot.t('n_votes', 90)).to.equal('90 balsų');
+    expect(polyglot.t('n_votes', 91)).to.equal('91 balsas');
+    expect(polyglot.t('n_votes', 92)).to.equal('92 balsai');
+    expect(polyglot.t('n_votes', 102)).to.equal('102 balsai');
+  });
 });
 
 describe('locale', function () {
