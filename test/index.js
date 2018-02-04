@@ -437,6 +437,21 @@ describe('locale-specific pluralization rules', function () {
       expect(polyglot.t('n_votes', c)).to.equal(c + ' komentarjev');
     });
   });
+
+  it('pluralizes in Turkish', function () {
+    var whatSomeoneTranslated = [
+      'Sepetinizde %{smart_count} X var. Bunu almak istiyor musunuz?',
+      'Sepetinizde %{smart_count} X var. Bunları almak istiyor musunuz?'
+    ];
+    var phrases = {
+      n_x_cart: whatSomeoneTranslated.join(' |||| ')
+    };
+
+    var polyglot = new Polyglot({ phrases: phrases, locale: 'tr' });
+
+    expect(polyglot.t('n_x_cart', 1)).to.equal('Sepetinizde 1 X var. Bunu almak istiyor musunuz?');
+    expect(polyglot.t('n_x_cart', 2)).to.equal('Sepetinizde 2 X var. Bunları almak istiyor musunuz?');
+  });
 });
 
 describe('locale', function () {

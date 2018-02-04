@@ -100,9 +100,9 @@ var pluralTypes = {
 var pluralTypeToLanguages = {
   arabic: ['ar'],
   bosnian_serbian: ['bs-Latn-BA', 'bs-Cyrl-BA', 'srl-RS', 'sr-RS'],
-  chinese: ['id', 'id-ID', 'ja', 'ko', 'ko-KR', 'lo', 'ms', 'th', 'th-TH', 'tr', 'zh'],
+  chinese: ['id', 'id-ID', 'ja', 'ko', 'ko-KR', 'lo', 'ms', 'th', 'th-TH', 'zh'],
   croatian: ['hr', 'hr-HR'],
-  german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hi-IN', 'hu', 'hu-HU', 'it', 'nl', 'no', 'pt', 'sv'],
+  german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hi-IN', 'hu', 'hu-HU', 'it', 'nl', 'no', 'pt', 'sv', 'tr'],
   french: ['fr', 'tl', 'pt-br'],
   russian: ['ru', 'ru-RU', 'lt'],
   czech: ['cs', 'cs-CZ', 'sk'],
