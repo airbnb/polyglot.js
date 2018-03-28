@@ -257,6 +257,10 @@ Clears all phrases. Useful for special cases, such as freeing up memory if you h
 Completely replace the existing phrases with a new set of phrases.
 Normally, just use `extend` to add more phrases, but under certain circumstances, you may want to make sure no old phrases are lying around.
 
+### Polyglot.prototype.has(key)
+
+Returns `true` if the key does exist in the provided phrases, otherwise it will return `false`.
+
 ## Public Static Methods
 
 ### transformPhrase(phrase[, substitutions[, locale]])
