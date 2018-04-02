@@ -121,6 +121,20 @@ polyglot.t("nav.sidebar.welcome");
 => "Welcome"
 ```
 
+The substitution variable syntax is customizable.
+
+```js
+var polyglot = new Polyglot({
+  phrases: {
+    "hello_name": "Hola {{name}}"
+  },
+  interpolation: {prefix: '{{', suffix: '}}'}
+});
+
+polyglot.t("hello_name", {name: "DeNiro"});
+=> "Hola, DeNiro."
+```
+
 ### Pluralization
 
 For pluralization to work properly, you need to tell Polyglot what the current locale is. You can use `polyglot.locale("fr")` to set the locale to, for example, French. This method is also a getter:
@@ -284,6 +298,7 @@ You should pass in a third argument, the locale, to specify the correct plural t
  - `locale`: a string describing the locale (language and region) of the translation, to apply pluralization rules. see [Pluralization](#pluralization)
  - `allowMissing`: a boolean to control whether missing keys in a `t` call are allowed. If `false`, by default, a missing key is returned and a warning is issued.
  - `onMissingKey`: if `allowMissing` is `true`, and this option is a function, then it will be called instead of the default functionality. Arguments passed to it are `key`, `options`, and `locale`. The return of this function will be used as a translation fallback when `polyglot.t('missing.key')` is called (hint: return the key).
+ - `interpolation`: an object to change the substitution syntax for interpolation by setting the `prefix` and `suffix` fields.
 
 
 ## [History](CHANGELOG.md)

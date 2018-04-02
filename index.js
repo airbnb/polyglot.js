@@ -132,9 +132,24 @@ function pluralTypeIndex(locale, count) {
   return pluralTypes[pluralTypeName(locale)](count);
 }
 
+function escape(token) {
+  return token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function constructTokenRegex(opts) {
+  var prefix = (opts && opts.prefix) || '%{';
+  var suffix = (opts && opts.suffix) || '}';
+
+  if (prefix === delimiter || suffix === delimiter) {
+    throw new RangeError('"' + delimiter + '" token is reserved for pluralization');
+  }
+
+  return new RegExp(escape(prefix) + '(.*?)' + escape(suffix), 'g');
+}
+
 var dollarRegex = /\$/g;
 var dollarBillsYall = '$$';
-var tokenRegex = /%\{(.*?)\}/g;
+var defaultTokenRegex = /%\{(.*?)\}/g;
 
 // ### transformPhrase(phrase, substitutions, locale)
 //
@@ -159,7 +174,7 @@ var tokenRegex = /%\{(.*?)\}/g;
 //
 // You should pass in a third argument, the locale, to specify the correct plural type.
 // It defaults to `'en'` with 2 plural forms.
-function transformPhrase(phrase, substitutions, locale) {
+function transformPhrase(phrase, substitutions, locale, tokenRegex) {
   if (typeof phrase !== 'string') {
     throw new TypeError('Polyglot.transformPhrase expects argument #1 to be string');
   }
@@ -169,6 +184,7 @@ function transformPhrase(phrase, substitutions, locale) {
   }
 
   var result = phrase;
+  var interpolationRegex = tokenRegex || defaultTokenRegex;
 
   // allow number as a pluralization shortcut
   var options = typeof substitutions === 'number' ? { smart_count: substitutions } : substitutions;
@@ -182,7 +198,7 @@ function transformPhrase(phrase, substitutions, locale) {
   }
 
   // Interpolate: Creates a `RegExp` object for each interpolation placeholder.
-  result = replace.call(result, tokenRegex, function (expression, argument) {
+  result = replace.call(result, interpolationRegex, function (expression, argument) {
     if (!has(options, argument) || options[argument] == null) { return expression; }
     // Ensure replacement value is escaped to prevent special $-prefixed regex replace tokens.
     return replace.call(options[argument], dollarRegex, dollarBillsYall);
@@ -200,6 +216,7 @@ function Polyglot(options) {
   var allowMissing = opts.allowMissing ? transformPhrase : null;
   this.onMissingKey = typeof opts.onMissingKey === 'function' ? opts.onMissingKey : allowMissing;
   this.warn = opts.warn || warn;
+  this.tokenRegex = constructTokenRegex(opts.interpolation);
 }
 
 // ### polyglot.locale([locale])
@@ -350,13 +367,13 @@ Polyglot.prototype.t = function (key, options) {
     phrase = opts._;
   } else if (this.onMissingKey) {
     var onMissingKey = this.onMissingKey;
-    result = onMissingKey(key, opts, this.currentLocale);
+    result = onMissingKey(key, opts, this.currentLocale, this.tokenRegex);
   } else {
     this.warn('Missing translation for key: "' + key + '"');
     result = key;
   }
   if (typeof phrase === 'string') {
-    result = transformPhrase(phrase, opts, this.currentLocale);
+    result = transformPhrase(phrase, opts, this.currentLocale, this.tokenRegex);
   }
   return result;
 };
@@ -370,6 +387,8 @@ Polyglot.prototype.has = function (key) {
 };
 
 // export transformPhrase
-Polyglot.transformPhrase = transformPhrase;
+Polyglot.transformPhrase = function transform(phrase, substitutions, locale) {
+  return transformPhrase(phrase, substitutions, locale);
+};
 
 module.exports = Polyglot;

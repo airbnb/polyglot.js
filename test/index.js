@@ -64,6 +64,38 @@ describe('t', function () {
     })).to.equal('Welcome Robert');
   });
 
+  describe('custom interpolation syntax', function () {
+    var createWithInterpolation = function (interpolation) {
+      return new Polyglot({ phrases: {}, allowMissing: true, interpolation: interpolation });
+    };
+
+    it('interpolates with the specified custom token syntax', function () {
+      var instance = createWithInterpolation({ prefix: '{{', suffix: '}}' });
+      expect(instance.t('Welcome {{name}}', {
+        name: 'Robert'
+      })).to.equal('Welcome Robert');
+    });
+
+    it('interpolates if the prefix and suffix are the same', function () {
+      var instance = createWithInterpolation({ prefix: '|', suffix: '|' });
+      expect(instance.t('Welcome |name|, how are you, |name|?', {
+        name: 'Robert'
+      })).to.equal('Welcome Robert, how are you, Robert?');
+    });
+
+    it('interpolates when using regular expression tokens', function () {
+      var instance = createWithInterpolation({ prefix: '\\s.*', suffix: '\\d.+' });
+      expect(instance.t('Welcome \\s.*name\\d.+', {
+        name: 'Robert'
+      })).to.equal('Welcome Robert');
+    });
+
+    it('throws an error when either prefix or suffix equals to pluralization delimiter', function () {
+      expect(function () { createWithInterpolation({ prefix: '||||', suffix: '}}' }); }).to.throw(RangeError);
+      expect(function () { createWithInterpolation({ prefix: '{{', suffix: '||||' }); }).to.throw(RangeError);
+    });
+  });
+
   it('returns the translation even if it is an empty string', function () {
     expect(polyglot.t('empty_string')).to.equal('');
   });
