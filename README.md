@@ -154,6 +154,13 @@ In English (and German, Spanish, Italian, and a few others) there are only two p
 
 Some languages get a bit more complicated. In Czech, there are three separate forms: 1, 2 through 4, and 5 and up. Russian is even crazier.
 
+```js
+var polyglot = new Polyglot({locale: "cs"}); // Czech
+polyglot.extend({
+  "num_foxes": "Mám %{smart_count} liška |||| Mám %{smart_count} lišky |||| Mám %{smart_count} lišek"
+})
+```
+
 `polyglot.t()` will choose the appropriate phrase based on the provided `smart_count` option, whose value is a number.
 
 ```js
