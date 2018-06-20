@@ -279,6 +279,132 @@ describe('locale-specific pluralization rules', function () {
       expect(polyglotLanguageCode.t('n_votes', c)).to.equal(c + ' glasova');
     });
   });
+
+  it('pluralizes in Serbian (Latin & Cyrillic)', function () {
+    // English would be: "1 vote" / "%{smart_count} votes"
+    var whatSomeoneTranslated = [
+      '%{smart_count} miš',
+      '%{smart_count} miša',
+      '%{smart_count} miševa'
+    ];
+    var phrases = {
+      n_votes: whatSomeoneTranslated.join(' |||| ')
+    };
+
+    var polyglotLatin = new Polyglot({ phrases: phrases, locale: 'srl-RS' });
+
+    expect(polyglotLatin.t('n_votes', 1)).to.equal('1 miš');
+    expect(polyglotLatin.t('n_votes', 11)).to.equal('11 miševa');
+    expect(polyglotLatin.t('n_votes', 101)).to.equal('101 miš');
+    expect(polyglotLatin.t('n_votes', 932)).to.equal('932 miša');
+    expect(polyglotLatin.t('n_votes', 324)).to.equal('324 miša');
+    expect(polyglotLatin.t('n_votes', 12)).to.equal('12 miševa');
+    expect(polyglotLatin.t('n_votes', 13)).to.equal('13 miševa');
+    expect(polyglotLatin.t('n_votes', 14)).to.equal('14 miševa');
+    expect(polyglotLatin.t('n_votes', 15)).to.equal('15 miševa');
+    expect(polyglotLatin.t('n_votes', 0)).to.equal('0 miševa');
+
+    var polyglotCyrillic = new Polyglot({ phrases: phrases, locale: 'sr-RS' });
+
+    expect(polyglotCyrillic.t('n_votes', 1)).to.equal('1 miš');
+    expect(polyglotCyrillic.t('n_votes', 11)).to.equal('11 miševa');
+    expect(polyglotCyrillic.t('n_votes', 101)).to.equal('101 miš');
+    expect(polyglotCyrillic.t('n_votes', 932)).to.equal('932 miša');
+    expect(polyglotCyrillic.t('n_votes', 324)).to.equal('324 miša');
+    expect(polyglotCyrillic.t('n_votes', 12)).to.equal('12 miševa');
+    expect(polyglotCyrillic.t('n_votes', 13)).to.equal('13 miševa');
+    expect(polyglotCyrillic.t('n_votes', 14)).to.equal('14 miševa');
+    expect(polyglotCyrillic.t('n_votes', 15)).to.equal('15 miševa');
+    expect(polyglotCyrillic.t('n_votes', 0)).to.equal('0 miševa');
+  });
+
+  it('pluralizes in Bosnian (Latin & Cyrillic)', function () {
+    // English would be: "1 vote" / "%{smart_count} votes"
+    var whatSomeoneTranslated = [
+      '%{smart_count} članak',
+      '%{smart_count} članka',
+      '%{smart_count} članaka'
+    ];
+    var phrases = {
+      n_votes: whatSomeoneTranslated.join(' |||| ')
+    };
+
+    var polyglotLatin = new Polyglot({ phrases: phrases, locale: 'bs-Latn-BA' });
+
+    expect(polyglotLatin.t('n_votes', 1)).to.equal('1 članak');
+    expect(polyglotLatin.t('n_votes', 11)).to.equal('11 članaka');
+    expect(polyglotLatin.t('n_votes', 101)).to.equal('101 članak');
+    expect(polyglotLatin.t('n_votes', 932)).to.equal('932 članka');
+    expect(polyglotLatin.t('n_votes', 324)).to.equal('324 članka');
+    expect(polyglotLatin.t('n_votes', 12)).to.equal('12 članaka');
+    expect(polyglotLatin.t('n_votes', 13)).to.equal('13 članaka');
+    expect(polyglotLatin.t('n_votes', 14)).to.equal('14 članaka');
+    expect(polyglotLatin.t('n_votes', 15)).to.equal('15 članaka');
+    expect(polyglotLatin.t('n_votes', 0)).to.equal('0 članaka');
+
+    var polyglotCyrillic = new Polyglot({ phrases: phrases, locale: 'bs-Cyrl-BA' });
+
+    expect(polyglotCyrillic.t('n_votes', 1)).to.equal('1 članak');
+    expect(polyglotCyrillic.t('n_votes', 11)).to.equal('11 članaka');
+    expect(polyglotCyrillic.t('n_votes', 101)).to.equal('101 članak');
+    expect(polyglotCyrillic.t('n_votes', 932)).to.equal('932 članka');
+    expect(polyglotCyrillic.t('n_votes', 324)).to.equal('324 članka');
+    expect(polyglotCyrillic.t('n_votes', 12)).to.equal('12 članaka');
+    expect(polyglotCyrillic.t('n_votes', 13)).to.equal('13 članaka');
+    expect(polyglotCyrillic.t('n_votes', 14)).to.equal('14 članaka');
+    expect(polyglotCyrillic.t('n_votes', 15)).to.equal('15 članaka');
+    expect(polyglotCyrillic.t('n_votes', 0)).to.equal('0 članaka');
+  });
+
+  it('pluralizes in Czech', function () {
+    // English would be: "1 vote" / "%{smart_count} votes"
+    var whatSomeoneTranslated = [
+      '%{smart_count} komentář',
+      '%{smart_count} komentáře',
+      '%{smart_count} komentářů'
+    ];
+    var phrases = {
+      n_votes: whatSomeoneTranslated.join(' |||| ')
+    };
+
+    var polyglot = new Polyglot({ phrases: phrases, locale: 'cs-CZ' });
+
+    expect(polyglot.t('n_votes', 1)).to.equal('1 komentář');
+    expect(polyglot.t('n_votes', 2)).to.equal('2 komentáře');
+    expect(polyglot.t('n_votes', 3)).to.equal('3 komentáře');
+    expect(polyglot.t('n_votes', 4)).to.equal('4 komentáře');
+    expect(polyglot.t('n_votes', 0)).to.equal('0 komentářů');
+    expect(polyglot.t('n_votes', 11)).to.equal('11 komentářů');
+    expect(polyglot.t('n_votes', 12)).to.equal('12 komentářů');
+    expect(polyglot.t('n_votes', 16)).to.equal('16 komentářů');
+  });
+
+  it('pluralizes in Slovenian', function () {
+    // English would be: "1 vote" / "%{smart_count} votes"
+    var whatSomeoneTranslated = [
+      '%{smart_count} komentar',
+      '%{smart_count} komentarja',
+      '%{smart_count} komentarji',
+      '%{smart_count} komentarjev'
+    ];
+    var phrases = {
+      n_votes: whatSomeoneTranslated.join(' |||| ')
+    };
+
+    var polyglot = new Polyglot({ phrases: phrases, locale: 'sl-SL' });
+
+    forEach([1, 12301, 101, 1001, 201, 301], function (c) {
+      expect(polyglot.t('n_votes', c)).to.equal(c + ' komentar');
+    });
+
+    forEach([2, 102, 202, 302], function (c) {
+      expect(polyglot.t('n_votes', c)).to.equal(c + ' komentarja');
+    });
+
+    forEach([0, 11, 12, 13, 14, 52, 53], function (c) {
+      expect(polyglot.t('n_votes', c)).to.equal(c + ' komentarjev');
+    });
+  });
 });
 
 describe('locale', function () {
