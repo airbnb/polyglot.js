@@ -42,6 +42,16 @@ var pluralTypes = {
     return n % 100 >= 11 ? 4 : 5;
   },
   chinese: function () { return 0; },
+  croatian: function (n) {
+    var end = n % 10;
+    if (n !== 11 && end === 1) {
+      return 0;
+    }
+    if (2 <= end && end <= 4 && !(12 <= n && n <= 14)) {
+      return 1;
+    }
+    return 2;
+  },
   german: function (n) { return n !== 1 ? 1 : 0; },
   french: function (n) { return n > 1 ? 1 : 0; },
   russian: function (n) {
@@ -65,10 +75,13 @@ var pluralTypes = {
   icelandic: function (n) { return (n % 10 !== 1 || n % 100 === 11) ? 1 : 0; }
 };
 
-// Mapping from pluralization group to individual locales.
+// Mapping from pluralization group to individual language codes/locales.
+// Will look up based on exact match, if not found and it's a locale will parse the locale
+// for language code, and if that does not exist will default to 'en'
 var pluralTypeToLanguages = {
   arabic: ['ar'],
   chinese: ['id', 'ja', 'ko', 'ko-KR', 'lo', 'ms', 'th', 'th-TH', 'tr', 'zh'],
+  croatian: ['hr', 'hr-HR'],
   german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'hu-HU', 'it', 'nl', 'no', 'pt', 'sv'],
   french: ['fr', 'tl', 'pt-br'],
   russian: ['ru', 'ru-RU', 'lt'],
