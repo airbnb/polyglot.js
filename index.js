@@ -68,11 +68,11 @@ var pluralTypes = {
 // Mapping from pluralization group to individual locales.
 var pluralTypeToLanguages = {
   arabic: ['ar'],
-  chinese: ['id', 'ja', 'ko', 'lo', 'ms', 'th', 'tr', 'zh'],
-  german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'it', 'nl', 'no', 'pt', 'sv'],
+  chinese: ['id', 'ja', 'ko', 'ko-KR', 'lo', 'ms', 'th', 'th-TH', 'tr', 'zh'],
+  german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'hu-HU', 'it', 'nl', 'no', 'pt', 'sv'],
   french: ['fr', 'tl', 'pt-br'],
-  russian: ['hr', 'ru', 'ru-RU', 'lt'],
-  czech: ['cs', 'sk'],
+  russian: ['ru', 'ru-RU', 'lt'],
+  czech: ['cs', 'cs-CZ', 'sk'],
   polish: ['pl'],
   icelandic: ['is']
 };
