@@ -71,7 +71,7 @@ var pluralTypeToLanguages = {
   chinese: ['id', 'ja', 'ko', 'lo', 'ms', 'th', 'tr', 'zh'],
   german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'it', 'nl', 'no', 'pt', 'sv'],
   french: ['fr', 'tl', 'pt-br'],
-  russian: ['hr', 'ru', 'lt'],
+  russian: ['hr', 'ru', 'ru-RU', 'lt'],
   czech: ['cs', 'sk'],
   polish: ['pl'],
   icelandic: ['is']
