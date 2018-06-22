@@ -45,8 +45,14 @@ var pluralTypes = {
   german: function (n) { return n !== 1 ? 1 : 0; },
   french: function (n) { return n > 1 ? 1 : 0; },
   russian: function (n) {
-    if (n % 10 === 1 && n % 100 !== 11) { return 0; }
-    return n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
+    var end = n % 10;
+    if (n !== 11 && end === 1) {
+      return 0;
+    }
+    if (2 <= end && end <= 4 && !(12 <= n && n <= 14)) {
+      return 1;
+    }
+    return 2;
   },
   czech: function (n) {
     if (n === 1) { return 0; }

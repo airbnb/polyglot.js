@@ -180,6 +180,42 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglot.t('n_votes', 11)).to.equal('11 صوت');
     expect(polyglot.t('n_votes', 102)).to.equal('102 صوت');
   });
+
+  it('pluralizes in Russian', function () {
+    // English would be: "1 vote" / "%{smart_count} votes"
+    var whatSomeoneTranslated = [
+      '%{smart_count} машина',
+      '%{smart_count} машины',
+      '%{smart_count} машин'
+    ];
+    var phrases = {
+      n_votes: whatSomeoneTranslated.join(' |||| ')
+    };
+
+    var polyglotLanguageCode = new Polyglot({ phrases: phrases, locale: 'ru' });
+
+    expect(polyglotLanguageCode.t('n_votes', 1)).to.equal('1 машина');
+    expect(polyglotLanguageCode.t('n_votes', 11)).to.equal('11 машин');
+    expect(polyglotLanguageCode.t('n_votes', 101)).to.equal('101 машина');
+    expect(polyglotLanguageCode.t('n_votes', 932)).to.equal('932 машины');
+    expect(polyglotLanguageCode.t('n_votes', 324)).to.equal('324 машины');
+    expect(polyglotLanguageCode.t('n_votes', 12)).to.equal('12 машин');
+    expect(polyglotLanguageCode.t('n_votes', 13)).to.equal('13 машин');
+    expect(polyglotLanguageCode.t('n_votes', 14)).to.equal('14 машин');
+    expect(polyglotLanguageCode.t('n_votes', 15)).to.equal('15 машин');
+
+    var polyglotLocaleId = new Polyglot({ phrases: phrases, locale: 'ru-RU' });
+
+    expect(polyglotLocaleId.t('n_votes', 1)).to.equal('1 машина');
+    expect(polyglotLocaleId.t('n_votes', 11)).to.equal('11 машин');
+    expect(polyglotLocaleId.t('n_votes', 101)).to.equal('101 машина');
+    expect(polyglotLocaleId.t('n_votes', 932)).to.equal('932 машины');
+    expect(polyglotLocaleId.t('n_votes', 324)).to.equal('324 машины');
+    expect(polyglotLocaleId.t('n_votes', 12)).to.equal('12 машин');
+    expect(polyglotLocaleId.t('n_votes', 13)).to.equal('13 машин');
+    expect(polyglotLocaleId.t('n_votes', 14)).to.equal('14 машин');
+    expect(polyglotLocaleId.t('n_votes', 15)).to.equal('15 машин');
+  });
 });
 
 describe('locale', function () {
