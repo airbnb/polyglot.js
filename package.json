@@ -26,7 +26,6 @@
   ],
   "author": "Spike Brehm <spike@airbnb.com>",
   "dependencies": {
-    "string.prototype.trim": "^1.1.2",
     "warning": "^3.0.0"
   },
   "devDependencies": {
