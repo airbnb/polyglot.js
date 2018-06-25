@@ -17,7 +17,16 @@
 
 'use strict';
 
-var forEach = require('for-each');
+var forEach = function (target, fn, receiver) {
+  var isArray = target instanceof Array;
+  Object.keys(target).forEach(function (key) {
+    fn.call(
+      receiver,
+      target[key],
+      isArray ? Number(key) : key
+    );
+  });
+};
 var warning = require('warning');
 var has = require('has');
 var trim = require('string.prototype.trim');
