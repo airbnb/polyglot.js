@@ -17,14 +17,36 @@
 
 'use strict';
 
-var forEach = require('for-each');
 var warning = require('warning');
-var has = require('has');
-var trim = require('string.prototype.trim');
 
-var warn = function warn(message) {
+// #### Helper methods
+function forEach(target, fn, receiver) {
+  var isArray = target instanceof Array;
+  Object.keys(target).forEach(function (key) {
+    fn.call(
+      receiver,
+      target[key],
+      isArray ? Number(key) : key
+    );
+  });
+}
+
+function has(target, key) {
+  return key in target;
+}
+
+function trim(str) {
+  /* eslint-disable no-control-regex */
+  var whitespace = '[\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028\u2029\uFEFF]+';
+  var leftWhitespace = new RegExp('^' + whitespace);
+  var rightWhitespace = new RegExp(whitespace + '$');
+  /* eslint-enable no-control-regex */
+  return str.replace(leftWhitespace, '').replace(rightWhitespace, '');
+}
+
+function warn(message) {
   warning(false, message);
-};
+}
 
 var replace = String.prototype.replace;
 var split = String.prototype.split;
