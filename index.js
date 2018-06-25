@@ -17,6 +17,8 @@
 
 'use strict';
 
+var warning = require('warning');
+
 var forEach = function (target, fn, receiver) {
   var isArray = target instanceof Array;
   Object.keys(target).forEach(function (key) {
@@ -27,7 +29,6 @@ var forEach = function (target, fn, receiver) {
     );
   });
 };
-var warning = require('warning');
 var has = function (target, key) {
   return key in target;
 };
