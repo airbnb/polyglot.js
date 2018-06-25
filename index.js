@@ -28,7 +28,9 @@ var forEach = function (target, fn, receiver) {
   });
 };
 var warning = require('warning');
-var has = require('has');
+var has = function (target, key) {
+  return key in target;
+};
 var trim = require('string.prototype.trim');
 
 var warn = function warn(message) {
