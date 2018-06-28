@@ -80,7 +80,7 @@ var pluralTypes = {
 // for language code, and if that does not exist will default to 'en'
 var pluralTypeToLanguages = {
   arabic: ['ar'],
-  chinese: ['id', 'ja', 'ko', 'ko-KR', 'lo', 'ms', 'th', 'th-TH', 'tr', 'zh'],
+  chinese: ['id', 'id-ID', 'ja', 'ko', 'ko-KR', 'lo', 'ms', 'th', 'th-TH', 'tr', 'zh'],
   croatian: ['hr', 'hr-HR'],
   german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hu', 'hu-HU', 'it', 'nl', 'no', 'pt', 'sv'],
   french: ['fr', 'tl', 'pt-br'],
