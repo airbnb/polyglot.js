@@ -217,74 +217,42 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglotLocaleId.t('n_votes', 14)).to.equal('14 машин');
     expect(polyglotLocaleId.t('n_votes', 15)).to.equal('15 машин');
   });
-});
 
-it('pluralizes in Croatian', function () {
-  // English would be: "1 vote" / "%{smart_count} votes"
-  var whatSomeoneTranslated = [
-    '%{smart_count} glas',
-    '%{smart_count} glasa',
-    '%{smart_count} glasova'
-  ];
-  var phrases = {
-    n_votes: whatSomeoneTranslated.join(' |||| ')
-  };
+  it('pluralizes in Croatian', function () {
+    // English would be: "1 vote" / "%{smart_count} votes"
+    var whatSomeoneTranslated = [
+      '%{smart_count} glas',
+      '%{smart_count} glasa',
+      '%{smart_count} glasova'
+    ];
+    var phrases = {
+      n_votes: whatSomeoneTranslated.join(' |||| ')
+    };
 
-  var polyglotLocale = new Polyglot({ phrases: phrases, locale: 'hr-HR' });
+    var polyglotLocale = new Polyglot({ phrases: phrases, locale: 'hr-HR' });
 
-  forEach([1, 21, 31, 101], function (c) {
-    expect(polyglotLocale.t('n_votes', c)).to.equal(c + ' glas');
+    forEach([1, 21, 31, 101], function (c) {
+      expect(polyglotLocale.t('n_votes', c)).to.equal(c + ' glas');
+    });
+    forEach([2, 3, 4, 22, 23, 24, 32, 33, 34], function (c) {
+      expect(polyglotLocale.t('n_votes', c)).to.equal(c + ' glasa');
+    });
+    forEach([0, 5, 6, 11, 13, 14, 15, 16, 17, 25, 26, 35, 36], function (c) {
+      expect(polyglotLocale.t('n_votes', c)).to.equal(c + ' glasova');
+    });
+
+    var polyglotLanguageCode = new Polyglot({ phrases: phrases, locale: 'hr' });
+
+    forEach([1, 21, 31, 101], function (c) {
+      expect(polyglotLanguageCode.t('n_votes', c)).to.equal(c + ' glas');
+    });
+    forEach([2, 3, 4, 22, 23, 24, 32, 33, 34], function (c) {
+      expect(polyglotLanguageCode.t('n_votes', c)).to.equal(c + ' glasa');
+    });
+    forEach([0, 5, 6, 11, 13, 14, 15, 16, 17, 25, 26, 35, 36], function (c) {
+      expect(polyglotLanguageCode.t('n_votes', c)).to.equal(c + ' glasova');
+    });
   });
-  forEach([2, 3, 4, 22, 23, 24, 32, 33, 34], function (c) {
-    expect(polyglotLocale.t('n_votes', c)).to.equal(c + ' glasa');
-  });
-  forEach([0, 5, 6, 11, 13, 14, 15, 16, 17, 25, 26, 35, 36], function (c) {
-    expect(polyglotLocale.t('n_votes', c)).to.equal(c + ' glasova');
-  });
-
-  var polyglotLanguageCode = new Polyglot({ phrases: phrases, locale: 'hr' });
-
-  forEach([1, 21, 31, 101], function (c) {
-    expect(polyglotLanguageCode.t('n_votes', c)).to.equal(c + ' glas');
-  });
-  forEach([2, 3, 4, 22, 23, 24, 32, 33, 34], function (c) {
-    expect(polyglotLanguageCode.t('n_votes', c)).to.equal(c + ' glasa');
-  });
-  forEach([0, 5, 6, 11, 13, 14, 15, 16, 17, 25, 26, 35, 36], function (c) {
-    expect(polyglotLanguageCode.t('n_votes', c)).to.equal(c + ' glasova');
-  });
-});
-
-it('pluralizes in Croatian', function () {
-  // English would be: "1 vote" / "%{smart_count} votes"
-  var whatSomeoneTranslated = [
-    '%{smart_count} komentar',
-    '%{smart_count} komentara',
-    '%{smart_count} komentara'
-  ];
-  var phrases = {
-    n_votes: whatSomeoneTranslated.join(' |||| ')
-  };
-
-  var polyglotLocale = new Polyglot({ phrases: phrases, locale: 'hr-HR' });
-
-  expect(polyglotLocale.t('n_votes', 1)).to.equal('1 komentar');
-  expect(polyglotLocale.t('n_votes', 11)).to.equal('11 komentara');
-  expect(polyglotLocale.t('n_votes', 101)).to.equal('101 komentar');
-  expect(polyglotLocale.t('n_votes', 13)).to.equal('13 komentara');
-  expect(polyglotLocale.t('n_votes', 14)).to.equal('14 komentara');
-  expect(polyglotLocale.t('n_votes', 15)).to.equal('15 komentara');
-  expect(polyglotLocale.t('n_votes', 0)).to.equal('0 komentara');
-
-  var polyglotLanguageCode = new Polyglot({ phrases: phrases, locale: 'hr' });
-
-  expect(polyglotLanguageCode.t('n_votes', 1)).to.equal('1 komentar');
-  expect(polyglotLanguageCode.t('n_votes', 11)).to.equal('11 komentara');
-  expect(polyglotLanguageCode.t('n_votes', 101)).to.equal('101 komentar');
-  expect(polyglotLanguageCode.t('n_votes', 13)).to.equal('13 komentara');
-  expect(polyglotLanguageCode.t('n_votes', 14)).to.equal('14 komentara');
-  expect(polyglotLanguageCode.t('n_votes', 15)).to.equal('15 komentara');
-  expect(polyglotLanguageCode.t('n_votes', 0)).to.equal('0 komentara');
 });
 
 describe('locale', function () {
