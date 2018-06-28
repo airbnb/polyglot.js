@@ -218,7 +218,33 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglotLocaleId.t('n_votes', 15)).to.equal('15 машин');
   });
 
-  it('pluralizes in Croatian', function () {
+  it('pluralizes in Croatian (guest) Test', function () {
+    // English would be: "1 vote" / "%{smart_count} votes"
+    var whatSomeoneTranslated = [
+      '%{smart_count} gost',
+      '%{smart_count} gosta',
+      '%{smart_count} gostiju'
+    ];
+    var phrases = {
+      n_guests: whatSomeoneTranslated.join(' |||| ')
+    };
+
+    var polyglotLocale = new Polyglot({ phrases: phrases, locale: 'hr-HR' });
+
+    expect(polyglotLocale.t('n_guests', 1)).to.equal('1 gost');
+    expect(polyglotLocale.t('n_guests', 11)).to.equal('11 gostiju');
+    expect(polyglotLocale.t('n_guests', 21)).to.equal('21 gost');
+
+    expect(polyglotLocale.t('n_guests', 2)).to.equal('2 gosta');
+    expect(polyglotLocale.t('n_guests', 3)).to.equal('3 gosta');
+    expect(polyglotLocale.t('n_guests', 4)).to.equal('4 gosta');
+
+    expect(polyglotLocale.t('n_guests', 12)).to.equal('12 gostiju');
+    expect(polyglotLocale.t('n_guests', 13)).to.equal('13 gostiju');
+    expect(polyglotLocale.t('n_guests', 14)).to.equal('14 gostiju');
+  });
+
+  it('pluralizes in Croatian (vote) Test', function () {
     // English would be: "1 vote" / "%{smart_count} votes"
     var whatSomeoneTranslated = [
       '%{smart_count} glas',
