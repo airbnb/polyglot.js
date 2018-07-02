@@ -1,3 +1,25 @@
+### v2.3.0: July 2, 2018
+ * [New] add ability to change interpolation regex by specifying prefix and suffix (#106, #64)
+ * [New] support for Serbian (Latin & Cyrillic), Bosnian (Latin & Cyrillic), Czech (#113)
+ * [Fix] Moved lt to it's own group (#101)
+ * [Fix] Moved tr from chinese to german group (#100)
+ * [Fix] Move persian(fa) language to german group of pluralization (#86)
+ * [Fix] Remove long-since-updated build files
+ * [Fix] fix russian pluralization; add tests (#115)
+ * [Fix] croatian is not russian (#114)
+ * [Clarity] add more specific locales, even though language codes will match them (#115)
+ * [Docs] document constructor options (#84)
+ * [Docs] document all instance and static methods (#83)
+ * [Docs] fix spelling of "delimiter" (#91)
+ * [Docs] `onMissingKey` can (rather, should) return a value (#95)
+ * [Docs] fix instructions to only recommend use with npm (#96)
+ * [Docs] Added documentation for method has (#104)
+ * [Docs] add example for languages with multiple plurals (#108)
+ * [Docs] remove outdated sentence (#112, #110)
+ * [Deps] update `for-each`, `has`, `warning`
+ * [Dev Deps] update `chai`, `eslint`, `eslint-config-airbnb-base`, `eslint-plugin-import`, `mocha`; remove `should`
+ * [Tests] up to `node` `v10`; use `nvm install-latest-npm` to ensure new npm doesn’t break old node; improve matrix
+
 ### v2.2.2: January 5, 2017
  * [Fix] revert unintentional breaking change of missing substitutions being untouched
  * [Dev Deps] update `eslint`, `eslint-config-airbnb-base`, `mocha`, `should`; add `safe-publish-latest`
