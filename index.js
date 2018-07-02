@@ -33,45 +33,32 @@ var split = String.prototype.split;
 // The string that separates the different phrase possibilities.
 var delimiter = '||||';
 
+var russianPluralGroups = function (n) {
+  var end = n % 10;
+  if (n !== 11 && end === 1) {
+    return 0;
+  }
+  if (2 <= end && end <= 4 && !(n >= 12 && n <= 14)) {
+    return 1;
+  }
+  return 2;
+};
+
 // Mapping from pluralization group plural logic.
 var pluralTypes = {
   arabic: function (n) {
     // http://www.arabeyes.org/Plural_Forms
     if (n < 3) { return n; }
-    if (n % 100 >= 3 && n % 100 <= 10) return 3;
-    return n % 100 >= 11 ? 4 : 5;
+    var lastTwo = n % 100;
+    if (lastTwo >= 3 && lastTwo <= 10) return 3;
+    return lastTwo >= 11 ? 4 : 5;
   },
-  bosnian_serbian: function (n) {
-    if (n !== 11 && (n % 10) === 1) {
-      return 0;
-    } else if ((n % 10 >= 2 && n % 10 <= 4) && !(n >= 12 && n <= 14)) {
-      return 1;
-    }
-    return 2;
-  },
+  bosnian_serbian: russianPluralGroups,
   chinese: function () { return 0; },
-  croatian: function (n) {
-    var end = n % 10;
-    if (n !== 11 && end === 1) {
-      return 0;
-    }
-    if (2 <= end && end <= 4 && !(12 <= n && n <= 14)) {
-      return 1;
-    }
-    return 2;
-  },
-  german: function (n) { return n !== 1 ? 1 : 0; },
+  croatian: russianPluralGroups,
   french: function (n) { return n > 1 ? 1 : 0; },
-  russian: function (n) {
-    var end = n % 10;
-    if (n !== 11 && end === 1) {
-      return 0;
-    }
-    if (2 <= end && end <= 4 && !(12 <= n && n <= 14)) {
-      return 1;
-    }
-    return 2;
-  },
+  german: function (n) { return n !== 1 ? 1 : 0; },
+  russian: russianPluralGroups,
   lithuanian: function (n) {
     if (n % 10 === 1 && n % 100 !== 11) { return 0; }
     return n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19) ? 1 : 2;
@@ -82,15 +69,19 @@ var pluralTypes = {
   },
   polish: function (n) {
     if (n === 1) { return 0; }
-    return n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
+    var end = n % 10;
+    return 2 <= end && end <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
   },
   icelandic: function (n) { return (n % 10 !== 1 || n % 100 === 11) ? 1 : 0; },
   slovenian: function (n) {
-    if (n % 100 === 1) {
+    var lastTwo = n % 100;
+    if (lastTwo === 1) {
       return 0;
-    } else if (n % 100 === 2) {
+    }
+    if (lastTwo === 2) {
       return 1;
-    } else if (n % 100 === 3 || n % 100 === 4) {
+    }
+    if (lastTwo === 3 || lastTwo === 4) {
       return 2;
     }
     return 3;
