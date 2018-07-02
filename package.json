@@ -26,10 +26,10 @@
   ],
   "author": "Spike Brehm <spike@airbnb.com>",
   "dependencies": {
-    "for-each": "^0.3.2",
-    "has": "^1.0.1",
+    "for-each": "^0.3.3",
+    "has": "^1.0.3",
     "string.prototype.trim": "^1.1.2",
-    "warning": "^3.0.0"
+    "warning": "^4.0.1"
   },
   "devDependencies": {
     "chai": "^4.1.2",
