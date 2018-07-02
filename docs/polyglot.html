@@ -27,7 +27,7 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <pre><code>(c) <span class="hljs-number">2012</span><span class="hljs-number">-2016</span> Airbnb, Inc.
+              <pre><code>(c) <span class="hljs-number">2012</span><span class="hljs-number">-2018</span> Airbnb, Inc.
 
 polyglot.js may be freely distributed under the terms <span class="hljs-keyword">of</span> the BSD
 license. For all licensing information, details, and documention:
@@ -71,7 +71,18 @@ your client- or server-side JavaScript application.</p>
 
             </div>
 
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> delimiter = <span class="hljs-string">'||||'</span>;</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> delimiter = <span class="hljs-string">'||||'</span>;
+
+<span class="hljs-keyword">var</span> russianPluralGroups = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{
+  <span class="hljs-keyword">var</span> end = n % <span class="hljs-number">10</span>;
+  <span class="hljs-keyword">if</span> (n !== <span class="hljs-number">11</span> &amp;&amp; end === <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+  }
+  <span class="hljs-keyword">if</span> (<span class="hljs-number">2</span> &lt;= end &amp;&amp; end &lt;= <span class="hljs-number">4</span> &amp;&amp; !(n &gt;= <span class="hljs-number">12</span> &amp;&amp; n &lt;= <span class="hljs-number">14</span>)) {
+    <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+  }
+  <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>;
+};</pre></div></div>
 
         </li>
 
@@ -87,7 +98,7 @@ your client- or server-side JavaScript application.</p>
             </div>
 
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> pluralTypes = {
-  arabic: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{</pre></div></div>
+  <span class="hljs-attr">arabic</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{</pre></div></div>
 
         </li>
 
@@ -103,25 +114,43 @@ your client- or server-side JavaScript application.</p>
             </div>
 
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> (n &lt; <span class="hljs-number">3</span>) { <span class="hljs-keyword">return</span> n; }
-    <span class="hljs-keyword">if</span> (n % <span class="hljs-number">100</span> &gt;= <span class="hljs-number">3</span> &amp;&amp; n % <span class="hljs-number">100</span> &lt;= <span class="hljs-number">10</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">3</span>;
-    <span class="hljs-keyword">return</span> n % <span class="hljs-number">100</span> &gt;= <span class="hljs-number">11</span> ? <span class="hljs-number">4</span> : <span class="hljs-number">5</span>;
+    <span class="hljs-keyword">var</span> lastTwo = n % <span class="hljs-number">100</span>;
+    <span class="hljs-keyword">if</span> (lastTwo &gt;= <span class="hljs-number">3</span> &amp;&amp; lastTwo &lt;= <span class="hljs-number">10</span>) <span class="hljs-keyword">return</span> <span class="hljs-number">3</span>;
+    <span class="hljs-keyword">return</span> lastTwo &gt;= <span class="hljs-number">11</span> ? <span class="hljs-number">4</span> : <span class="hljs-number">5</span>;
   },
-  chinese: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; },
-  german: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{ <span class="hljs-keyword">return</span> n !== <span class="hljs-number">1</span> ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>; },
-  french: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{ <span class="hljs-keyword">return</span> n &gt; <span class="hljs-number">1</span> ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>; },
-  russian: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{
+  <span class="hljs-attr">bosnian_serbian</span>: russianPluralGroups,
+  <span class="hljs-attr">chinese</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{ <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; },
+  <span class="hljs-attr">croatian</span>: russianPluralGroups,
+  <span class="hljs-attr">french</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{ <span class="hljs-keyword">return</span> n &gt; <span class="hljs-number">1</span> ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>; },
+  <span class="hljs-attr">german</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{ <span class="hljs-keyword">return</span> n !== <span class="hljs-number">1</span> ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>; },
+  <span class="hljs-attr">russian</span>: russianPluralGroups,
+  <span class="hljs-attr">lithuanian</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{
     <span class="hljs-keyword">if</span> (n % <span class="hljs-number">10</span> === <span class="hljs-number">1</span> &amp;&amp; n % <span class="hljs-number">100</span> !== <span class="hljs-number">11</span>) { <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
-    <span class="hljs-keyword">return</span> n % <span class="hljs-number">10</span> &gt;= <span class="hljs-number">2</span> &amp;&amp; n % <span class="hljs-number">10</span> &lt;= <span class="hljs-number">4</span> &amp;&amp; (n % <span class="hljs-number">100</span> &lt; <span class="hljs-number">10</span> || n % <span class="hljs-number">100</span> &gt;= <span class="hljs-number">20</span>) ? <span class="hljs-number">1</span> : <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">return</span> n % <span class="hljs-number">10</span> &gt;= <span class="hljs-number">2</span> &amp;&amp; n % <span class="hljs-number">10</span> &lt;= <span class="hljs-number">9</span> &amp;&amp; (n % <span class="hljs-number">100</span> &lt; <span class="hljs-number">11</span> || n % <span class="hljs-number">100</span> &gt; <span class="hljs-number">19</span>) ? <span class="hljs-number">1</span> : <span class="hljs-number">2</span>;
   },
-  czech: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{
+  <span class="hljs-attr">czech</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{
     <span class="hljs-keyword">if</span> (n === <span class="hljs-number">1</span>) { <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
     <span class="hljs-keyword">return</span> (n &gt;= <span class="hljs-number">2</span> &amp;&amp; n &lt;= <span class="hljs-number">4</span>) ? <span class="hljs-number">1</span> : <span class="hljs-number">2</span>;
   },
-  polish: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{
+  <span class="hljs-attr">polish</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{
     <span class="hljs-keyword">if</span> (n === <span class="hljs-number">1</span>) { <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; }
-    <span class="hljs-keyword">return</span> n % <span class="hljs-number">10</span> &gt;= <span class="hljs-number">2</span> &amp;&amp; n % <span class="hljs-number">10</span> &lt;= <span class="hljs-number">4</span> &amp;&amp; (n % <span class="hljs-number">100</span> &lt; <span class="hljs-number">10</span> || n % <span class="hljs-number">100</span> &gt;= <span class="hljs-number">20</span>) ? <span class="hljs-number">1</span> : <span class="hljs-number">2</span>;
+    <span class="hljs-keyword">var</span> end = n % <span class="hljs-number">10</span>;
+    <span class="hljs-keyword">return</span> <span class="hljs-number">2</span> &lt;= end &amp;&amp; end &lt;= <span class="hljs-number">4</span> &amp;&amp; (n % <span class="hljs-number">100</span> &lt; <span class="hljs-number">10</span> || n % <span class="hljs-number">100</span> &gt;= <span class="hljs-number">20</span>) ? <span class="hljs-number">1</span> : <span class="hljs-number">2</span>;
   },
-  icelandic: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{ <span class="hljs-keyword">return</span> (n % <span class="hljs-number">10</span> !== <span class="hljs-number">1</span> || n % <span class="hljs-number">100</span> === <span class="hljs-number">11</span>) ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>; }
+  <span class="hljs-attr">icelandic</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{ <span class="hljs-keyword">return</span> (n % <span class="hljs-number">10</span> !== <span class="hljs-number">1</span> || n % <span class="hljs-number">100</span> === <span class="hljs-number">11</span>) ? <span class="hljs-number">1</span> : <span class="hljs-number">0</span>; },
+  <span class="hljs-attr">slovenian</span>: <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">n</span>) </span>{
+    <span class="hljs-keyword">var</span> lastTwo = n % <span class="hljs-number">100</span>;
+    <span class="hljs-keyword">if</span> (lastTwo === <span class="hljs-number">1</span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+    }
+    <span class="hljs-keyword">if</span> (lastTwo === <span class="hljs-number">2</span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-number">1</span>;
+    }
+    <span class="hljs-keyword">if</span> (lastTwo === <span class="hljs-number">3</span> || lastTwo === <span class="hljs-number">4</span>) {
+      <span class="hljs-keyword">return</span> <span class="hljs-number">2</span>;
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-number">3</span>;
+  }
 };</pre></div></div>
 
         </li>
@@ -133,45 +162,66 @@ your client- or server-side JavaScript application.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>Mapping from pluralization group to individual locales.</p>
+              <p>Mapping from pluralization group to individual language codes/locales.
+Will look up based on exact match, if not found and it’s a locale will parse the locale
+for language code, and if that does not exist will default to ‘en’</p>
 
             </div>
 
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> pluralTypeToLanguages = {
-  arabic: [<span class="hljs-string">'ar'</span>],
-  chinese: [<span class="hljs-string">'fa'</span>, <span class="hljs-string">'id'</span>, <span class="hljs-string">'ja'</span>, <span class="hljs-string">'ko'</span>, <span class="hljs-string">'lo'</span>, <span class="hljs-string">'ms'</span>, <span class="hljs-string">'th'</span>, <span class="hljs-string">'tr'</span>, <span class="hljs-string">'zh'</span>],
-  german: [<span class="hljs-string">'da'</span>, <span class="hljs-string">'de'</span>, <span class="hljs-string">'en'</span>, <span class="hljs-string">'es'</span>, <span class="hljs-string">'fi'</span>, <span class="hljs-string">'el'</span>, <span class="hljs-string">'he'</span>, <span class="hljs-string">'hu'</span>, <span class="hljs-string">'it'</span>, <span class="hljs-string">'nl'</span>, <span class="hljs-string">'no'</span>, <span class="hljs-string">'pt'</span>, <span class="hljs-string">'sv'</span>],
-  french: [<span class="hljs-string">'fr'</span>, <span class="hljs-string">'tl'</span>, <span class="hljs-string">'pt-br'</span>],
-  russian: [<span class="hljs-string">'hr'</span>, <span class="hljs-string">'ru'</span>, <span class="hljs-string">'lt'</span>],
-  czech: [<span class="hljs-string">'cs'</span>, <span class="hljs-string">'sk'</span>],
-  polish: [<span class="hljs-string">'pl'</span>],
-  icelandic: [<span class="hljs-string">'is'</span>]
+            <div class="content"><div class='highlight'><pre>var pluralTypeToLanguages = {
+  arabic: ['ar'],
+  bosnian_serbian: ['bs-Latn-BA', 'bs-Cyrl-BA', 'srl-RS', 'sr-RS'],
+  chinese: ['id', 'id-ID', 'ja', 'ko', 'ko-KR', 'lo', 'ms', 'th', 'th-TH', 'zh'],
+  croatian: ['hr', 'hr-HR'],
+  german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hi-IN', 'hu', 'hu-HU', 'it', 'nl', 'no', 'pt', 'sv', 'tr'],
+  french: ['fr', 'tl', 'pt-br'],
+  russian: ['ru', 'ru-RU'],
+  lithuanian: ['lt'],
+  czech: ['cs', 'cs-CZ', 'sk'],
+  polish: ['pl'],
+  icelandic: ['is'],
+  slovenian: ['sl-SL']
 };
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">langToTypeMap</span>(<span class="hljs-params">mapping</span>) </span>{
-  <span class="hljs-keyword">var</span> ret = {};
-  forEach(mapping, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">langs, type</span>) </span>{
-    forEach(langs, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">lang</span>) </span>{
+function langToTypeMap(mapping) {
+  var ret = {};
+  forEach(mapping, function (langs, type) {
+    forEach(langs, function (lang) {
       ret[lang] = type;
     });
   });
-  <span class="hljs-keyword">return</span> ret;
+  return ret;
 }
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pluralTypeName</span>(<span class="hljs-params">locale</span>) </span>{
-  <span class="hljs-keyword">var</span> langToPluralType = langToTypeMap(pluralTypeToLanguages);
-  <span class="hljs-keyword">return</span> langToPluralType[locale]
-    || langToPluralType[split.call(locale, <span class="hljs-regexp">/-/</span>, <span class="hljs-number">1</span>)[<span class="hljs-number">0</span>]]
+function pluralTypeName(locale) {
+  var langToPluralType = langToTypeMap(pluralTypeToLanguages);
+  return langToPluralType[locale]
+    || langToPluralType[split.call(locale, /-/, 1)[0]]
     || langToPluralType.en;
 }
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">pluralTypeIndex</span>(<span class="hljs-params">locale, count</span>) </span>{
-  <span class="hljs-keyword">return</span> pluralTypes[pluralTypeName(locale)](count);
+function pluralTypeIndex(locale, count) {
+  return pluralTypes[pluralTypeName(locale)](count);
 }
 
-<span class="hljs-keyword">var</span> dollarRegex = <span class="hljs-regexp">/\$/g</span>;
-<span class="hljs-keyword">var</span> dollarBillsYall = <span class="hljs-string">'$$'</span>;
-<span class="hljs-keyword">var</span> tokenRegex = <span class="hljs-regexp">/%\{(.*?)\}/g</span>;</pre></div></div>
+function escape(token) {
+  return token.replace(/[.*+?^${}()|[\]\\]/g, '\\$&amp;');
+}
+
+function constructTokenRegex(opts) {
+  var prefix = (opts &amp;&amp; opts.prefix) || '%{';
+  var suffix = (opts &amp;&amp; opts.suffix) || '}';
+
+  if (prefix === delimiter || suffix === delimiter) {
+    throw new RangeError('"' + delimiter + '" token is reserved for pluralization');
+  }
+
+  return new RegExp(escape(prefix) + '(.*?)' + escape(suffix), 'g');
+}
+
+var dollarRegex = /\$/g;
+var dollarBillsYall = '$$';
+var defaultTokenRegex = /%\{(.*?)\}/g;</pre></div></div>
 
         </li>
 
@@ -185,15 +235,15 @@ your client- or server-side JavaScript application.</p>
               <h3 id="transformphrase-phrase-substitutions-locale-">transformPhrase(phrase, substitutions, locale)</h3>
 <p>Takes a phrase string and transforms it by choosing the correct
 plural form and interpolating it.</p>
-<pre><code>transformPhrase(<span class="hljs-string">'Hello, %{name}!'</span>, {name: <span class="hljs-string">'Spike'</span>});
+<pre><code>transformPhrase(<span class="hljs-string">'Hello, %{name}!'</span>, {<span class="hljs-attr">name</span>: <span class="hljs-string">'Spike'</span>});
 <span class="hljs-comment">// "Hello, Spike!"</span>
 </code></pre><p>The correct plural form is selected if substitutions.smart_count
 is set. You can pass in a number instead of an Object as <code>substitutions</code>
 as a shortcut for <code>smart_count</code>.</p>
-<pre><code>transformPhrase(<span class="hljs-string">'%{smart_count} new messages |||| 1 new message'</span>, {smart_count: <span class="hljs-number">1</span>}, <span class="hljs-string">'en'</span>);
+<pre><code>transformPhrase(<span class="hljs-string">'%{smart_count} new messages |||| 1 new message'</span>, {<span class="hljs-attr">smart_count</span>: <span class="hljs-number">1</span>}, <span class="hljs-string">'en'</span>);
 <span class="hljs-comment">// "1 new message"</span>
 
-transformPhrase(<span class="hljs-string">'%{smart_count} new messages |||| 1 new message'</span>, {smart_count: <span class="hljs-number">2</span>}, <span class="hljs-string">'en'</span>);
+transformPhrase(<span class="hljs-string">'%{smart_count} new messages |||| 1 new message'</span>, {<span class="hljs-attr">smart_count</span>: <span class="hljs-number">2</span>}, <span class="hljs-string">'en'</span>);
 <span class="hljs-comment">// "2 new messages"</span>
 
 transformPhrase(<span class="hljs-string">'%{smart_count} new messages |||| 1 new message'</span>, <span class="hljs-number">5</span>, <span class="hljs-string">'en'</span>);
@@ -203,7 +253,7 @@ It defaults to <code>&#39;en&#39;</code> with 2 plural forms.</p>
 
             </div>
 
-            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transformPhrase</span>(<span class="hljs-params">phrase, substitutions, locale</span>) </span>{
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transformPhrase</span>(<span class="hljs-params">phrase, substitutions, locale, tokenRegex</span>) </span>{
   <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> phrase !== <span class="hljs-string">'string'</span>) {
     <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">TypeError</span>(<span class="hljs-string">'Polyglot.transformPhrase expects argument #1 to be string'</span>);
   }
@@ -212,7 +262,8 @@ It defaults to <code>&#39;en&#39;</code> with 2 plural forms.</p>
     <span class="hljs-keyword">return</span> phrase;
   }
 
-  <span class="hljs-keyword">var</span> result = phrase;</pre></div></div>
+  <span class="hljs-keyword">var</span> result = phrase;
+  <span class="hljs-keyword">var</span> interpolationRegex = tokenRegex || defaultTokenRegex;</pre></div></div>
 
         </li>
 
@@ -227,7 +278,7 @@ It defaults to <code>&#39;en&#39;</code> with 2 plural forms.</p>
 
             </div>
 
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> options = <span class="hljs-keyword">typeof</span> substitutions === <span class="hljs-string">'number'</span> ? { smart_count: substitutions } : substitutions;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> options = <span class="hljs-keyword">typeof</span> substitutions === <span class="hljs-string">'number'</span> ? { <span class="hljs-attr">smart_count</span>: substitutions } : substitutions;</pre></div></div>
 
         </li>
 
@@ -262,9 +313,8 @@ choose the correct plural form. This is only done if <code>count</code> is set.<
 
             </div>
 
-            <div class="content"><div class='highlight'><pre>  result = replace.call(result, tokenRegex, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">expression, argument</span>) </span>{
-    <span class="hljs-keyword">if</span> (!has(options, argument)) { <span class="hljs-keyword">return</span> <span class="hljs-string">''</span>; }
-    <span class="hljs-keyword">if</span> (options[argument] == <span class="hljs-literal">null</span>) { <span class="hljs-keyword">return</span> expression; }</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  result = replace.call(result, interpolationRegex, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">expression, argument</span>) </span>{
+    <span class="hljs-keyword">if</span> (!has(options, argument) || options[argument] == <span class="hljs-literal">null</span>) { <span class="hljs-keyword">return</span> expression; }</pre></div></div>
 
         </li>
 
@@ -306,6 +356,7 @@ choose the correct plural form. This is only done if <code>count</code> is set.<
   <span class="hljs-keyword">var</span> allowMissing = opts.allowMissing ? transformPhrase : <span class="hljs-literal">null</span>;
   <span class="hljs-keyword">this</span>.onMissingKey = <span class="hljs-keyword">typeof</span> opts.onMissingKey === <span class="hljs-string">'function'</span> ? opts.onMissingKey : allowMissing;
   <span class="hljs-keyword">this</span>.warn = opts.warn || warn;
+  <span class="hljs-keyword">this</span>.tokenRegex = constructTokenRegex(opts.interpolation);
 }</pre></div></div>
 
         </li>
@@ -485,13 +536,13 @@ phrase.</p>
 </code></pre><p>The phrase value is provided first by a call to <code>polyglot.extend()</code> or
 <code>polyglot.replace()</code>.</p>
 <p>Pass in an object as the second argument to perform interpolation.</p>
-<pre><code>polyglot.t(<span class="hljs-string">"hello_name"</span>, {name: <span class="hljs-string">"Spike"</span>});
+<pre><code>polyglot.t(<span class="hljs-string">"hello_name"</span>, {<span class="hljs-attr">name</span>: <span class="hljs-string">"Spike"</span>});
 =&gt; <span class="hljs-string">"Hello, Spike"</span>
 </code></pre><p>If you like, you can provide a default value in case the phrase is missing.
 Use the special option key “_” to specify a default.</p>
 <pre><code>polyglot.t(<span class="hljs-string">"i_like_to_write_in_language"</span>, {
-  _: <span class="hljs-string">"I like to write in %{language}."</span>,
-  language: <span class="hljs-string">"JavaScript"</span>
+  <span class="hljs-attr">_</span>: <span class="hljs-string">"I like to write in %{language}."</span>,
+  <span class="hljs-attr">language</span>: <span class="hljs-string">"JavaScript"</span>
 });
 =&gt; <span class="hljs-string">"I like to write in JavaScript."</span>
 </code></pre>
@@ -506,13 +557,13 @@ Use the special option key “_” to specify a default.</p>
     phrase = opts._;
   } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.onMissingKey) {
     <span class="hljs-keyword">var</span> onMissingKey = <span class="hljs-keyword">this</span>.onMissingKey;
-    result = onMissingKey(key, opts, <span class="hljs-keyword">this</span>.currentLocale);
+    result = onMissingKey(key, opts, <span class="hljs-keyword">this</span>.currentLocale, <span class="hljs-keyword">this</span>.tokenRegex);
   } <span class="hljs-keyword">else</span> {
     <span class="hljs-keyword">this</span>.warn(<span class="hljs-string">'Missing translation for key: "'</span> + key + <span class="hljs-string">'"'</span>);
     result = key;
   }
   <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> phrase === <span class="hljs-string">'string'</span>) {
-    result = transformPhrase(phrase, opts, <span class="hljs-keyword">this</span>.currentLocale);
+    result = transformPhrase(phrase, opts, <span class="hljs-keyword">this</span>.currentLocale, <span class="hljs-keyword">this</span>.tokenRegex);
   }
   <span class="hljs-keyword">return</span> result;
 };</pre></div></div>
@@ -548,7 +599,9 @@ Use the special option key “_” to specify a default.</p>
 
             </div>
 
-            <div class="content"><div class='highlight'><pre>Polyglot.transformPhrase = transformPhrase;
+            <div class="content"><div class='highlight'><pre>Polyglot.transformPhrase = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">transform</span>(<span class="hljs-params">phrase, substitutions, locale</span>) </span>{
+  <span class="hljs-keyword">return</span> transformPhrase(phrase, substitutions, locale);
+};
 
 <span class="hljs-built_in">module</span>.exports = Polyglot;</pre></div></div>
 

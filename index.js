@@ -1,4 +1,4 @@
-//     (c) 2012-2016 Airbnb, Inc.
+//     (c) 2012-2018 Airbnb, Inc.
 //
 //     polyglot.js may be freely distributed under the terms of the BSD
 //     license. For all licensing information, details, and documention:
