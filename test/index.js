@@ -230,6 +230,7 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglotLanguageCode.t('n_votes', 1)).to.equal('1 машина');
     expect(polyglotLanguageCode.t('n_votes', 11)).to.equal('11 машин');
     expect(polyglotLanguageCode.t('n_votes', 101)).to.equal('101 машина');
+    expect(polyglotLanguageCode.t('n_votes', 112)).to.equal('112 машин');
     expect(polyglotLanguageCode.t('n_votes', 932)).to.equal('932 машины');
     expect(polyglotLanguageCode.t('n_votes', 324)).to.equal('324 машины');
     expect(polyglotLanguageCode.t('n_votes', 12)).to.equal('12 машин');
@@ -242,6 +243,7 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglotLocaleId.t('n_votes', 1)).to.equal('1 машина');
     expect(polyglotLocaleId.t('n_votes', 11)).to.equal('11 машин');
     expect(polyglotLocaleId.t('n_votes', 101)).to.equal('101 машина');
+    expect(polyglotLocaleId.t('n_votes', 112)).to.equal('112 машин');
     expect(polyglotLocaleId.t('n_votes', 932)).to.equal('932 машины');
     expect(polyglotLocaleId.t('n_votes', 324)).to.equal('324 машины');
     expect(polyglotLocaleId.t('n_votes', 12)).to.equal('12 машин');
