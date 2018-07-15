@@ -34,11 +34,12 @@ var split = String.prototype.split;
 var delimiter = '||||';
 
 var russianPluralGroups = function (n) {
-  var end = n % 10;
-  if (n !== 11 && end === 1) {
+  var lastTwo = n % 100;
+  var end = lastTwo % 10;
+  if (lastTwo !== 11 && end === 1) {
     return 0;
   }
-  if (2 <= end && end <= 4 && !(n >= 12 && n <= 14)) {
+  if (2 <= end && end <= 4 && !(lastTwo >= 12 && lastTwo <= 14)) {
     return 1;
   }
   return 2;

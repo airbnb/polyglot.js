@@ -230,6 +230,7 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglotLanguageCode.t('n_votes', 1)).to.equal('1 машина');
     expect(polyglotLanguageCode.t('n_votes', 11)).to.equal('11 машин');
     expect(polyglotLanguageCode.t('n_votes', 101)).to.equal('101 машина');
+    expect(polyglotLanguageCode.t('n_votes', 112)).to.equal('112 машин');
     expect(polyglotLanguageCode.t('n_votes', 932)).to.equal('932 машины');
     expect(polyglotLanguageCode.t('n_votes', 324)).to.equal('324 машины');
     expect(polyglotLanguageCode.t('n_votes', 12)).to.equal('12 машин');
@@ -242,6 +243,7 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglotLocaleId.t('n_votes', 1)).to.equal('1 машина');
     expect(polyglotLocaleId.t('n_votes', 11)).to.equal('11 машин');
     expect(polyglotLocaleId.t('n_votes', 101)).to.equal('101 машина');
+    expect(polyglotLocaleId.t('n_votes', 112)).to.equal('112 машин');
     expect(polyglotLocaleId.t('n_votes', 932)).to.equal('932 машины');
     expect(polyglotLocaleId.t('n_votes', 324)).to.equal('324 машины');
     expect(polyglotLocaleId.t('n_votes', 12)).to.equal('12 машин');
@@ -274,6 +276,9 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglotLocale.t('n_guests', 12)).to.equal('12 gostiju');
     expect(polyglotLocale.t('n_guests', 13)).to.equal('13 gostiju');
     expect(polyglotLocale.t('n_guests', 14)).to.equal('14 gostiju');
+    expect(polyglotLocale.t('n_guests', 112)).to.equal('112 gostiju');
+    expect(polyglotLocale.t('n_guests', 113)).to.equal('113 gostiju');
+    expect(polyglotLocale.t('n_guests', 114)).to.equal('114 gostiju');
   });
 
   it('pluralizes in Croatian (vote) Test', function () {
@@ -295,7 +300,7 @@ describe('locale-specific pluralization rules', function () {
     forEach([2, 3, 4, 22, 23, 24, 32, 33, 34], function (c) {
       expect(polyglotLocale.t('n_votes', c)).to.equal(c + ' glasa');
     });
-    forEach([0, 5, 6, 11, 13, 14, 15, 16, 17, 25, 26, 35, 36], function (c) {
+    forEach([0, 5, 6, 11, 12, 13, 14, 15, 16, 17, 25, 26, 35, 36, 112, 113, 114], function (c) {
       expect(polyglotLocale.t('n_votes', c)).to.equal(c + ' glasova');
     });
 
@@ -307,7 +312,7 @@ describe('locale-specific pluralization rules', function () {
     forEach([2, 3, 4, 22, 23, 24, 32, 33, 34], function (c) {
       expect(polyglotLanguageCode.t('n_votes', c)).to.equal(c + ' glasa');
     });
-    forEach([0, 5, 6, 11, 13, 14, 15, 16, 17, 25, 26, 35, 36], function (c) {
+    forEach([0, 5, 6, 11, 12, 13, 14, 15, 16, 17, 25, 26, 35, 36, 112, 113, 114], function (c) {
       expect(polyglotLanguageCode.t('n_votes', c)).to.equal(c + ' glasova');
     });
   });
@@ -372,6 +377,10 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglotLatin.t('n_votes', 13)).to.equal('13 članaka');
     expect(polyglotLatin.t('n_votes', 14)).to.equal('14 članaka');
     expect(polyglotLatin.t('n_votes', 15)).to.equal('15 članaka');
+    expect(polyglotLatin.t('n_votes', 112)).to.equal('112 članaka');
+    expect(polyglotLatin.t('n_votes', 113)).to.equal('113 članaka');
+    expect(polyglotLatin.t('n_votes', 114)).to.equal('114 članaka');
+    expect(polyglotLatin.t('n_votes', 115)).to.equal('115 članaka');
     expect(polyglotLatin.t('n_votes', 0)).to.equal('0 članaka');
 
     var polyglotCyrillic = new Polyglot({ phrases: phrases, locale: 'bs-Cyrl-BA' });
@@ -385,6 +394,10 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglotCyrillic.t('n_votes', 13)).to.equal('13 članaka');
     expect(polyglotCyrillic.t('n_votes', 14)).to.equal('14 članaka');
     expect(polyglotCyrillic.t('n_votes', 15)).to.equal('15 članaka');
+    expect(polyglotCyrillic.t('n_votes', 112)).to.equal('112 članaka');
+    expect(polyglotCyrillic.t('n_votes', 113)).to.equal('113 članaka');
+    expect(polyglotCyrillic.t('n_votes', 114)).to.equal('114 članaka');
+    expect(polyglotCyrillic.t('n_votes', 115)).to.equal('115 članaka');
     expect(polyglotCyrillic.t('n_votes', 0)).to.equal('0 članaka');
   });
 
