@@ -384,8 +384,8 @@ Polyglot.prototype.has = function (key) {
 };
 
 // export transformPhrase
-Polyglot.transformPhrase = function transform(phrase, substitutions, locale) {
-  return transformPhrase(phrase, substitutions, locale);
+Polyglot.transformPhrase = function transform(phrase, substitutions, locale, tokenRegex) {
+  return transformPhrase(phrase, substitutions, locale, tokenRegex);
 };
 
 module.exports = Polyglot;
