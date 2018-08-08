@@ -20,7 +20,6 @@
 var forEach = require('for-each');
 var warning = require('warning');
 var has = require('has');
-var trim = require('string.prototype.trim');
 
 var warn = function warn(message) {
   warning(false, message);
@@ -39,6 +38,7 @@ var russianPluralGroups = function (n) {
   if (lastTwo !== 11 && end === 1) {
     return 0;
   }
+  // eslint-disable-next-line yoda
   if (2 <= end && end <= 4 && !(lastTwo >= 12 && lastTwo <= 14)) {
     return 1;
   }
@@ -71,6 +71,7 @@ var pluralTypes = {
   polish: function (n) {
     if (n === 1) { return 0; }
     var end = n % 10;
+    // eslint-disable-next-line yoda
     return 2 <= end && end <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
   },
   icelandic: function (n) { return (n % 10 !== 1 || n % 100 === 11) ? 1 : 0; },
@@ -191,7 +192,7 @@ function transformPhrase(phrase, substitutions, locale, tokenRegex) {
   // choose the correct plural form. This is only done if `count` is set.
   if (options.smart_count != null && result) {
     var texts = split.call(result, delimiter);
-    result = trim(texts[pluralTypeIndex(locale || 'en', options.smart_count)] || texts[0]);
+    result = (texts[pluralTypeIndex(locale || 'en', options.smart_count)] || texts[0]).trim();
   }
 
   // Interpolate: Creates a `RegExp` object for each interpolation placeholder.
