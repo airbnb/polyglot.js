@@ -171,7 +171,7 @@ Some languages get a bit more complicated. In Czech, there are three separate fo
 ```js
 var polyglot = new Polyglot({locale: "cs"}); // Czech
 polyglot.extend({
-  "num_foxes": "Mám %{smart_count} liška |||| Mám %{smart_count} lišky |||| Mám %{smart_count} lišek"
+  "num_foxes": "Mám %{smart_count} lišku |||| Mám %{smart_count} lišky |||| Mám %{smart_count} lišek"
 })
 ```
 
