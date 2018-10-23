@@ -9,7 +9,8 @@ describe('t', function () {
     hello: 'Hello',
     hi_name_welcome_to_place: 'Hi, %{name}, welcome to %{place}!',
     name_your_name_is_name: '%{name}, your name is %{name}!',
-    empty_string: ''
+    empty_string: '',
+    number: '%{number}'
   };
 
   var polyglot;
@@ -155,6 +156,16 @@ describe('t', function () {
       var instance = new Polyglot({ onMissingKey: onMissingKey, allowMissing: true });
       instance.t(missingKey);
     });
+  });
+
+  it('uses numberFormat', function () {
+    var instance = new Polyglot({
+      phrases: phrases,
+      // prove we're passed a Number by doing math on it and formatting it
+      numberFormat: function (n) { return 'x' + (n + 2); }
+    });
+
+    expect(instance.t('number', { number: 1234.56 })).to.equal('x1236.56');
   });
 });
 
