@@ -1,6 +1,6 @@
 'use strict';
 
-var Polyglot = require('../');
+var Polyglot = require('../dist/polyglot.common-js.js');
 var expect = require('chai').expect;
 var forEach = require('for-each');
 
