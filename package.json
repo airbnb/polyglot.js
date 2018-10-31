@@ -2,13 +2,18 @@
   "name": "node-polyglot",
   "version": "2.3.0",
   "description": "Give your JavaScript the ability to speak many languages.",
-  "main": "index.js",
+  "main": "dist/polyglot.common-js.js",
+  "module": "dist/polyglot.es-modules.js",
   "scripts": {
-    "prepublish": "safe-publish-latest",
-    "pretest": "npm run --silent lint",
+    "build": "npm-run-all -p build:*",
+    "build:cjs": "rollup index.js --file dist/polyglot.common-js.js --format cjs",
+    "build:esm": "rollup index.js --file dist/polyglot.es-modules.js --format esm",
+    "prepublishOnly": "npm-run-all -s build safe-publish-latest",
+    "pretest": "npm-run-all -s build lint:silent",
     "test": "npm run --silent tests-only",
     "tests-only": "mocha test/*.js --reporter spec",
     "lint": "eslint *.js test/*.js",
+    "lint:silent": "npm run --silent lint",
     "docs": "docco -o docs/ index.js"
   },
   "repository": {
@@ -38,6 +43,8 @@
     "eslint-config-airbnb-base": "^13.0.0",
     "eslint-plugin-import": "^2.13.0",
     "mocha": "^3.5.3",
+    "npm-run-all": "^4.1.3",
+    "rollup": "^0.66.6",
     "safe-publish-latest": "^1.1.1",
     "uglify-js": "2.7.3"
   },

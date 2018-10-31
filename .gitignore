@@ -9,3 +9,7 @@ build/*.gz
 npm-shrinkwrap.json
 package-lock.json
 yarn.lock
+
+# these are built at npn pre-publish time
+*.common-js.js
+*.es-modules.js

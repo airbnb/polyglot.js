@@ -15,8 +15,6 @@
 // your client- or server-side JavaScript application.
 //
 
-'use strict';
-
 var forEach = require('for-each');
 var warning = require('warning');
 var has = require('has');
@@ -388,4 +386,4 @@ Polyglot.transformPhrase = function transform(phrase, substitutions, locale) {
   return transformPhrase(phrase, substitutions, locale);
 };
 
-module.exports = Polyglot;
+export default Polyglot;
