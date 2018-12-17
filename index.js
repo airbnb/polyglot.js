@@ -17,7 +17,7 @@
 
 'use strict';
 
-var forEach = require('for-each');
+var objectEntries = require('object.entries');
 var warning = require('warning');
 var has = require('has');
 var trim = require('string.prototype.trim');
@@ -110,8 +110,11 @@ var pluralTypeToLanguages = {
 
 function langToTypeMap(mapping) {
   var ret = {};
-  forEach(mapping, function (langs, type) {
-    forEach(langs, function (lang) {
+  objectEntries(mapping).forEach(function (entry) {
+    var type = entry[0];
+    var langs = entry[1];
+
+    langs.forEach(function (lang) {
       ret[lang] = type;
     });
   });
@@ -274,7 +277,10 @@ Polyglot.prototype.locale = function (newLocale) {
 //
 // This feature is used internally to support nested phrase objects.
 Polyglot.prototype.extend = function (morePhrases, prefix) {
-  forEach(morePhrases, function (phrase, key) {
+  objectEntries(morePhrases).forEach(function (entry) {
+    var key = entry[0];
+    var phrase = entry[1];
+
     var prefixedKey = prefix ? prefix + '.' + key : key;
     if (typeof phrase === 'object') {
       this.extend(phrase, prefixedKey);
@@ -299,7 +305,10 @@ Polyglot.prototype.unset = function (morePhrases, prefix) {
   if (typeof morePhrases === 'string') {
     delete this.phrases[morePhrases];
   } else {
-    forEach(morePhrases, function (phrase, key) {
+    objectEntries(morePhrases).forEach(function (entry) {
+      var key = entry[0];
+      var phrase = entry[1];
+
       var prefixedKey = prefix ? prefix + '.' + key : key;
       if (typeof phrase === 'object') {
         this.unset(phrase, prefixedKey);
