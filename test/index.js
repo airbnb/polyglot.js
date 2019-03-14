@@ -129,6 +129,17 @@ describe('t', function () {
     expect(instance.t('header.sign_in')).to.equal('Sign In');
   });
 
+  it('supports array phrases', function () {
+    var helloArray = ['Hi', 'Welcome', 'Hello'];
+
+    var arrayPhrases = {
+      hello: helloArray
+    };
+
+    var instance = new Polyglot({ phrases: arrayPhrases });
+    expect(helloArray).to.include(instance.t('hello'));
+  });
+
   describe('onMissingKey', function () {
     it('calls the function when a key is missing', function () {
       var expectedKey = 'some key';

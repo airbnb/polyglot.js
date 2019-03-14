@@ -276,7 +276,7 @@ Polyglot.prototype.locale = function (newLocale) {
 Polyglot.prototype.extend = function (morePhrases, prefix) {
   forEach(morePhrases, function (phrase, key) {
     var prefixedKey = prefix ? prefix + '.' + key : key;
-    if (typeof phrase === 'object') {
+    if (typeof phrase === 'object' && !Array.isArray(phrase)) {
       this.extend(phrase, prefixedKey);
     } else {
       this.phrases[prefixedKey] = phrase;
@@ -360,6 +360,9 @@ Polyglot.prototype.t = function (key, options) {
   var opts = options == null ? {} : options;
   if (typeof this.phrases[key] === 'string') {
     phrase = this.phrases[key];
+  } else if (Array.isArray(this.phrases[key])) {
+    var random = Math.floor(Math.random() * this.phrases[key].length);
+    phrase = this.phrases[key][random];
   } else if (typeof opts._ === 'string') {
     phrase = opts._;
   } else if (this.onMissingKey) {
