@@ -2,6 +2,9 @@ language: node_js
 os:
  - linux
 node_js:
+  - "12"
+  - "11"
+  - "10"
   - "9"
   - "8"
   - "7"
@@ -42,4 +45,6 @@ matrix:
     - os: osx
     - env: TEST=true ALLOW_FAILURE=true
     - env: COVERAGE=true
+    - node_js: "11"
     - node_js: "9"
+    - node_js: "7"
