@@ -144,8 +144,6 @@ function constructTokenRegex(opts) {
   return new RegExp(escape(prefix) + '(.*?)' + escape(suffix), 'g');
 }
 
-var dollarRegex = /\$/g;
-var dollarBillsYall = '$$';
 var defaultTokenRegex = /%\{(.*?)\}/g;
 
 // ### transformPhrase(phrase, substitutions, locale)
@@ -197,8 +195,7 @@ function transformPhrase(phrase, substitutions, locale, tokenRegex) {
   // Interpolate: Creates a `RegExp` object for each interpolation placeholder.
   result = replace.call(result, interpolationRegex, function (expression, argument) {
     if (!has(options, argument) || options[argument] == null) { return expression; }
-    // Ensure replacement value is escaped to prevent special $-prefixed regex replace tokens.
-    return replace.call(options[argument], dollarRegex, dollarBillsYall);
+    return options[argument];
   });
 
   return result;
