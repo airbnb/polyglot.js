@@ -1,3 +1,11 @@
+### v2.3.1: June 20, 2019
+ * [Fix] fix plurals for Russian with n > 100 (#119)
+ * [Performance] Remove unnecessary dollar signs replacement (#132)
+ * [Docs] fix typo in the Czech example (#123)
+ * [Deps] update `warning`
+ * [Dev Deps] update `chai`, `eslint`, `eslint-config-airbnb-base`, `eslint-plugin-import`, `safe-publish-latest`, `uglify-js`
+ * [Tests] on `node` `v12`, `v11`, `v10`
+
 ### v2.3.0: July 2, 2018
  * [New] add ability to change interpolation regex by specifying prefix and suffix (#106, #64)
  * [New] support for Serbian (Latin & Cyrillic), Bosnian (Latin & Cyrillic), Czech (#113)
