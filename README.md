@@ -10,7 +10,7 @@ Polyglot.js is a tiny I18n helper library written in JavaScript, made to work bo
 I18n is incredibly important for us at [Airbnb](https://www.airbnb.com/), as we have listings in 192 countries, and we translate our site into 30-odd different languages.
 We’re also [hiring talented engineers](https://www.airbnb.com/jobs/departments/engineering) to help us scale up to meet the challenges of buliding a global marketplace.
 
-View the [documentation on Github](http://airbnb.github.com/polyglot.js).
+View the [documentation on Github](https://github.com/airbnb/polyglot.js).
 
 View the [annotated source](http://airbnb.github.com/polyglot.js/polyglot.html).
 
