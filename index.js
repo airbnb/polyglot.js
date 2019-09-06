@@ -33,79 +33,212 @@ var split = String.prototype.split;
 // The string that separates the different phrase possibilities.
 var delimiter = '||||';
 
-var russianPluralGroups = function (n) {
-  var lastTwo = n % 100;
-  var end = lastTwo % 10;
-  if (lastTwo !== 11 && end === 1) {
-    return 0;
-  }
-  if (2 <= end && end <= 4 && !(lastTwo >= 12 && lastTwo <= 14)) {
-    return 1;
-  }
-  return 2;
-};
-
 // Mapping from pluralization group plural logic.
 var pluralTypes = {
-  arabic: function (n) {
-    // http://www.arabeyes.org/Plural_Forms
-    if (n < 3) { return n; }
-    var lastTwo = n % 100;
-    if (lastTwo >= 3 && lastTwo <= 10) return 3;
-    return lastTwo >= 11 ? 4 : 5;
+  chineseLike: function () {
+    return 0;
   },
-  bosnian_serbian: russianPluralGroups,
-  chinese: function () { return 0; },
-  croatian: russianPluralGroups,
-  french: function (n) { return n > 1 ? 1 : 0; },
-  german: function (n) { return n !== 1 ? 1 : 0; },
-  russian: russianPluralGroups,
-  lithuanian: function (n) {
-    if (n % 10 === 1 && n % 100 !== 11) { return 0; }
-    return n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19) ? 1 : 2;
-  },
-  czech: function (n) {
-    if (n === 1) { return 0; }
-    return (n >= 2 && n <= 4) ? 1 : 2;
-  },
-  polish: function (n) {
-    if (n === 1) { return 0; }
-    var end = n % 10;
-    return 2 <= end && end <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
-  },
-  icelandic: function (n) { return (n % 10 !== 1 || n % 100 === 11) ? 1 : 0; },
-  slovenian: function (n) {
-    var lastTwo = n % 100;
-    if (lastTwo === 1) {
+  germanLike: function (n) {
+    // is 1
+    if (n === 1) {
       return 0;
     }
-    if (lastTwo === 2) {
+    // everything else
+    return 1;
+  },
+  frenchLike: function (n) {
+    // is 0 or 1
+    if (n <= 1) {
+      return 0;
+    }
+    // everything else
+    return 1;
+  },
+  russianLike: function (n) {
+    // ends in 1, excluding 11
+    if (n % 10 === 1 && n % 100 !== 11) {
+      return 0;
+    }
+    // ends in 2-4, excluding 12-14
+    if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) {
       return 1;
     }
-    if (lastTwo === 3 || lastTwo === 4) {
+    // everything else
+    return 2;
+  },
+  czechLike: function (n) {
+    // is 1
+    if (n === 1) {
+      return 0;
+    }
+    // is 2-4
+    if (n >= 2 && n <= 4) {
+      return 1;
+    }
+    // everything else
+    return 2;
+  },
+  polishLike: function (n) {
+    // is 1
+    if (n === 1) {
+      return 0;
+    }
+    // ends in 2-4, excluding 12-14
+    if (n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20)) {
+      return 1;
+    }
+    // everything else
+    return 2;
+  },
+  icelandicLike: function (n) {
+    // ends in 1, excluding 11
+    if (n % 10 === 1 && n % 100 !== 11) {
+      return 0;
+    }
+    // everything else
+    return 1;
+  },
+  arabicLike: function (n) {
+    // is 0
+    if (n === 0) {
+      return 0;
+    }
+    // is 1
+    if (n === 1) {
+      return 1;
+    }
+    // is 2
+    if (n === 2) {
       return 2;
     }
+    // ends in 03-10
+    if (n % 100 >= 3 && n % 100 <= 10) {
+      return 3;
+    }
+    // everything else but is 0 and ends in 00-02, excluding 0-2
+    if (n % 100 >= 11) {
+      return 4;
+    }
+    // everything else
+    return 5;
+  },
+  irish: function (n) {
+    // is 1
+    if (n === 1) {
+      return 0;
+    }
+    // is 2
+    if (n === 2) {
+      return 1;
+    }
+    // is 3-6
+    if (n >= 3 && n <= 6) {
+      return 2;
+    }
+    // is 7-10
+    if (n >= 7 && n <= 10) {
+      return 3;
+    }
+    // everything else
+    return 4;
+  },
+  latvianLike: function (n) {
+    // ends in 0
+    if (n % 10 === 0) {
+      return 0;
+    }
+    // ends in 1, excluding 11
+    if (n % 10 === 1 && n % 100 !== 11) {
+      return 1;
+    }
+    // everything else
+    return 2;
+  },
+  lithuanian: function (n) {
+    // ends in 1, excluding 11
+    if (n % 10 === 1 && n % 100 !== 11) {
+      return 0;
+    }
+    // ends in 0 or ends in 11-19
+    if (n % 10 === 0 || (n % 100 >= 11 && n % 100 <= 19)) {
+      return 1;
+    }
+    // everything else
+    return 2;
+  },
+  maltese: function (n) {
+    // is 1
+    if (n === 1) {
+      return 0;
+    }
+    // is 0 or ends in 01-10, excluding 1
+    if (n === 0 || (n !== 1 && n % 100 >= 1 && n % 100 <= 10)) {
+      return 1;
+    }
+    // ends in 11-19
+    if (n % 100 >= 11 && n % 100 <= 19) {
+      return 2;
+    }
+    // everything else
     return 3;
+  },
+  romanian: function (n) {
+    // is 1
+    if (n === 1) {
+      return 0;
+    }
+    // is 0 or ends in 01-19, excluding 1
+    if (n === 0 || (n !== 1 && n % 100 >= 1 && n % 100 <= 19)) {
+      return 1;
+    }
+    // everything else
+    return 2;
+  },
+  slovenianLike: function (n) {
+    // ends in 01
+    if (n % 100 === 1) {
+      return 0;
+    }
+    // ends in 02
+    if (n % 100 === 2) {
+      return 1;
+    }
+    // ends in 03-04
+    if (n % 100 === 3 || n % 100 === 4) {
+      return 2;
+    }
+    // everything else
+    return 3;
+  },
+  tagalog: function (n) {
+    // ends in 0, 1, 2, 3, 5, 7, 8
+    if (n % 10 !== 4 && n % 10 !== 6 && n % 10 !== 9) {
+      return 0;
+    }
+    // everything else
+    return 1;
   }
 };
-
 
 // Mapping from pluralization group to individual language codes/locales.
 // Will look up based on exact match, if not found and it's a locale will parse the locale
 // for language code, and if that does not exist will default to 'en'
 var pluralTypeToLanguages = {
-  arabic: ['ar'],
-  bosnian_serbian: ['bs-Latn-BA', 'bs-Cyrl-BA', 'srl-RS', 'sr-RS'],
-  chinese: ['id', 'id-ID', 'ja', 'ko', 'ko-KR', 'lo', 'ms', 'th', 'th-TH', 'zh'],
-  croatian: ['hr', 'hr-HR'],
-  german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hi-IN', 'hu', 'hu-HU', 'it', 'nl', 'no', 'pt', 'sv', 'tr'],
-  french: ['fr', 'tl', 'pt-br'],
-  russian: ['ru', 'ru-RU'],
+  chineseLike: ['az', 'id', 'ja', 'ko', 'lo', 'ms', 'th', 'tr', 'vi', 'zh', 'zh-TW'],
+  germanLike: ['bg', 'ca', 'da', 'de', 'el', 'en', 'es', 'et', 'fa', 'fi', 'he', 'hu', 'it', 'ka', 'nl', 'no', 'pt', 'sq', 'sv', 'sw', 'xh', 'zu'],
+  frenchLike: ['fr', 'hi', 'hy', 'pt-BR', 'pt-br'],
+  russianLike: ['bs', 'hr', 'ru', 'sr', 'srl', 'uk'],
+  czechLike: ['cs', 'sk'],
+  polishLike: ['pl'],
+  icelandicLike: ['is', 'mk'],
+  arabicLike: ['ar'],
+  irish: ['ga'],
+  latvianLike: ['lv'],
   lithuanian: ['lt'],
-  czech: ['cs', 'cs-CZ', 'sk'],
-  polish: ['pl'],
-  icelandic: ['is'],
-  slovenian: ['sl-SL']
+  maltese: ['mt'],
+  romanian: ['ro'],
+  slovenianLike: ['sl'],
+  tagalog: ['tl']
 };
 
 function langToTypeMap(mapping) {

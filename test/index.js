@@ -450,44 +450,241 @@ describe('locale-specific pluralization rules', function () {
       expect(polyglot.t('n_votes', c)).to.equal(c + ' komentarjev');
     });
   });
+});
 
-  it('pluralizes in Turkish', function () {
-    var whatSomeoneTranslated = [
-      'Sepetinizde %{smart_count} X var. Bunu almak istiyor musunuz?',
-      'Sepetinizde %{smart_count} X var. Bunları almak istiyor musunuz?'
-    ];
-    var phrases = {
-      n_x_cart: whatSomeoneTranslated.join(' |||| ')
-    };
+describe('locale-specific pluralization rules exhaustive', function () {
+  function testPlurals(text, locale, answers) {
+    var polyglot = new Polyglot({ phrases: { test_phrase: text }, locale: locale });
 
-    var polyglot = new Polyglot({ phrases: phrases, locale: 'tr' });
+    answers.forEach(function (answer, i) {
+      var expected = answer.replace('%{smart_count}', i);
+      expect(polyglot.t('test_phrase', i)).to.equal(expected);
+    });
+  }
 
-    expect(polyglot.t('n_x_cart', 1)).to.equal('Sepetinizde 1 X var. Bunu almak istiyor musunuz?');
-    expect(polyglot.t('n_x_cart', 2)).to.equal('Sepetinizde 2 X var. Bunları almak istiyor musunuz?');
+  function expandAnswers(condensedAnswers) {
+    var answers = [];
+    condensedAnswers.forEach(function (condensedAnswer) {
+      var answer = condensedAnswer[0];
+      var reps = condensedAnswer[1];
+
+      for (var i = 0; i < reps; i += 1) {
+        answers.push(answer);
+      }
+    });
+
+    return answers;
+  }
+
+  it('pluralizes in ja', function () {
+    var reviewText = '%{smart_count} レビュー';
+
+    var answers = expandAnswers([
+      ['%{smart_count} レビュー', 26]
+    ]);
+
+    testPlurals(reviewText, 'ja', answers);
   });
 
-  it('pluralizes in Lithuanian', function () {
-    var whatSomeoneTranslated = [
-      '%{smart_count} balsas',
-      '%{smart_count} balsai',
-      '%{smart_count} balsų'
-    ];
-    var phrases = {
-      n_votes: whatSomeoneTranslated.join(' |||| ')
-    };
-    var polyglot = new Polyglot({ phrases: phrases, locale: 'lt' });
+  it('pluralizes in zh-TW', function () {
+    var reviewText = '%{smart_count} 台灣飯店';
 
-    expect(polyglot.t('n_votes', 0)).to.equal('0 balsų');
-    expect(polyglot.t('n_votes', 1)).to.equal('1 balsas');
-    expect(polyglot.t('n_votes', 2)).to.equal('2 balsai');
-    expect(polyglot.t('n_votes', 9)).to.equal('9 balsai');
-    expect(polyglot.t('n_votes', 10)).to.equal('10 balsų');
-    expect(polyglot.t('n_votes', 11)).to.equal('11 balsų');
-    expect(polyglot.t('n_votes', 12)).to.equal('12 balsų');
-    expect(polyglot.t('n_votes', 90)).to.equal('90 balsų');
-    expect(polyglot.t('n_votes', 91)).to.equal('91 balsas');
-    expect(polyglot.t('n_votes', 92)).to.equal('92 balsai');
-    expect(polyglot.t('n_votes', 102)).to.equal('102 balsai');
+    var answers = expandAnswers([
+      ['%{smart_count} 台灣飯店', 26]
+    ]);
+
+    testPlurals(reviewText, 'zh-TW', answers);
+  });
+
+  it('pluralizes in de', function () {
+    var reviewText = '%{smart_count} bewertung |||| %{smart_count} bewertungen';
+
+    var answers = expandAnswers([
+      ['%{smart_count} bewertungen', 1],
+      ['%{smart_count} bewertung', 1],
+      ['%{smart_count} bewertungen', 24]
+    ]);
+
+    testPlurals(reviewText, 'de', answers);
+  });
+
+  it('pluralizes in fr', function () {
+    var reviewText = '%{smart_count} commentaire |||| %{smart_count} commentaires';
+
+    var answers = expandAnswers([
+      ['%{smart_count} commentaire', 2],
+      ['%{smart_count} commentaires', 24]
+    ]);
+
+    testPlurals(reviewText, 'fr', answers);
+  });
+
+  it('pluralizes in ru', function () {
+    var reviewText = '%{smart_count} ends-in-one-except-eleven |||| %{smart_count} ends-in-two-through-four-except-twelve-through-fourteen |||| %{smart_count} everything-else';
+
+    var answers = expandAnswers([
+      ['%{smart_count} everything-else', 1],
+      ['%{smart_count} ends-in-one-except-eleven', 1],
+      ['%{smart_count} ends-in-two-through-four-except-twelve-through-fourteen', 3],
+      ['%{smart_count} everything-else', 16],
+      ['%{smart_count} ends-in-one-except-eleven', 1],
+      ['%{smart_count} ends-in-two-through-four-except-twelve-through-fourteen', 3],
+      ['%{smart_count} everything-else', 1]
+    ]);
+
+    testPlurals(reviewText, 'ru', answers);
+  });
+
+  it('pluralizes in ar', function () {
+    var reviewText = '%{smart_count} zero |||| %{smart_count} one |||| %{smart_count} two |||| %{smart_count} ends-in-03-10 |||| %{smart_count} ends-in-11-99 |||| %{smart_count} ends-in-00-01-02';
+
+    var answers = expandAnswers([
+      ['%{smart_count} zero', 1],
+      ['%{smart_count} one', 1],
+      ['%{smart_count} two', 1],
+      ['%{smart_count} ends-in-03-10', 8],
+      ['%{smart_count} ends-in-11-99', 89],
+      ['%{smart_count} ends-in-00-01-02', 3],
+      ['%{smart_count} ends-in-03-10', 8],
+      ['%{smart_count} ends-in-11-99', 89],
+      ['%{smart_count} ends-in-00-01-02', 3],
+      ['%{smart_count} ends-in-03-10', 8],
+      ['%{smart_count} ends-in-11-99', 89]
+    ]);
+
+    testPlurals(reviewText, 'ar', answers);
+  });
+
+  it('pluralizes in cs', function () {
+    var reviewText = '%{smart_count} one |||| %{smart_count} two-through-four |||| %{smart_count} everything-else';
+
+    var answers = expandAnswers([
+      ['%{smart_count} everything-else', 1],
+      ['%{smart_count} one', 1],
+      ['%{smart_count} two-through-four', 3],
+      ['%{smart_count} everything-else', 21]
+    ]);
+
+    testPlurals(reviewText, 'cs', answers);
+  });
+
+  it('pluralizes in pl', function () {
+    var reviewText = '%{smart_count} one |||| %{smart_count} ends-in-two-through-four-except-twelve-through-fourteen |||| %{smart_count} everything-else';
+
+    var answers = expandAnswers([
+      ['%{smart_count} everything-else', 1],
+      ['%{smart_count} one', 1],
+      ['%{smart_count} ends-in-two-through-four-except-twelve-through-fourteen', 3],
+      ['%{smart_count} everything-else', 17],
+      ['%{smart_count} ends-in-two-through-four-except-twelve-through-fourteen', 3],
+      ['%{smart_count} everything-else', 1]
+    ]);
+
+    testPlurals(reviewText, 'pl', answers);
+  });
+
+  it('pluralizes in ga', function () {
+    var reviewText = '%{smart_count} one |||| %{smart_count} two |||| %{smart_count} three to six |||| %{smart_count} seven to ten |||| %{smart_count} everything else';
+
+    var answers = expandAnswers([
+      ['%{smart_count} everything else', 1],
+      ['%{smart_count} one', 1],
+      ['%{smart_count} two', 1],
+      ['%{smart_count} three to six', 4],
+      ['%{smart_count} seven to ten', 4],
+      ['%{smart_count} everything else', 10]
+    ]);
+
+    testPlurals(reviewText, 'ga', answers);
+  });
+
+  it('pluralizes in lv', function () {
+    var reviewText = '%{smart_count} ends in 0 |||| %{smart_count} ends in 1, excluding 11 |||| %{smart_count} everything else';
+
+    var answers = expandAnswers([
+      ['%{smart_count} ends in 0', 1],
+      ['%{smart_count} ends in 1, excluding 11', 1],
+      ['%{smart_count} everything else', 8],
+      ['%{smart_count} ends in 0', 1],
+      ['%{smart_count} everything else', 9],
+      ['%{smart_count} ends in 0', 1],
+      ['%{smart_count} ends in 1, excluding 11', 1],
+      ['%{smart_count} everything else', 8]
+    ]);
+
+    testPlurals(reviewText, 'lv', answers);
+  });
+
+  it('pluralizes in lt', function () {
+    var reviewText = '%{smart_count} ends in 1, excluding 11 |||| %{smart_count} ends in 0 or ends in 11-19 |||| %{smart_count} everything else';
+
+    var answers = expandAnswers([
+      ['%{smart_count} ends in 0 or ends in 11-19', 1],
+      ['%{smart_count} ends in 1, excluding 11', 1],
+      ['%{smart_count} everything else', 8],
+      ['%{smart_count} ends in 0 or ends in 11-19', 11],
+      ['%{smart_count} ends in 1, excluding 11', 1],
+      ['%{smart_count} everything else', 8]
+    ]);
+
+    testPlurals(reviewText, 'lt', answers);
+  });
+
+  it('pluralizes in mt', function () {
+    var reviewText = '%{smart_count} is 1 |||| %{smart_count} is 0 or ends in 01-10 excluding 1 |||| %{smart_count} ends in 11-19 |||| %{smart_count} everything else';
+
+    var answers = expandAnswers([
+      ['%{smart_count} is 0 or ends in 01-10 excluding 1', 1],
+      ['%{smart_count} is 1', 1],
+      ['%{smart_count} is 0 or ends in 01-10 excluding 1', 9],
+      ['%{smart_count} ends in 11-19', 9],
+      ['%{smart_count} everything else', 10]
+    ]);
+
+    testPlurals(reviewText, 'mt', answers);
+  });
+
+  it('pluralizes in ro', function () {
+    var reviewText = '%{smart_count} is 1 |||| %{smart_count} is 0 or ends in 01-19, excluding 1 |||| %{smart_count} everything else';
+
+    var answers = expandAnswers([
+      ['%{smart_count} is 0 or ends in 01-19, excluding 1', 1],
+      ['%{smart_count} is 1', 1],
+      ['%{smart_count} is 0 or ends in 01-19, excluding 1', 18],
+      ['%{smart_count} everything else', 10]
+    ]);
+
+    testPlurals(reviewText, 'ro', answers);
+  });
+
+  it('pluralizes in sl', function () {
+    var reviewText = '%{smart_count} ends in 01 |||| %{smart_count} ends in 02 |||| %{smart_count} ends in 03-04 |||| %{smart_count} everything else';
+
+    var answers = expandAnswers([
+      ['%{smart_count} everything else', 1],
+      ['%{smart_count} ends in 01', 1],
+      ['%{smart_count} ends in 02', 1],
+      ['%{smart_count} ends in 03-04', 2],
+      ['%{smart_count} everything else', 16]
+    ]);
+
+    testPlurals(reviewText, 'sl', answers);
+  });
+
+  it('pluralizes in tl', function () {
+    var reviewText = '%{smart_count} ends in 0, 1, 2, 3, 5, 7, 8 |||| %{smart_count} everything else';
+
+    var answers = expandAnswers([
+      ['%{smart_count} ends in 0, 1, 2, 3, 5, 7, 8', 4],
+      ['%{smart_count} everything else', 1],
+      ['%{smart_count} ends in 0, 1, 2, 3, 5, 7, 8', 1],
+      ['%{smart_count} everything else', 1],
+      ['%{smart_count} ends in 0, 1, 2, 3, 5, 7, 8', 2],
+      ['%{smart_count} everything else', 1],
+      ['%{smart_count} ends in 0, 1, 2, 3, 5, 7, 8', 4]
+    ]);
+
+    testPlurals(reviewText, 'tl', answers);
   });
 });
 
