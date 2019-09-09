@@ -491,6 +491,61 @@ describe('locale-specific pluralization rules', function () {
   });
 });
 
+describe('custom pluralRules', function () {
+  var customPluralRules = {
+    pluralTypes: {
+      germanLike: function (n) {
+        // is 1
+        if (n === 1) {
+          return 0;
+        }
+        // everything else
+        return 1;
+      },
+      frenchLike: function (n) {
+        // is 0 or 1
+        if (n <= 1) {
+          return 0;
+        }
+        // everything else
+        return 1;
+      }
+    },
+    pluralTypeToLanguages: {
+      germanLike: ['x1'],
+      frenchLike: ['x2']
+    }
+  };
+
+  var testPhrases = {
+    test_phrase: '%{smart_count} form zero |||| %{smart_count} form one'
+  };
+
+  it('pluralizes in x1', function () {
+    var polyglot = new Polyglot({
+      phrases: testPhrases,
+      locale: 'x1',
+      pluralRules: customPluralRules
+    });
+
+    expect(polyglot.t('test_phrase', 0)).to.equal('0 form one');
+    expect(polyglot.t('test_phrase', 1)).to.equal('1 form zero');
+    expect(polyglot.t('test_phrase', 2)).to.equal('2 form one');
+  });
+
+  it('pluralizes in x2', function () {
+    var polyglot = new Polyglot({
+      phrases: testPhrases,
+      locale: 'x2',
+      pluralRules: customPluralRules
+    });
+
+    expect(polyglot.t('test_phrase', 0)).to.equal('0 form zero');
+    expect(polyglot.t('test_phrase', 1)).to.equal('1 form zero');
+    expect(polyglot.t('test_phrase', 2)).to.equal('2 form one');
+  });
+});
+
 describe('locale', function () {
   var polyglot;
   beforeEach(function () {
