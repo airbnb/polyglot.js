@@ -166,7 +166,7 @@ polyglot.extend({
 
 In English (and German, Spanish, Italian, and a few others) there are only two plural forms: singular and not-singular.
 
-Some languages get a bit more complicated. In Czech, there are three separate forms: 1, 2 through 4, and 5 and up. Russian is even crazier.
+Some languages get a bit more complicated. In Czech, there are three separate forms: 1, 2 through 4, and 5 and up. Russian is even more involved.
 
 ```js
 var polyglot = new Polyglot({locale: "cs"}); // Czech
@@ -194,6 +194,41 @@ As a shortcut, you can also pass a number to the second parameter:
 polyglot.t("num_cars", 2);
 => "2 cars"
 ```
+
+#### Custom Pluralization Rules
+
+Polyglot provides some default pluralization rules for some locales. You can specify a different set of rules through the `pluralRules` constructor param.
+
+```js
+var polyglot = new Polyglot({
+  pluralRules: {
+    pluralTypes: {
+      germanLike: function (n) {
+        // is 1
+        if (n === 1) {
+          return 0;
+        }
+        // everything else
+        return 1;
+      },
+      frenchLike: function (n) {
+        // is 0 or 1
+        if (n <= 1) {
+          return 0;
+        }
+        // everything else
+        return 1;
+      }
+    },
+    pluralTypeToLanguages: {
+      germanLike: ['de', 'en', 'xh', 'zu'],
+      frenchLike: ['fr', 'hy']
+    }
+  }
+});
+```
+
+This can be useful to support locales that polyglot does not support by default or to change the rule definitions.
 
 ## Public Instance Methods
 
@@ -299,6 +334,7 @@ You should pass in a third argument, the locale, to specify the correct plural t
  - `allowMissing`: a boolean to control whether missing keys in a `t` call are allowed. If `false`, by default, a missing key is returned and a warning is issued.
  - `onMissingKey`: if `allowMissing` is `true`, and this option is a function, then it will be called instead of the default functionality. Arguments passed to it are `key`, `options`, and `locale`. The return of this function will be used as a translation fallback when `polyglot.t('missing.key')` is called (hint: return the key).
  - `interpolation`: an object to change the substitution syntax for interpolation by setting the `prefix` and `suffix` fields.
+ - `pluralRules`: an object of `pluralTypes` and `pluralTypeToLanguages` to control pluralization logic.
 
 
 ## [History](CHANGELOG.md)
