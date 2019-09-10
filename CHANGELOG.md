@@ -1,3 +1,6 @@
+### v2.4.0: September 10, 2019
+ * [New] add ability to configure pluralization rules (#138)
+
 ### v2.3.1: June 20, 2019
  * [Fix] fix plurals for Russian with n > 100 (#119)
  * [Performance] Remove unnecessary dollar signs replacement (#132)
