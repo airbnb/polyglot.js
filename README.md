@@ -163,6 +163,7 @@ polyglot.extend({
   "num_cars": "%{smart_count} car |||| %{smart_count} cars",
 });
 ```
+Please keep in mind that `smart_count` is required. No other option name is taken into account to transform pluralization strings.
 
 In English (and German, Spanish, Italian, and a few others) there are only two plural forms: singular and not-singular.
 
