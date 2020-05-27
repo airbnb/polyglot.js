@@ -2,7 +2,6 @@
 
 var Polyglot = require('../');
 var expect = require('chai').expect;
-var forEach = require('for-each');
 
 describe('t', function () {
   var phrases = {
@@ -294,25 +293,25 @@ describe('locale-specific pluralization rules', function () {
 
     var polyglotLocale = new Polyglot({ phrases: phrases, locale: 'hr-HR' });
 
-    forEach([1, 21, 31, 101], function (c) {
+    [1, 21, 31, 101].forEach(function (c) {
       expect(polyglotLocale.t('n_votes', c)).to.equal(c + ' glas');
     });
-    forEach([2, 3, 4, 22, 23, 24, 32, 33, 34], function (c) {
+    [2, 3, 4, 22, 23, 24, 32, 33, 34].forEach(function (c) {
       expect(polyglotLocale.t('n_votes', c)).to.equal(c + ' glasa');
     });
-    forEach([0, 5, 6, 11, 12, 13, 14, 15, 16, 17, 25, 26, 35, 36, 112, 113, 114], function (c) {
+    [0, 5, 6, 11, 12, 13, 14, 15, 16, 17, 25, 26, 35, 36, 112, 113, 114].forEach(function (c) {
       expect(polyglotLocale.t('n_votes', c)).to.equal(c + ' glasova');
     });
 
     var polyglotLanguageCode = new Polyglot({ phrases: phrases, locale: 'hr' });
 
-    forEach([1, 21, 31, 101], function (c) {
+    [1, 21, 31, 101].forEach(function (c) {
       expect(polyglotLanguageCode.t('n_votes', c)).to.equal(c + ' glas');
     });
-    forEach([2, 3, 4, 22, 23, 24, 32, 33, 34], function (c) {
+    [2, 3, 4, 22, 23, 24, 32, 33, 34].forEach(function (c) {
       expect(polyglotLanguageCode.t('n_votes', c)).to.equal(c + ' glasa');
     });
-    forEach([0, 5, 6, 11, 12, 13, 14, 15, 16, 17, 25, 26, 35, 36, 112, 113, 114], function (c) {
+    [0, 5, 6, 11, 12, 13, 14, 15, 16, 17, 25, 26, 35, 36, 112, 113, 114].forEach(function (c) {
       expect(polyglotLanguageCode.t('n_votes', c)).to.equal(c + ' glasova');
     });
   });
@@ -438,15 +437,15 @@ describe('locale-specific pluralization rules', function () {
 
     var polyglot = new Polyglot({ phrases: phrases, locale: 'sl-SL' });
 
-    forEach([1, 12301, 101, 1001, 201, 301], function (c) {
+    [1, 12301, 101, 1001, 201, 301].forEach(function (c) {
       expect(polyglot.t('n_votes', c)).to.equal(c + ' komentar');
     });
 
-    forEach([2, 102, 202, 302], function (c) {
+    [2, 102, 202, 302].forEach(function (c) {
       expect(polyglot.t('n_votes', c)).to.equal(c + ' komentarja');
     });
 
-    forEach([0, 11, 12, 13, 14, 52, 53], function (c) {
+    [0, 11, 12, 13, 14, 52, 53].forEach(function (c) {
       expect(polyglot.t('n_votes', c)).to.equal(c + ' komentarjev');
     });
   });
