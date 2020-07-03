@@ -20,7 +20,14 @@
 /* Should always be false */
 var debug = false;
 
-var forEach = require('for-each');
+var forEach = function (iterable, callback) {
+  var keys = Object.keys(iterable);
+  for (var i = 0; i < keys.length; i += 1) {
+    var key = keys[i];
+    var val = iterable[key];
+    callback(val, key, iterable);
+  }
+};
 
 var has = function (object, property) {
   return Object.prototype.hasOwnProperty.call(object, property);
@@ -285,14 +292,15 @@ Polyglot.prototype.locale = function (newLocale) {
 //
 // This feature is used internally to support nested phrase objects.
 Polyglot.prototype.extend = function (morePhrases, prefix) {
+  var that = this;
   forEach(morePhrases, function (phrase, key) {
     var prefixedKey = prefix ? prefix + '.' + key : key;
     if (typeof phrase === 'object') {
-      this.extend(phrase, prefixedKey);
+      that.extend(phrase, prefixedKey);
     } else {
-      this.phrases[prefixedKey] = phrase;
+      that.phrases[prefixedKey] = phrase;
     }
-  }, this);
+  });
 };
 
 // ### polyglot.unset(phrases)
@@ -310,14 +318,15 @@ Polyglot.prototype.unset = function (morePhrases, prefix) {
   if (typeof morePhrases === 'string') {
     delete this.phrases[morePhrases];
   } else {
+    var that = this;
     forEach(morePhrases, function (phrase, key) {
       var prefixedKey = prefix ? prefix + '.' + key : key;
       if (typeof phrase === 'object') {
-        this.unset(phrase, prefixedKey);
+        that.unset(phrase, prefixedKey);
       } else {
-        delete this.phrases[prefixedKey];
+        delete that.phrases[prefixedKey];
       }
-    }, this);
+    });
   }
 };
 

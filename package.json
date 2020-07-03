@@ -25,9 +25,6 @@
     "polyglot"
   ],
   "author": "Spike Brehm <spike@airbnb.com>",
-  "dependencies": {
-    "for-each": "^0.3.3"
-  },
   "devDependencies": {
     "chai": "^4.2.0",
     "docco": "^0.7.0",

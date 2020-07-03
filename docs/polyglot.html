@@ -48,7 +48,14 @@ your client- or server-side JavaScript application.</p>
 <span class="hljs-comment">/* Should always be false */</span>
 <span class="hljs-keyword">var</span> debug = <span class="hljs-literal">false</span>;
 
-<span class="hljs-keyword">var</span> forEach = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;for-each&#x27;</span>);
+<span class="hljs-keyword">var</span> forEach = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">iterable, callback</span>) </span>{
+  <span class="hljs-keyword">var</span> keys = <span class="hljs-built_in">Object</span>.keys(iterable);
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; keys.length; i += <span class="hljs-number">1</span>) {
+    <span class="hljs-keyword">var</span> key = keys[i];
+    <span class="hljs-keyword">var</span> val = iterable[key];
+    callback(val, key, iterable);
+  }
+};
 
 <span class="hljs-keyword">var</span> has = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">object, property</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.prototype.hasOwnProperty.call(object, property);
@@ -433,14 +440,15 @@ notation.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>Polyglot.prototype.extend = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">morePhrases, prefix</span>) </span>{
+  <span class="hljs-keyword">var</span> that = <span class="hljs-built_in">this</span>;
   forEach(morePhrases, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">phrase, key</span>) </span>{
     <span class="hljs-keyword">var</span> prefixedKey = prefix ? prefix + <span class="hljs-string">&#x27;.&#x27;</span> + key : key;
     <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> phrase === <span class="hljs-string">&#x27;object&#x27;</span>) {
-      <span class="hljs-built_in">this</span>.extend(phrase, prefixedKey);
+      that.extend(phrase, prefixedKey);
     } <span class="hljs-keyword">else</span> {
-      <span class="hljs-built_in">this</span>.phrases[prefixedKey] = phrase;
+      that.phrases[prefixedKey] = phrase;
     }
-  }, <span class="hljs-built_in">this</span>);
+  });
 };</pre></div></div>
             
         </li>
@@ -468,14 +476,15 @@ the keys that you would like to unset.</p>
   <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> morePhrases === <span class="hljs-string">&#x27;string&#x27;</span>) {
     <span class="hljs-keyword">delete</span> <span class="hljs-built_in">this</span>.phrases[morePhrases];
   } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">var</span> that = <span class="hljs-built_in">this</span>;
     forEach(morePhrases, <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">phrase, key</span>) </span>{
       <span class="hljs-keyword">var</span> prefixedKey = prefix ? prefix + <span class="hljs-string">&#x27;.&#x27;</span> + key : key;
       <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> phrase === <span class="hljs-string">&#x27;object&#x27;</span>) {
-        <span class="hljs-built_in">this</span>.unset(phrase, prefixedKey);
+        that.unset(phrase, prefixedKey);
       } <span class="hljs-keyword">else</span> {
-        <span class="hljs-keyword">delete</span> <span class="hljs-built_in">this</span>.phrases[prefixedKey];
+        <span class="hljs-keyword">delete</span> that.phrases[prefixedKey];
       }
-    }, <span class="hljs-built_in">this</span>);
+    });
   }
 };</pre></div></div>
             

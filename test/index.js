@@ -2,7 +2,15 @@
 
 var Polyglot = require('../');
 var expect = require('chai').expect;
-var forEach = require('for-each');
+
+var forEach = function (iterable, callback) {
+  var keys = Object.keys(iterable);
+  for (var i = 0; i < keys.length; i += 1) {
+    var key = keys[i];
+    var val = iterable[key];
+    callback(val, key, iterable);
+  }
+};
 
 describe('t', function () {
   var phrases = {
