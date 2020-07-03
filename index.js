@@ -17,13 +17,18 @@
 
 'use strict';
 
+/* Should always be false */
+var debug = false;
+
 var forEach = require('for-each');
-var warning = require('warning');
 var has = require('has');
 var trim = require('string.prototype.trim');
 
 var warn = function warn(message) {
-  warning(false, message);
+  if (debug) {
+    /* eslint-disable-next-line no-console */
+    console.log(message);
+  }
 };
 
 var replace = String.prototype.replace;
