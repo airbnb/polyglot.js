@@ -21,8 +21,12 @@
 var debug = false;
 
 var forEach = require('for-each');
+
 var has = require('has');
-var trim = require('string.prototype.trim');
+
+var trim = function (input) {
+  return input.replace(/(^\s*)|(\s*$)/mg, '');
+};
 
 var warn = function warn(message) {
   if (debug) {
