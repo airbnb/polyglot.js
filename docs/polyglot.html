@@ -50,7 +50,9 @@ your client- or server-side JavaScript application.</p>
 
 <span class="hljs-keyword">var</span> forEach = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;for-each&#x27;</span>);
 
-<span class="hljs-keyword">var</span> has = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;has&#x27;</span>);
+<span class="hljs-keyword">var</span> has = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">object, property</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-built_in">Object</span>.prototype.hasOwnProperty.call(object, property);
+};
 
 <span class="hljs-keyword">var</span> trim = <span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">input</span>) </span>{
   <span class="hljs-keyword">return</span> input.replace(<span class="hljs-regexp">/(^\s*)|(\s*$)/mg</span>, <span class="hljs-string">&#x27;&#x27;</span>);

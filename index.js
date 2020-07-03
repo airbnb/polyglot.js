@@ -22,7 +22,9 @@ var debug = false;
 
 var forEach = require('for-each');
 
-var has = require('has');
+var has = function (object, property) {
+  return Object.prototype.hasOwnProperty.call(object, property);
+};
 
 var trim = function (input) {
   return input.replace(/(^\s*)|(\s*$)/mg, '');
