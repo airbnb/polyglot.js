@@ -55,7 +55,8 @@ var defaultPluralRules = {
       if (lastTwo >= 3 && lastTwo <= 10) return 3;
       return lastTwo >= 11 ? 4 : 5;
     },
-    bosnian_serbian: russianPluralGroups,
+    serbian: russianPluralGroups,
+    bosnian: russianPluralGroups,
     chinese: function () { return 0; },
     croatian: russianPluralGroups,
     french: function (n) { return n > 1 ? 1 : 0; },
@@ -95,7 +96,8 @@ var defaultPluralRules = {
   // for language code, and if that does not exist will default to 'en'
   pluralTypeToLanguages: {
     arabic: ['ar'],
-    bosnian_serbian: ['bs-Latn-BA', 'bs-Cyrl-BA', 'srl-RS', 'sr-RS'],
+    serbian: ['sr', 'sr-Cyrl', 'sr-Latn', 'sr-RS'],
+    bosnian: ['bs', 'bs-Cyrl', 'bs-Latn', 'bs-BA'],
     chinese: ['id', 'id-ID', 'ja', 'ko', 'ko-KR', 'lo', 'ms', 'th', 'th-TH', 'zh'],
     croatian: ['hr', 'hr-HR'],
     german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hi-IN', 'hu', 'hu-HU', 'it', 'nl', 'no', 'pt', 'sv', 'tr'],
