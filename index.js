@@ -96,6 +96,7 @@ var defaultPluralRules = {
   // for language code, and if that does not exist will default to 'en'
   pluralTypeToLanguages: {
     arabic: ['ar'],
+    bosnian_serbian: ['bs-Latn-BA', 'bs-Cyrl-BA', 'srl-RS', 'sr-RS'],
     serbian: ['sr', 'sr-Cyrl', 'sr-Latn', 'sr-RS'],
     bosnian: ['bs', 'bs-Cyrl', 'bs-Latn', 'bs-BA'],
     chinese: ['id', 'id-ID', 'ja', 'ko', 'ko-KR', 'lo', 'ms', 'th', 'th-TH', 'zh'],
