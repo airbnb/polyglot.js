@@ -28,7 +28,6 @@
   "dependencies": {
     "for-each": "^0.3.3",
     "has": "^1.0.3",
-    "string.prototype.trim": "^1.1.2",
     "warning": "^4.0.3"
   },
   "devDependencies": {

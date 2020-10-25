@@ -20,7 +20,6 @@
 var forEach = require('for-each');
 var warning = require('warning');
 var has = require('has');
-var trim = require('string.prototype.trim');
 
 var warn = function warn(message) {
   warning(false, message);
@@ -191,7 +190,7 @@ function transformPhrase(phrase, substitutions, locale, tokenRegex, pluralRules)
   // choose the correct plural form. This is only done if `count` is set.
   if (options.smart_count != null && result) {
     var texts = split.call(result, delimiter);
-    result = trim(texts[pluralTypeIndex(pluralRulesOrDefault, locale || 'en', options.smart_count)] || texts[0]);
+    result = (texts[pluralTypeIndex(pluralRulesOrDefault, locale || 'en', options.smart_count)] || texts[0]).trim();
   }
 
   // Interpolate: Creates a `RegExp` object for each interpolation placeholder.
