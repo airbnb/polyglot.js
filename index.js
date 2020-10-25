@@ -19,7 +19,9 @@
 
 var forEach = require('for-each');
 var warning = require('warning');
-var has = require('has');
+var has = function (obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+};
 
 var warn = function warn(message) {
   warning(false, message);
