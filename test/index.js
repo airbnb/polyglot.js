@@ -702,6 +702,8 @@ describe('transformPhrase', function () {
     // French rule: "0" is singular
     expect(Polyglot.transformPhrase(english, { smart_count: 0 }, 'fr')).to.equal('0 Name');
     expect(Polyglot.transformPhrase(english, { smart_count: 1 }, 'fr')).to.equal('1 Name');
+    expect(Polyglot.transformPhrase(english, { smart_count: 1.5 }, 'fr')).to.equal('1.5 Name');
+    // French rule: plural starts at 2 included
     expect(Polyglot.transformPhrase(english, { smart_count: 2 }, 'fr')).to.equal('2 Names');
     expect(Polyglot.transformPhrase(english, { smart_count: 3 }, 'fr')).to.equal('3 Names');
 

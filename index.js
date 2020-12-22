@@ -58,7 +58,7 @@ var defaultPluralRules = {
     bosnian_serbian: russianPluralGroups,
     chinese: function () { return 0; },
     croatian: russianPluralGroups,
-    french: function (n) { return n > 1 ? 1 : 0; },
+    french: function (n) { return n >= 2 ? 1 : 0; },
     german: function (n) { return n !== 1 ? 1 : 0; },
     russian: russianPluralGroups,
     lithuanian: function (n) {
