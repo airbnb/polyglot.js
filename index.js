@@ -329,7 +329,6 @@ Polyglot.prototype.replace = function (newPhrases) {
   this.extend(newPhrases);
 };
 
-
 // ### polyglot.t(key, options)
 //
 // The most-used method. Provide a key, and `t` will return the
@@ -374,7 +373,6 @@ Polyglot.prototype.t = function (key, options) {
   }
   return result;
 };
-
 
 // ### polyglot.has(key)
 //
