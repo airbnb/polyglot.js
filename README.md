@@ -12,7 +12,7 @@ We’re also [hiring talented engineers](https://www.airbnb.com/jobs/departments
 
 View the [documentation on Github](https://github.com/airbnb/polyglot.js).
 
-View the [annotated source](http://airbnb.github.com/polyglot.js/polyglot.html).
+View the [annotated source](https://airbnb.io/polyglot.js/polyglot.html).
 
 Polylglot is agnostic to your translation backend. It doesn’t perform any translation; it simply gives you a way to manage translated phrases from your client- or server-side JavaScript application.
 
