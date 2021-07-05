@@ -749,15 +749,19 @@ describe('memoize plural type language', function () {
     if (require.cache[require.resolve(moduleRelativePath)]) {
       delete require.cache[require.resolve(moduleRelativePath)];
     }
+
     Object.keys(stubs).forEach(function (dependencyRelativePath) {
       require.cache[require.resolve(dependencyRelativePath)] = {
         exports: stubs[dependencyRelativePath]
       };
     });
+
     // eslint-disable-next-line global-require
     return require(moduleRelativePath);
   }
+
   var forEachCalls = [];
+
   before(function () {
     Polyglot = fakeDefaultExport('../', {
       'for-each': function (array, iterator, thisArg) {
@@ -766,10 +770,12 @@ describe('memoize plural type language', function () {
       }
     });
   });
+
   after(function () {
     // eslint-disable-next-line global-require
     Polyglot = require('../');
   });
+
   var customPluralRules = {
     pluralTypes: {
       germanLike: function (n) {
@@ -785,9 +791,11 @@ describe('memoize plural type language', function () {
       germanLike: ['x1']
     }
   };
+
   var testPhrases = {
     test_phrase: '%{smart_count} Name |||| %{smart_count} Names'
   };
+
   it('should memoize the plural type language once and call forEach expected amount of times', function () {
     var polyglot = new Polyglot({
       phrases: testPhrases,
