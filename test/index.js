@@ -544,6 +544,23 @@ describe('custom pluralRules', function () {
     expect(polyglot.t('test_phrase', 1)).to.equal('1 form zero');
     expect(polyglot.t('test_phrase', 2)).to.equal('2 form one');
   });
+
+  it('memoizes plural type language correctly and selects the correct locale after several calls', function () {
+    var polyglot = new Polyglot({
+      phrases: {
+        test_phrase: '%{smart_count} Name |||| %{smart_count} Names'
+      },
+      locale: 'x1',
+      pluralRules: customPluralRules
+    });
+
+    expect(polyglot.t('test_phrase', 0)).to.equal('0 Names');
+    expect(polyglot.t('test_phrase', 0)).to.equal('0 Names');
+    expect(polyglot.t('test_phrase', 1)).to.equal('1 Name');
+    expect(polyglot.t('test_phrase', 1)).to.equal('1 Name');
+    expect(polyglot.t('test_phrase', 2)).to.equal('2 Names');
+    expect(polyglot.t('test_phrase', 2)).to.equal('2 Names');
+  });
 });
 
 describe('locale', function () {
@@ -741,5 +758,17 @@ describe('transformPhrase', function () {
     expect(function () { Polyglot.transformPhrase(null); }).to.throw(TypeError);
     expect(function () { Polyglot.transformPhrase(32); }).to.throw(TypeError);
     expect(function () { Polyglot.transformPhrase({}); }).to.throw(TypeError);
+  });
+
+  it('memoizes plural type language correctly and selects the correct locale after several calls', function () {
+    expect(Polyglot.transformPhrase(english, { smart_count: 0 }, 'en')).to.equal('0 Names');
+    expect(Polyglot.transformPhrase(english, { smart_count: 0 }, 'en')).to.equal('0 Names');
+    expect(Polyglot.transformPhrase(english, { smart_count: 1 }, 'en')).to.equal('1 Name');
+    expect(Polyglot.transformPhrase(english, { smart_count: 1 }, 'en')).to.equal('1 Name');
+
+    expect(Polyglot.transformPhrase(english, { smart_count: 0 }, 'fr')).to.equal('0 Name');
+    expect(Polyglot.transformPhrase(english, { smart_count: 0 }, 'fr')).to.equal('0 Name');
+    expect(Polyglot.transformPhrase(english, { smart_count: 2 }, 'fr')).to.equal('2 Names');
+    expect(Polyglot.transformPhrase(english, { smart_count: 2 }, 'fr')).to.equal('2 Names');
   });
 });
