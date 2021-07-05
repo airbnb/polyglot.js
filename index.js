@@ -39,7 +39,7 @@ var russianPluralGroups = function (n) {
   if (lastTwo !== 11 && end === 1) {
     return 0;
   }
-  if (2 <= end && end <= 4 && !(lastTwo >= 12 && lastTwo <= 14)) {
+  if (end >= 2 && end <= 4 && !(lastTwo >= 12 && lastTwo <= 14)) {
     return 1;
   }
   return 2;
@@ -72,7 +72,7 @@ var defaultPluralRules = {
     polish: function (n) {
       if (n === 1) { return 0; }
       var end = n % 10;
-      return 2 <= end && end <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
+      return end >= 2 && end <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
     },
     icelandic: function (n) { return (n % 10 !== 1 || n % 100 === 11) ? 1 : 0; },
     slovenian: function (n) {
@@ -126,8 +126,31 @@ function pluralTypeName(pluralRules, locale) {
     || langToPluralType.en;
 }
 
-function pluralTypeIndex(pluralRules, locale, count) {
-  return pluralRules.pluralTypes[pluralTypeName(pluralRules, locale)](count);
+function pluralTypeIndex(pluralRules, pluralType, count) {
+  return pluralRules.pluralTypes[pluralType](count);
+}
+
+function createMemoizedPluralTypeNameSelector() {
+  var localePluralTypeStorage = {};
+
+  return function (pluralRules, locale) {
+    var pluralType = localePluralTypeStorage[locale];
+
+    if (pluralType && !pluralRules.pluralTypes[pluralType]) {
+      delete localePluralTypeStorage[locale];
+      pluralType = null;
+    }
+
+    if (!pluralType) {
+      pluralType = pluralTypeName(pluralRules, locale);
+
+      if (pluralType) {
+        localePluralTypeStorage[locale] = pluralType;
+      }
+    }
+
+    return pluralType;
+  };
 }
 
 function escape(token) {
@@ -144,6 +167,8 @@ function constructTokenRegex(opts) {
 
   return new RegExp(escape(prefix) + '(.*?)' + escape(suffix), 'g');
 }
+
+var memoizedPluralTypeName = createMemoizedPluralTypeNameSelector();
 
 var defaultTokenRegex = /%\{(.*?)\}/g;
 
@@ -181,7 +206,6 @@ function transformPhrase(phrase, substitutions, locale, tokenRegex, pluralRules)
 
   var result = phrase;
   var interpolationRegex = tokenRegex || defaultTokenRegex;
-  var pluralRulesOrDefault = pluralRules || defaultPluralRules;
 
   // allow number as a pluralization shortcut
   var options = typeof substitutions === 'number' ? { smart_count: substitutions } : substitutions;
@@ -189,9 +213,18 @@ function transformPhrase(phrase, substitutions, locale, tokenRegex, pluralRules)
   // Select plural form: based on a phrase text that contains `n`
   // plural forms separated by `delimiter`, a `locale`, and a `substitutions.smart_count`,
   // choose the correct plural form. This is only done if `count` is set.
-  if (options.smart_count != null && result) {
-    var texts = split.call(result, delimiter);
-    result = trim(texts[pluralTypeIndex(pluralRulesOrDefault, locale || 'en', options.smart_count)] || texts[0]);
+  if (options.smart_count != null && phrase) {
+    var pluralRulesOrDefault = pluralRules || defaultPluralRules;
+    var texts = split.call(phrase, delimiter);
+    var bestLocale = locale || 'en';
+    var pluralType = memoizedPluralTypeName(pluralRulesOrDefault, bestLocale);
+    var pluralTypeWithCount = pluralTypeIndex(
+      pluralRulesOrDefault,
+      pluralType,
+      options.smart_count
+    );
+
+    result = trim(texts[pluralTypeWithCount] || texts[0]);
   }
 
   // Interpolate: Creates a `RegExp` object for each interpolation placeholder.
@@ -214,6 +247,7 @@ function Polyglot(options) {
   this.warn = opts.warn || warn;
   this.tokenRegex = constructTokenRegex(opts.interpolation);
   this.pluralRules = opts.pluralRules || defaultPluralRules;
+  this.knownLocalePluralTypeName = {};
 }
 
 // ### polyglot.locale([locale])
