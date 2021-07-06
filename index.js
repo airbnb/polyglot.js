@@ -39,7 +39,7 @@ var russianPluralGroups = function (n) {
   if (lastTwo !== 11 && end === 1) {
     return 0;
   }
-  if (end >= 2 && end <= 4 && !(lastTwo >= 12 && lastTwo <= 14)) {
+  if (2 <= end && end <= 4 && !(lastTwo >= 12 && lastTwo <= 14)) {
     return 1;
   }
   return 2;
@@ -72,7 +72,7 @@ var defaultPluralRules = {
     polish: function (n) {
       if (n === 1) { return 0; }
       var end = n % 10;
-      return end >= 2 && end <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
+      return 2 <= end && end <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2;
     },
     icelandic: function (n) { return (n % 10 !== 1 || n % 100 === 11) ? 1 : 0; },
     slovenian: function (n) {
@@ -247,7 +247,6 @@ function Polyglot(options) {
   this.warn = opts.warn || warn;
   this.tokenRegex = constructTokenRegex(opts.interpolation);
   this.pluralRules = opts.pluralRules || defaultPluralRules;
-  this.knownLocalePluralTypeName = {};
 }
 
 // ### polyglot.locale([locale])
