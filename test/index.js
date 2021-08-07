@@ -2,7 +2,7 @@
 
 var Polyglot = require('../');
 var expect = require('chai').expect;
-var forEach = require('for-each');
+var forEach = require('array.prototype.foreach');
 
 describe('t', function () {
   var phrases = {
