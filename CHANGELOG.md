@@ -1,3 +1,10 @@
+### v2.4.1: August 16, 2021
+ * [Fix] French starts plural at 2 (#154)
+ * [Refactor] Replace `for-each` with `object.entries` and `array.prototype.foreach` (#127)
+ * [Performance] Add plural type name memoization (#158)
+ * [Deps] Update `string.prototype.trim` (#127)
+ * [Dev Deps] update `chai`, `safe-publish-latest`, `eslint`, `eslint-plugin-import` (#127)
+
 ### v2.4.0: September 10, 2019
  * [New] add ability to configure pluralization rules (#138)
 
