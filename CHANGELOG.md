@@ -1,3 +1,6 @@
+### v2.4.2: August 16, 2021
+ * [Fix] Handle null and undefined gracefully in extend and unset (#161)
+
 ### v2.4.1: August 16, 2021
  * [Fix] French starts plural at 2 (#154)
  * [Refactor] Replace `for-each` with `object.entries` and `array.prototype.foreach` (#127)
