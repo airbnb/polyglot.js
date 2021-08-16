@@ -588,6 +588,14 @@ describe('extend', function () {
     polyglot = new Polyglot();
   });
 
+  it('handles null gracefully', function () {
+    expect(function () { polyglot.extend(null); }).to.not.throw();
+  });
+
+  it('handles undefined gracefully', function () {
+    expect(function () { polyglot.extend(undefined); }).to.not.throw();
+  });
+
   it('supports multiple extends, overriding old keys', function () {
     polyglot.extend({ aKey: 'First time' });
     polyglot.extend({ aKey: 'Second time' });
@@ -659,6 +667,14 @@ describe('unset', function () {
   var polyglot;
   beforeEach(function () {
     polyglot = new Polyglot();
+  });
+
+  it('handles null gracefully', function () {
+    expect(function () { polyglot.unset(null); }).to.not.throw();
+  });
+
+  it('handles undefined gracefully', function () {
+    expect(function () { polyglot.unset(undefined); }).to.not.throw();
   });
 
   it('unsets a key based on a string', function () {
