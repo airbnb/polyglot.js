@@ -2,7 +2,7 @@
 //
 //     polyglot.js may be freely distributed under the terms of the BSD
 //     license. For all licensing information, details, and documentation:
-//     http://airbnb.github.com/polyglot.js
+//     https://airbnb.io/polyglot.js/
 //
 //
 // Polyglot.js is an I18n helper library written in JavaScript, made to
