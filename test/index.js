@@ -214,6 +214,26 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglot.t('n_votes', 102)).to.equal('102 صوت');
   });
 
+  it('interpolates properly in Arabic', function () {
+    var phrases = {
+      hello: 'الرمز ${code} غير صحيح' // eslint-disable-line no-template-curly-in-string
+    };
+
+    var polyglot = new Polyglot({
+      phrases: phrases,
+      locale: 'ar',
+      interpolation: { prefix: '${', suffix: '}' }
+    });
+
+    expect(polyglot.t('hello', { code: 'De30Niro' })).to.equal('الرمز De30Niro غير صحيح');
+
+    // note how the "30" in the next line shows up in the wrong place:
+    expect(polyglot.t('hello', { code: '30DeNiro' })).to.equal('الرمز 30DeNiro غير صحيح');
+    // but with a directional marker character, it shows up in the right place:
+    expect(polyglot.t('hello', { code: '\u200E30DeNiroMarker' })).to.equal('الرمز \u200E30DeNiroMarker غير صحيح');
+    // see https://github.com/airbnb/polyglot.js/issues/167 / https://stackoverflow.com/a/34903965 for why it's impractical to handle in polyglot
+  });
+
   it('pluralizes in Russian', function () {
     // English would be: "1 vote" / "%{smart_count} votes"
     var whatSomeoneTranslated = [
