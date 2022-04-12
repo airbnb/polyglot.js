@@ -1,0 +1,18 @@
+name: 'Tests: node.js'
+
+on: [pull_request, push]
+
+jobs:
+  tests:
+    uses: ljharb/actions/.github/workflows/node.yml@main
+    with:
+      range: '>= 0.8'
+      type: majors
+      command: npm run tests-only
+
+  node:
+    name: 'node.js tests'
+    needs: [tests]
+    runs-on: ubuntu-latest
+    steps:
+      - run: 'echo tests completed'
