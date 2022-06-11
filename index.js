@@ -27,7 +27,7 @@ var warn = function warn(message) {
   warning(false, message);
 };
 
-var replace = String.prototype.replace;
+var defaultReplace = String.prototype.replace;
 var split = String.prototype.split;
 
 // #### Pluralization methods
@@ -198,7 +198,14 @@ var defaultTokenRegex = /%\{(.*?)\}/g;
 //
 // You should pass in a third argument, the locale, to specify the correct plural type.
 // It defaults to `'en'` with 2 plural forms.
-function transformPhrase(phrase, substitutions, locale, tokenRegex, pluralRules) {
+function transformPhrase(
+  phrase,
+  substitutions,
+  locale,
+  tokenRegex,
+  pluralRules,
+  replaceImplementation
+) {
   if (typeof phrase !== 'string') {
     throw new TypeError('Polyglot.transformPhrase expects argument #1 to be string');
   }
@@ -209,6 +216,7 @@ function transformPhrase(phrase, substitutions, locale, tokenRegex, pluralRules)
 
   var result = phrase;
   var interpolationRegex = tokenRegex || defaultTokenRegex;
+  var replace = replaceImplementation || defaultReplace;
 
   // allow number as a pluralization shortcut
   var options = typeof substitutions === 'number' ? { smart_count: substitutions } : substitutions;
@@ -248,6 +256,7 @@ function Polyglot(options) {
   var allowMissing = opts.allowMissing ? transformPhrase : null;
   this.onMissingKey = typeof opts.onMissingKey === 'function' ? opts.onMissingKey : allowMissing;
   this.warn = opts.warn || warn;
+  this.replaceImplementation = opts.replace || defaultReplace;
   this.tokenRegex = constructTokenRegex(opts.interpolation);
   this.pluralRules = opts.pluralRules || defaultPluralRules;
 }
@@ -403,13 +412,27 @@ Polyglot.prototype.t = function (key, options) {
     phrase = opts._;
   } else if (this.onMissingKey) {
     var onMissingKey = this.onMissingKey;
-    result = onMissingKey(key, opts, this.currentLocale, this.tokenRegex, this.pluralRules);
+    result = onMissingKey(
+      key,
+      opts,
+      this.currentLocale,
+      this.tokenRegex,
+      this.pluralRules,
+      this.replaceImplementation
+    );
   } else {
     this.warn('Missing translation for key: "' + key + '"');
     result = key;
   }
   if (typeof phrase === 'string') {
-    result = transformPhrase(phrase, opts, this.currentLocale, this.tokenRegex, this.pluralRules);
+    result = transformPhrase(
+      phrase,
+      opts,
+      this.currentLocale,
+      this.tokenRegex,
+      this.pluralRules,
+      this.replaceImplementation
+    );
   }
   return result;
 };

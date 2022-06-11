@@ -3,6 +3,8 @@
 var Polyglot = require('../');
 var expect = require('chai').expect;
 var forEach = require('array.prototype.foreach');
+var arrayFrom = require('array.from');
+var matchAll = require('string.prototype.matchall');
 
 describe('t', function () {
   var phrases = {
@@ -127,6 +129,58 @@ describe('t', function () {
     expect(instance.t('nav.hi_user', { user: 'Raph' })).to.equal('Hi, Raph.');
     expect(instance.t('nav.cta.join_now')).to.equal('Join now!');
     expect(instance.t('header.sign_in')).to.equal('Sign In');
+  });
+
+  it('supports custom replace implementation', function () {
+    var instance = new Polyglot({
+      phrases: phrases,
+      replace: function (interpolationRegex, callback) {
+        var phrase = this;
+        var i = 0;
+        var matches = arrayFrom(matchAll(phrase, interpolationRegex));
+        var children = [];
+
+        forEach(matches, function (match) {
+          if (match.index > i) {
+            children.push(phrase.slice(i, match.index));
+          }
+          children.push(callback(match[0], match[1]));
+          i = match.index + match[0].length;
+        });
+        if (i < phrase.length) {
+          children.push(phrase.slice(i));
+        }
+
+        return { type: 'might_be_react_fragment', children: children };
+      }
+    });
+
+    expect(instance.t(
+      'hi_name_welcome_to_place',
+      {
+        name: { type: 'might_be_react_node', children: ['Rudolf'] },
+        place: { type: 'might_be_react_node', children: ['Earth'] }
+      }
+    )).to.deep.equal({
+      children: [
+        'Hi, ',
+        {
+          children: [
+            'Rudolf'
+          ],
+          type: 'might_be_react_node'
+        },
+        ', welcome to ',
+        {
+          children: [
+            'Earth'
+          ],
+          type: 'might_be_react_node'
+        },
+        '!'
+      ],
+      type: 'might_be_react_fragment'
+    });
   });
 
   describe('onMissingKey', function () {
