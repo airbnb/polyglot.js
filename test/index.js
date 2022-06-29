@@ -3,7 +3,7 @@
 var Polyglot = require('../');
 var expect = require('chai').expect;
 var forEach = require('array.prototype.foreach');
-var arrayFrom = require('array.from');
+var iterate = require('iterate-iterator');
 var matchAll = require('string.prototype.matchall');
 
 describe('t', function () {
@@ -137,16 +137,16 @@ describe('t', function () {
       replace: function (interpolationRegex, callback) {
         var phrase = this;
         var i = 0;
-        var matches = arrayFrom(matchAll(phrase, interpolationRegex));
-        var children = [];
 
-        forEach(matches, function (match) {
+        var children = [];
+        iterate(matchAll(phrase, interpolationRegex), function (match) {
           if (match.index > i) {
             children.push(phrase.slice(i, match.index));
           }
           children.push(callback(match[0], match[1]));
           i = match.index + match[0].length;
         });
+
         if (i < phrase.length) {
           children.push(phrase.slice(i));
         }
