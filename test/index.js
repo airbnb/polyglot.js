@@ -563,6 +563,31 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglot.t('n_votes', 92)).to.equal('92 balsai');
     expect(polyglot.t('n_votes', 102)).to.equal('102 balsai');
   });
+
+  it('pluralizes in Romanian', function () {
+    var whatSomeoneTranslated = [
+      '%{smart_count} zi',
+      '%{smart_count} zile',
+      '%{smart_count} de zile'
+    ];
+    var phrases = {
+      n_days: whatSomeoneTranslated.join(' |||| ')
+    };
+    var polyglot = new Polyglot({ phrases: phrases, locale: 'ro' });
+
+    expect(polyglot.t('n_days', 0)).to.equal('0 zile');
+    expect(polyglot.t('n_days', 1)).to.equal('1 zi');
+    expect(polyglot.t('n_days', 2)).to.equal('2 zile');
+    expect(polyglot.t('n_days', 10)).to.equal('10 zile');
+    expect(polyglot.t('n_days', 19)).to.equal('19 zile');
+    expect(polyglot.t('n_days', 20)).to.equal('20 de zile');
+    expect(polyglot.t('n_days', 21)).to.equal('21 de zile');
+    expect(polyglot.t('n_days', 100)).to.equal('100 de zile');
+    expect(polyglot.t('n_days', 101)).to.equal('101 de zile');
+    expect(polyglot.t('n_days', 102)).to.equal('102 zile');
+    expect(polyglot.t('n_days', 119)).to.equal('119 zile');
+    expect(polyglot.t('n_days', 120)).to.equal('120 de zile');
+  });
 });
 
 describe('custom pluralRules', function () {

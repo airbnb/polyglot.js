@@ -88,6 +88,12 @@ var defaultPluralRules = {
         return 2;
       }
       return 3;
+    },
+    romanian: function (n) {
+      if (n === 1) { return 0; }
+      var lastTwo = n % 100;
+      if (n === 0 || (lastTwo >= 2 && lastTwo <= 19)) { return 1; }
+      return 2;
     }
   },
 
@@ -106,7 +112,8 @@ var defaultPluralRules = {
     czech: ['cs', 'cs-CZ', 'sk'],
     polish: ['pl'],
     icelandic: ['is'],
-    slovenian: ['sl-SL']
+    slovenian: ['sl-SL'],
+    romanian: ['ro']
   }
 };
 
