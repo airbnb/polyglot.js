@@ -588,6 +588,27 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglot.t('n_days', 119)).to.equal('119 zile');
     expect(polyglot.t('n_days', 120)).to.equal('120 de zile');
   });
+
+  it('pluralizes in Macedonian', function () {
+    var whatSomeoneTranslated = [
+      '%{smart_count} ден',
+      '%{smart_count} дена'
+    ];
+    var phrases = {
+      n_days: whatSomeoneTranslated.join(' |||| ')
+    };
+    var polyglot = new Polyglot({ phrases: phrases, locale: 'mk' });
+
+    expect(polyglot.t('n_days', 0)).to.equal('0 дена');
+    expect(polyglot.t('n_days', 1)).to.equal('1 ден');
+    expect(polyglot.t('n_days', 2)).to.equal('2 дена');
+    expect(polyglot.t('n_days', 10)).to.equal('10 дена');
+    expect(polyglot.t('n_days', 11)).to.equal('11 дена');
+    expect(polyglot.t('n_days', 21)).to.equal('21 ден');
+    expect(polyglot.t('n_days', 100)).to.equal('100 дена');
+    expect(polyglot.t('n_days', 101)).to.equal('101 ден');
+    expect(polyglot.t('n_days', 111)).to.equal('111 дена');
+  });
 });
 
 describe('custom pluralRules', function () {
