@@ -1,3 +1,10 @@
+### v2.5.0: January 23, 2023
+ * [New] Add `replace` option for custom replace implementation (#171)
+ * [New] Add Romanian and Macedonian (#176)
+ * [Deps] update array.prototype.foreach, object.entries, `string.prototype.trim` (#172)
+ * [Tests] Migrate tests to GitHub Actions (#169)
+ * [Tests] Add passing tests (#168)
+
 ### v2.4.2: August 16, 2021
  * [Fix] Handle null and undefined gracefully in extend and unset (#161)
 
