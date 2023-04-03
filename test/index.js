@@ -827,6 +827,7 @@ describe('unset', function () {
 describe('transformPhrase', function () {
   var simple = '%{name} is %{attribute}';
   var english = '%{smart_count} Name |||| %{smart_count} Names';
+  var chinese = '%{smart_count} 个 |||| %{smart_count} 个(plural)';
   var arabic = [
     'ولا صوت',
     'صوت واحد',
@@ -906,5 +907,12 @@ describe('transformPhrase', function () {
     expect(Polyglot.transformPhrase(english, { smart_count: 0 }, 'fr')).to.equal('0 Name');
     expect(Polyglot.transformPhrase(english, { smart_count: 2 }, 'fr')).to.equal('2 Names');
     expect(Polyglot.transformPhrase(english, { smart_count: 2 }, 'fr')).to.equal('2 Names');
+  });
+
+  it('selects the correct plural form based on smart_count', function () {
+    expect(Polyglot.transformPhrase(chinese, { smart_count: 0 }, 'zh')).to.equal('0 个');
+    expect(Polyglot.transformPhrase(chinese, { smart_count: 1 }, 'zh')).to.equal('1 个');
+    expect(Polyglot.transformPhrase(chinese, { smart_count: 2 }, 'zh')).to.equal('2 个(plural)');
+    expect(Polyglot.transformPhrase(chinese, { smart_count: 3 }, 'zh')).to.equal('3 个(plural)');
   });
 });
