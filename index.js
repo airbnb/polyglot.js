@@ -57,7 +57,7 @@ var defaultPluralRules = {
       return lastTwo >= 11 ? 4 : 5;
     },
     bosnian_serbian: russianPluralGroups,
-    chinese: function () { return 0; },
+    chinese: function (n) { return n >= 2 ? 1 : 0; },
     croatian: russianPluralGroups,
     french: function (n) { return n >= 2 ? 1 : 0; },
     german: function (n) { return n !== 1 ? 1 : 0; },
