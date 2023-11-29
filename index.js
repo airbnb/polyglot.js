@@ -20,7 +20,7 @@
 var forEach = require('array.prototype.foreach');
 var entries = require('object.entries');
 var warning = require('warning');
-var has = require('has');
+var has = require('hasown');
 var trim = require('string.prototype.trim');
 
 var warn = function warn(message) {
