@@ -70,6 +70,12 @@ var defaultPluralRules = {
       if (n === 1) { return 0; }
       return (n >= 2 && n <= 4) ? 1 : 2;
     },
+    hindi: function (n) {
+      if(n==1){ return 1; }
+      else if(n==2){ return 2; }
+      if(n>=3 && n<=4){ return 3; }
+      else { return 4; }
+    },
     polish: function (n) {
       if (n === 1) { return 0; }
       var end = n % 10;
@@ -106,6 +112,7 @@ var defaultPluralRules = {
     chinese: ['id', 'id-ID', 'ja', 'ko', 'ko-KR', 'lo', 'ms', 'th', 'th-TH', 'zh'],
     croatian: ['hr', 'hr-HR'],
     german: ['fa', 'da', 'de', 'en', 'es', 'fi', 'el', 'he', 'hi-IN', 'hu', 'hu-HU', 'it', 'nl', 'no', 'pt', 'sv', 'tr'],
+    hindi: ['hi', 'hi-IN'],
     french: ['fr', 'tl', 'pt-br'],
     russian: ['ru', 'ru-RU'],
     lithuanian: ['lt'],
