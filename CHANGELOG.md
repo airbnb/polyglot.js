@@ -1,3 +1,14 @@
+### v2.6.0: July 11, 2024
+ * [New] add Ukrainian (#184)
+ * [Refactor] remove `array.prototype.foreach`
+ * [Refactor] remove `string.prototype.trim`
+ * [Refactor] use `hasown` instead of `has`
+ * [meta] add missing `engines.node`
+ * [Deps] update `array.prototype.foreach`, `object.entries`, `string.prototype.trim`
+ * [Deps] update `aud`, `chai`, `docco`, `eslint-plugin-import`, `string.prototype.matchall`
+ * [eslint] disable yoda rule entirely
+ * [readme] Fixed typos (buliding, Polylglot) (#181)
+
 ### v2.5.0: January 23, 2023
  * [New] Add `replace` option for custom replace implementation (#171)
  * [New] Add Romanian and Macedonian (#176)
