@@ -92,7 +92,8 @@ var defaultPluralRules = {
       var lastTwo = n % 100;
       if (n === 0 || (lastTwo >= 2 && lastTwo <= 19)) { return 1; }
       return 2;
-    }
+    },
+    ukrainian: russianPluralGroups
   },
 
   // Mapping from pluralization group to individual language codes/locales.
@@ -111,7 +112,8 @@ var defaultPluralRules = {
     polish: ['pl'],
     icelandic: ['is', 'mk'],
     slovenian: ['sl-SL'],
-    romanian: ['ro']
+    romanian: ['ro'],
+    ukrainian: ['uk', 'ua']
   }
 };
 

@@ -609,6 +609,38 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglot.t('n_days', 101)).to.equal('101 ден');
     expect(polyglot.t('n_days', 111)).to.equal('111 дена');
   });
+
+  it('pluralizes in Ukrainian', function () {
+    // English would be: "1 vote" / "%{smart_count} votes"
+    var whatSomeoneTranslated = [
+      '%{smart_count} голос',
+      '%{smart_count} голоси',
+      '%{smart_count} голосів'
+    ];
+    var phrases = {
+      n_votes: whatSomeoneTranslated.join(' |||| ')
+    };
+
+    var polyglot = new Polyglot({ phrases: phrases, locale: 'uk' });
+
+    // Singular form
+    expect(polyglot.t('n_votes', 1)).to.equal('1 голос');
+    expect(polyglot.t('n_votes', 21)).to.equal('21 голос');
+
+    // Few form
+    expect(polyglot.t('n_votes', 2)).to.equal('2 голоси');
+    expect(polyglot.t('n_votes', 3)).to.equal('3 голоси');
+    expect(polyglot.t('n_votes', 4)).to.equal('4 голоси');
+
+    // Many form
+    expect(polyglot.t('n_votes', 0)).to.equal('0 голосів');
+    expect(polyglot.t('n_votes', 5)).to.equal('5 голосів');
+    expect(polyglot.t('n_votes', 6)).to.equal('6 голосів');
+    expect(polyglot.t('n_votes', 7)).to.equal('7 голосів');
+    expect(polyglot.t('n_votes', 8)).to.equal('8 голосів');
+    expect(polyglot.t('n_votes', 9)).to.equal('9 голосів');
+    expect(polyglot.t('n_votes', 11)).to.equal('11 голосів');
+  });
 });
 
 describe('custom pluralRules', function () {
