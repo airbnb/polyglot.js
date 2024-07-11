@@ -17,7 +17,6 @@
 
 'use strict';
 
-var forEach = require('array.prototype.foreach');
 var entries = require('object.entries');
 var warning = require('warning');
 var has = require('hasown');
@@ -118,13 +117,14 @@ var defaultPluralRules = {
 
 function langToTypeMap(mapping) {
   var ret = {};
-  forEach(entries(mapping), function (entry) {
-    var type = entry[0];
-    var langs = entry[1];
-    forEach(langs, function (lang) {
-      ret[lang] = type;
-    });
-  });
+  var mappingEntries = entries(mapping);
+  for (var i = 0; i < mappingEntries.length; i += 1) {
+    var type = mappingEntries[i][0];
+    var langs = mappingEntries[i][1];
+    for (var j = 0; j < langs.length; j += 1) {
+      ret[langs[j]] = type;
+    }
+  }
   return ret;
 }
 
@@ -325,16 +325,17 @@ Polyglot.prototype.locale = function (newLocale) {
 //
 // This feature is used internally to support nested phrase objects.
 Polyglot.prototype.extend = function (morePhrases, prefix) {
-  forEach(entries(morePhrases || {}), function (entry) {
-    var key = entry[0];
-    var phrase = entry[1];
+  var phraseEntries = entries(morePhrases || {});
+  for (var i = 0; i < phraseEntries.length; i += 1) {
+    var key = phraseEntries[i][0];
+    var phrase = phraseEntries[i][1];
     var prefixedKey = prefix ? prefix + '.' + key : key;
     if (typeof phrase === 'object') {
       this.extend(phrase, prefixedKey);
     } else {
       this.phrases[prefixedKey] = phrase;
     }
-  }, this);
+  }
 };
 
 // ### polyglot.unset(phrases)
@@ -352,16 +353,17 @@ Polyglot.prototype.unset = function (morePhrases, prefix) {
   if (typeof morePhrases === 'string') {
     delete this.phrases[morePhrases];
   } else {
-    forEach(entries(morePhrases || {}), function (entry) {
-      var key = entry[0];
-      var phrase = entry[1];
+    var phraseEntries = entries(morePhrases || {});
+    for (var i = 0; i < phraseEntries.length; i += 1) {
+      var key = phraseEntries[i][0];
+      var phrase = phraseEntries[i][1];
       var prefixedKey = prefix ? prefix + '.' + key : key;
       if (typeof phrase === 'object') {
         this.unset(phrase, prefixedKey);
       } else {
         delete this.phrases[prefixedKey];
       }
-    }, this);
+    }
   }
 };
 

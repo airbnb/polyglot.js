@@ -28,12 +28,12 @@
   ],
   "author": "Spike Brehm <spike@airbnb.com>",
   "dependencies": {
-    "array.prototype.foreach": "^1.0.7",
     "hasown": "^2.0.2",
     "object.entries": "^1.1.8",
     "warning": "^4.0.3"
   },
   "devDependencies": {
+    "array.prototype.foreach": "^1.0.7",
     "aud": "^2.0.4",
     "chai": "^3.5.0",
     "docco": "^0.7.0",
