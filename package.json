@@ -49,5 +49,8 @@
     "string.prototype.matchall": "^4.0.11",
     "uglify-js": "^2.7.3"
   },
-  "license": "BSD-2-Clause"
+  "license": "BSD-2-Clause",
+  "engines": {
+    "node": ">= 0.4"
+  }
 }
