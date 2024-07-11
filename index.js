@@ -21,7 +21,6 @@ var forEach = require('array.prototype.foreach');
 var entries = require('object.entries');
 var warning = require('warning');
 var has = require('hasown');
-var trim = require('string.prototype.trim');
 
 var warn = function warn(message) {
   warning(false, message);
@@ -242,7 +241,7 @@ function transformPhrase(
       options.smart_count
     );
 
-    result = trim(texts[pluralTypeWithCount] || texts[0]);
+    result = defaultReplace.call(texts[pluralTypeWithCount] || texts[0], /^[^\S]*|[^\S]*$/g, '');
   }
 
   // Interpolate: Creates a `RegExp` object for each interpolation placeholder.

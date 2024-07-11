@@ -31,7 +31,6 @@
     "array.prototype.foreach": "^1.0.7",
     "hasown": "^2.0.2",
     "object.entries": "^1.1.8",
-    "string.prototype.trim": "^1.2.9",
     "warning": "^4.0.3"
   },
   "devDependencies": {
