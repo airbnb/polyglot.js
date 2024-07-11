@@ -29,7 +29,7 @@
   "author": "Spike Brehm <spike@airbnb.com>",
   "dependencies": {
     "array.prototype.foreach": "^1.0.2",
-    "has": "^1.0.3",
+    "hasown": "^2.0.2",
     "object.entries": "^1.1.5",
     "string.prototype.trim": "^1.2.6",
     "warning": "^4.0.3"
