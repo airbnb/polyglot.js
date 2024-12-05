@@ -641,6 +641,17 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglot.t('n_votes', 9)).to.equal('9 голосів');
     expect(polyglot.t('n_votes', 11)).to.equal('11 голосів');
   });
+
+  it('pluralizes in Chinese', function () {
+    var phrases = {
+      n_items: '选择 1 个项目 |||| 选择 %{smart_count} 项目'
+    };
+
+    var polyglot = new Polyglot({ phrases: phrases, locale: 'zh' });
+
+    expect(polyglot.t('n_items', 1)).to.equal('选择 1 项目');
+    expect(polyglot.t('n_items', 2)).to.equal('选择 2 项目');
+  });
 });
 
 describe('custom pluralRules', function () {

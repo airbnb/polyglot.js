@@ -1,20 +1,3 @@
-//     (c) 2012-2018 Airbnb, Inc.
-//
-//     polyglot.js may be freely distributed under the terms of the BSD
-//     license. For all licensing information, details, and documentation:
-//     http://airbnb.github.com/polyglot.js
-//
-//
-// Polyglot.js is an I18n helper library written in JavaScript, made to
-// work both in the browser and in Node. It provides a simple solution for
-// interpolation and pluralization, based off of Airbnb's
-// experience adding I18n functionality to its Backbone.js and Node apps.
-//
-// Polylglot is agnostic to your translation backend. It doesn't perform any
-// translation; it simply gives you a way to manage translated phrases from
-// your client- or server-side JavaScript application.
-//
-
 'use strict';
 
 var entries = require('object.entries');
@@ -55,7 +38,7 @@ var defaultPluralRules = {
       return lastTwo >= 11 ? 4 : 5;
     },
     bosnian_serbian: russianPluralGroups,
-    chinese: function () { return 0; },
+    chinese: function (n) { return n === 1 ? 0 : 1; },
     croatian: russianPluralGroups,
     french: function (n) { return n >= 2 ? 1 : 0; },
     german: function (n) { return n !== 1 ? 1 : 0; },
