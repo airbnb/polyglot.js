@@ -340,7 +340,7 @@ You should pass in a third argument, the locale, to specify the correct plural t
 
 ## [History](CHANGELOG.md)
 
-[travis-image]: https://travis-ci.org/airbnb/polyglot.js.svg
+[travis-image]: https://travis-ci.org/airbnb/polyglotjs.svg
 [travis-url]: https://travis-ci.org/airbnb/polyglot.js
 
 ## Related projects
