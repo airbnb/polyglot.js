@@ -697,6 +697,42 @@ describe('custom pluralRules', function () {
     expect(polyglot.t('test_phrase', 2)).to.equal('2 form one');
   });
 
+  it('does not reuse locale rules across custom plural rule sets', function () {
+    var firstRules = {
+      pluralTypes: {
+        first: function () { return 0; },
+        second: function () { return 1; }
+      },
+      pluralTypeToLanguages: {
+        first: ['x1'],
+        second: ['x2']
+      }
+    };
+    var secondRules = {
+      pluralTypes: {
+        first: function () { return 0; },
+        second: function () { return 1; }
+      },
+      pluralTypeToLanguages: {
+        first: ['x2'],
+        second: ['x1']
+      }
+    };
+    var firstPolyglot = new Polyglot({
+      phrases: testPhrases,
+      locale: 'x1',
+      pluralRules: firstRules
+    });
+    var secondPolyglot = new Polyglot({
+      phrases: testPhrases,
+      locale: 'x1',
+      pluralRules: secondRules
+    });
+
+    expect(firstPolyglot.t('test_phrase', 1)).to.equal('1 form zero');
+    expect(secondPolyglot.t('test_phrase', 1)).to.equal('1 form one');
+  });
+
   it('memoizes plural type language correctly and selects the correct locale after several calls', function () {
     var polyglot = new Polyglot({
       phrases: {

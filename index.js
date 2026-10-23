@@ -236,7 +236,9 @@ function transformPhrase(
     var pluralRulesOrDefault = pluralRules || defaultPluralRules;
     var texts = split.call(phrase, delimiter);
     var bestLocale = locale || 'en';
-    var pluralType = memoizedPluralTypeName(pluralRulesOrDefault, bestLocale);
+    var pluralType = pluralRulesOrDefault === defaultPluralRules
+      ? memoizedPluralTypeName(pluralRulesOrDefault, bestLocale)
+      : pluralTypeName(pluralRulesOrDefault, bestLocale);
     var pluralTypeWithCount = pluralTypeIndex(
       pluralRulesOrDefault,
       pluralType,
