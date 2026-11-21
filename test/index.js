@@ -583,10 +583,13 @@ describe('locale-specific pluralization rules', function () {
     expect(polyglot.t('n_days', 20)).to.equal('20 de zile');
     expect(polyglot.t('n_days', 21)).to.equal('21 de zile');
     expect(polyglot.t('n_days', 100)).to.equal('100 de zile');
-    expect(polyglot.t('n_days', 101)).to.equal('101 de zile');
+    expect(polyglot.t('n_days', 101)).to.equal('101 zile');
     expect(polyglot.t('n_days', 102)).to.equal('102 zile');
     expect(polyglot.t('n_days', 119)).to.equal('119 zile');
     expect(polyglot.t('n_days', 120)).to.equal('120 de zile');
+    expect(polyglot.t('n_days', 200)).to.equal('200 de zile');
+    expect(polyglot.t('n_days', 201)).to.equal('201 zile');
+    expect(polyglot.t('n_days', 1001)).to.equal('1001 zile');
   });
 
   it('pluralizes in Macedonian', function () {
