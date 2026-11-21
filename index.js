@@ -90,7 +90,7 @@ var defaultPluralRules = {
     romanian: function (n) {
       if (n === 1) { return 0; }
       var lastTwo = n % 100;
-      if (n === 0 || (lastTwo >= 2 && lastTwo <= 19)) { return 1; }
+      if (n === 0 || (lastTwo >= 1 && lastTwo <= 19)) { return 1; }
       return 2;
     },
     ukrainian: russianPluralGroups
@@ -111,7 +111,7 @@ var defaultPluralRules = {
     czech: ['cs', 'cs-CZ', 'sk'],
     polish: ['pl'],
     icelandic: ['is', 'mk'],
-    slovenian: ['sl-SL'],
+    slovenian: ['sl', 'sl-SL'],
     romanian: ['ro'],
     ukrainian: ['uk', 'ua']
   }
