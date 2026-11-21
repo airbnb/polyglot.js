@@ -525,6 +525,29 @@ describe('locale-specific pluralization rules', function () {
     });
   });
 
+  it('pluralizes in Slovenian with the `sl` and `sl-SI` locales', function () {
+    var phrases = {
+      n_votes: [
+        '%{smart_count} komentar',
+        '%{smart_count} komentarja',
+        '%{smart_count} komentarji',
+        '%{smart_count} komentarjev'
+      ].join(' |||| ')
+    };
+
+    forEach(['sl', 'sl-SI'], function (locale) {
+      var polyglot = new Polyglot({ phrases: phrases, locale: locale });
+
+      expect(polyglot.t('n_votes', 1)).to.equal('1 komentar');
+      expect(polyglot.t('n_votes', 101)).to.equal('101 komentar');
+      expect(polyglot.t('n_votes', 2)).to.equal('2 komentarja');
+      expect(polyglot.t('n_votes', 3)).to.equal('3 komentarji');
+      expect(polyglot.t('n_votes', 104)).to.equal('104 komentarji');
+      expect(polyglot.t('n_votes', 5)).to.equal('5 komentarjev');
+      expect(polyglot.t('n_votes', 11)).to.equal('11 komentarjev');
+    });
+  });
+
   it('pluralizes in Turkish', function () {
     var whatSomeoneTranslated = [
       'Sepetinizde %{smart_count} X var. Bunu almak istiyor musunuz?',

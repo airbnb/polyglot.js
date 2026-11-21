@@ -111,7 +111,7 @@ var defaultPluralRules = {
     czech: ['cs', 'cs-CZ', 'sk'],
     polish: ['pl'],
     icelandic: ['is', 'mk'],
-    slovenian: ['sl-SL'],
+    slovenian: ['sl', 'sl-SL'],
     romanian: ['ro'],
     ukrainian: ['uk', 'ua']
   }
